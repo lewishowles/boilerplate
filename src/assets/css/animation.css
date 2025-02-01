@@ -1,0 +1,188 @@
+/*
+@utility animate-fast {
+	@media (prefers-reduced-motion: no-preference) {
+		--animation-duration: 150ms;
+	}
+}
+
+@utility animate-fade-in {
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation-name: fadeIn;
+	}
+}
+
+@utility animate-fade-in-up {
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation-name: fadeInUp;
+	}
+}
+
+@utility animate-fade-in-right {
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation-name: fadeInRight;
+	}
+}
+
+@utility animate-fade-in-down {
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation-name: fadeInDown;
+	}
+}
+
+@utility animate-fade-in-left {
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation: fadeInLeft;
+	}
+}
+
+@utility delay-micro {
+	@media (prefers-reduced-motion: no-preference) {
+		@for $i from 1 to 40 {
+			&:nth-child($i) {
+				animation-delay: calc($i * 10ms);
+			}
+		}
+	}
+}
+
+@utility delay {
+	@media (prefers-reduced-motion: no-preference) {
+		@for $i from 1 to 40 {
+			&:nth-child($i) {
+				animation-delay: calc($i * 50ms);
+			}
+		}
+	}
+}
+*/
+
+/**
+ * We need to include manually generated CSS as it seems currently Tailwind v4
+ * doesn't correctly deal with apply with utilities.
+ */
+
+@layer utilities {
+	@media (prefers-reduced-motion: no-preference) {
+		.animate-fast {
+			--animation-duration: 150ms;
+		}
+
+		.animate-fade-in {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeIn;
+		}
+
+		.animate-fade-in-down {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInDown;
+		}
+
+		.animate-fade-in-up {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInUp;
+		}
+
+		.animate-fade-in-right {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInRight;
+		}
+
+		.animate-fade-in-left {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInLeft;
+		}
+	}
+
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeInUp {
+		0% {
+			opacity: 0;
+			transform: translateY(0.5rem);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInRight {
+		0% {
+			opacity: 0;
+			transform: translateX(-0.5rem);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInDown {
+		0% {
+			opacity: 0;
+			transform: translateY(-0.5rem);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes fadeInLeft {
+		0% {
+			opacity: 0;
+			transform: translateX(0.5rem);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+}

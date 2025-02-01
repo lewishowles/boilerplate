@@ -1,0 +1,48 @@
+{
+	"name": "[[PACKAGE_NAME]]",
+	"version": "0.0.1",
+	"description": "[[SITE_DESCRIPTION]]",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"test:unit": "vitest",
+		"test:unit:run": "vitest run",
+		"test:component": "cypress run --component",
+		"test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
+		"lint": "eslint . --fix",
+		"deploy": "vite build; gh-pages -d dist"
+	},
+	"dependencies": {
+		"@lewishowles/components": "^0.19.0",
+		"@lewishowles/helpers": "^0.17.0",
+		"@lewishowles/testing": "^0.9.0",
+		"tailwindcss": "^4.0.1",
+		"vue": "^3.5.13"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.18.0",
+		"@stylistic/eslint-plugin": "^3.0.1",
+		"@tailwindcss/forms": "^0.5.10",
+		"@tailwindcss/typography": "^0.5.16",
+		"@tailwindcss/vite": "^4.0.1",
+		"@vitejs/plugin-vue": "^5.2.1",
+		"@vitest/eslint-plugin": "1.1.25",
+		"@vue/test-utils": "^2.4.6",
+		"cypress": "^14.0.0",
+		"eslint": "^9.18.0",
+		"eslint-plugin-cypress": "^4.1.0",
+		"eslint-plugin-vue": "^9.32.0",
+		"gh-pages": "^6.3.0",
+		"globals": "^15.14.0",
+		"happy-dom": "^16.7.3",
+		"simple-git-hooks": "^2.11.1",
+		"start-server-and-test": "^2.0.10",
+		"tailwindcss-hocus": "^0.0.7",
+		"vite": "^6.0.11",
+		"vite-plugin-vue-devtools": "^7.7.0",
+		"vitest": "^3.0.2"
+	}
+}

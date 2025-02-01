@@ -1,0 +1,168 @@
+/*
+@utility button-padding-x {
+	@apply px-[1em];
+}
+
+@utility button-padding-y {
+	@apply py-[0.5em];
+}
+
+@utility button {
+	@apply button-padding-x button-padding-y rounded-md;
+}
+
+@utility button--primary {
+	@apply button;
+	@apply font-semibold bg-purple-800 text-white;
+
+	@variant hover {
+		@apply bg-purple-900;
+	}
+
+	@variant active {
+		@apply bg-purple-950;
+	}
+}
+
+@utility button--muted {
+	@apply button no-underline text-current;
+	@apply bg-white border border-grey-300;
+
+	@variant hover {
+		@apply bg-grey-50 border-grey-400 text-grey-700;
+	}
+
+	@variant active {
+		@apply bg-grey-100 border-grey-500 text-grey-800;
+	}
+
+	@variant dark {
+		@apply bg-white/20 border-white/20;
+		@variant hover {
+			@apply bg-white/30 border-white/20 text-grey-100;
+		}
+		@variant active {
+			@apply bg-white/40 border-transparent text-grey-50;
+		}
+	}
+}
+
+@utility button--danger {
+	@apply button;
+	@apply font-semibold bg-red-700 text-white;
+
+	@variant hover {
+		@apply bg-red-800;
+	}
+
+	@variant active {
+		@apply bg-red-900;
+	}
+}
+*/
+
+/**
+ * We need to include manually generated CSS as it seems currently Tailwind v4
+ * doesn't correctly deal with apply with utilities.
+ */
+
+@layer utilities {
+	.button-padding-x {
+		padding-inline: 1em;
+	}
+
+	.button-padding-y {
+		padding-block: 0.5em;
+	}
+
+	.button--muted {
+		border-radius: var(--radius-md);
+		padding-inline: 1em;
+		padding-block: 0.5em;
+		color: currentColor;
+		text-decoration-line: none;
+		border-style: var(--tw-border-style);
+		border-width: 1px;
+		border-color: var(--color-grey-300);
+		background-color: var(--color-white);
+
+		&:hover {
+			@media (hover: hover) {
+				border-color: var(--color-grey-400);
+				background-color: var(--color-grey-50);
+				color: var(--color-grey-700);
+			}
+		}
+
+		&:active {
+			border-color: var(--color-grey-500);
+			background-color: var(--color-grey-100);
+			color: var(--color-grey-800);
+		}
+
+		&:where(.dark, .dark *) {
+			border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+
+			&:hover {
+				@media (hover: hover) {
+					border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+					background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
+					color: var(--color-grey-100);
+				}
+			}
+
+			&:active {
+				border-color: transparent;
+				background-color: color-mix(in oklab, var(--color-white) 40%, transparent);
+				color: var(--color-grey-50);
+			}
+		}
+	}
+
+	.button--danger {
+		border-radius: var(--radius-md);
+		padding-inline: 1em;
+		padding-block: 0.5em;
+		background-color: var(--color-red-700);
+		--tw-font-weight: var(--font-weight-semibold);
+		font-weight: var(--font-weight-semibold);
+		color: var(--color-white);
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-red-800);
+			}
+		}
+
+		&:active {
+			background-color: var(--color-red-900);
+		}
+	}
+
+	.button--primary {
+		border-radius: var(--radius-md);
+		padding-inline: 1em;
+		padding-block: 0.5em;
+		background-color: var(--color-purple-800);
+		--tw-font-weight: var(--font-weight-semibold);
+		font-weight: var(--font-weight-semibold);
+		color: var(--color-white);
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-purple-900);
+			}
+		}
+
+		&:active {
+			background-color: var(--color-purple-950);
+		}
+	}
+
+	.button {
+		border-radius: var(--radius-md);
+		padding-inline: 1em;
+		padding-block: 0.5em;
+	}
+}
