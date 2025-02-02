@@ -1,7 +1,7 @@
 {
-	"name": "[[PACKAGE_NAME]]",
+	"name": "{{PACKAGE_NAME}}",
 	"version": "0.0.1",
-	"description": "[[SITE_DESCRIPTION]]",
+	"description": "{{SITE_DESCRIPTION}}",
 	"private": true,
 	"type": "module",
 	"scripts": {
