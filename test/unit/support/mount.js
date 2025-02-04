@@ -1,5 +1,5 @@
 import { deepMerge } from "@lewishowles/helpers/object";
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 
 /**
  * Returns a function to simplify mounting components in Vitest by providing
@@ -13,8 +13,11 @@ import { mount } from "@vue/test-utils";
  *     The component to mount.
  * @param  {object}  defaultOptions
  *     Default options to pass to each subsequent mount call.
+ * @param  {boolean}  configuration.shallow
+ *     Whether to perform a shallow mount, as opposed to a full mount. This
+ *     generally improves performance.
  */
-export function createMount(component, defaultOptions = {}) {
+export function createMount(component, defaultOptions = {}, { shallow = true } = {}) {
 	/**
 	 * Simplify mounting components in Vitest by providing a method to pass
 	 * props without the need for a "props" key, unless we also need to specify
@@ -27,6 +30,8 @@ export function createMount(component, defaultOptions = {}) {
 		const isDirectProps = !Object.hasOwn(options, "props") && !Object.hasOwn(options, "slots") && !Object.hasOwn(options, "global");
 		const providedOptions = isDirectProps ? { props: options } : options;
 
-		return mount(component, deepMerge(defaultOptions, providedOptions));
+		const mountFunction = shallow ? shallowMount : mount;
+
+		return mountFunction(component, deepMerge(defaultOptions, providedOptions));
 	};
 };
