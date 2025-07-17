@@ -1,23 +1,23 @@
 :root {
-	font-family: "Inter Variable", sans-serif;
-	font-feature-settings: "liga" 1, "dlig" 1, "calt" 1, "tnum" 1, "ss01" 1, "ss04" 1;
+	font-family: "Funnel Sans", sans-serif;
+	/*font-feature-settings: "liga" 1, "dlig" 1, "calt" 1, "tnum" 1, "ss01" 1, "ss04" 1;*/
 	font-optical-sizing: auto;
 }
 
 @font-face {
-	font-family: "Inter Variable";
+	font-family: "Funnel Sans";
 	font-style: normal;
 	font-weight: 100 900;
 	font-display: swap;
-	src: local("Inter Variable"), url("../fonts/InterVariable.woff2") format("woff2");
+	src: local("Funnel Sans"), url("../fonts/FunnelSansVariable.woff2") format("woff2");
 }
 
 @font-face {
-	font-family: "Inter Variable";
+	font-family: "Funnel Sans";
 	font-style: italic;
 	font-weight: 100 900;
 	font-display: swap;
-	src: local("Inter Variable"), url("../fonts/InterVariable-Italic.woff2") format("woff2");
+	src: local("Funnel Sans"), url("../fonts/FunnelSansVariable-Italic.woff2") format("woff2");
 }
 
 @font-face {
