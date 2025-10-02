@@ -1,6 +1,10 @@
-import componentLibrary from "@lewishowles/components";
-import { deepMerge } from "@lewishowles/helpers/object";
+import { createTestingPinia } from "@pinia/testing";
+import { fn } from "@vitest/spy";
 import { mount } from "cypress/vue";
+import GlobalComponents from "@/plugins/global-components";
+import components from "@lewishowles/components";
+import i18n from "@/i18n";
+import router from "@/router";
 
 Cypress.Commands.add("mount", (component, options = {}) => {
 	options.global = options.global || {};
@@ -9,7 +13,14 @@ Cypress.Commands.add("mount", (component, options = {}) => {
 	options.global.components = options.global.components || {};
 	options.global.plugins = options.global.plugins || [];
 
-	options.global.plugins = [componentLibrary];
+	options.global.plugins = [
+		components,
+		i18n,
+		router,
+		GlobalComponents,
+		createTestingPinia({ createSpy: fn }),
+		...options.global.plugins,
+	];
 
 	return mount(component, options);
 });
@@ -37,13 +48,22 @@ export function createMount(component, defaultOptions = {}) {
 	 *     The options to pass to Cypress for this individual mount.
 	 */
 	return function (options = {}) {
-		const isDirectProps = !Object.hasOwn(options, "props") && !Object.hasOwn(options, "slots");
-		const providedOptions = isDirectProps ? { props: options } : options;
+		const mergedOptions = {
+			...defaultOptions,
+			...options,
+			props: {
+				...defaultOptions.props,
+				...options.props,
+			},
+			slots: {
+				...defaultOptions.slots,
+				...options.slots,
+			},
+		};
 
-		cy.mount(component, deepMerge(defaultOptions, providedOptions));
+		const isDirectProps = !Object.hasOwn(mergedOptions, "props") && !Object.hasOwn(mergedOptions, "slots");
+		const providedOptions = isDirectProps ? { props: mergedOptions } : mergedOptions;
 
-		cy.mount(component, deepMerge(defaultOptions, providedOptions)).then(({ wrapper }) => {
-			return cy.wrap(wrapper).as("vue");
-		});
+		cy.mount(component, providedOptions);
 	};
 }

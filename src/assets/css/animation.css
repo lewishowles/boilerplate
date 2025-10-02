@@ -1,4 +1,3 @@
-/*
 @utility animate-fast {
 	@media (prefers-reduced-motion: no-preference) {
 		--animation-duration: 150ms;
@@ -51,83 +50,23 @@
 		animation-duration: var(--animation-duration, 250ms);
 		animation-timing-function: ease-in-out;
 		animation-fill-mode: forwards;
-		animation: fadeInLeft;
+		animation-name: fadeInLeft;
 	}
 }
 
 @utility delay-micro {
 	@media (prefers-reduced-motion: no-preference) {
-		@for $i from 1 to 40 {
-			&:nth-child($i) {
-				animation-delay: calc($i * 10ms);
-			}
-		}
+		animation-delay: calc(sibling-index() * 10ms);
 	}
 }
 
 @utility delay {
 	@media (prefers-reduced-motion: no-preference) {
-		@for $i from 1 to 40 {
-			&:nth-child($i) {
-				animation-delay: calc($i * 50ms);
-			}
-		}
+		animation-delay: calc(sibling-index() * 50ms);
 	}
 }
-*/
-
-/**
- * We need to include manually generated CSS as it seems currently Tailwind v4
- * doesn't correctly deal with apply with utilities.
- */
 
 @layer utilities {
-	@media (prefers-reduced-motion: no-preference) {
-		.animate-fast {
-			--animation-duration: 150ms;
-		}
-
-		.animate-fade-in {
-			opacity: 0;
-			animation-duration: var(--animation-duration, 250ms);
-			animation-timing-function: ease-in-out;
-			animation-fill-mode: forwards;
-			animation-name: fadeIn;
-		}
-
-		.animate-fade-in-down {
-			opacity: 0;
-			animation-duration: var(--animation-duration, 250ms);
-			animation-timing-function: ease-in-out;
-			animation-fill-mode: forwards;
-			animation-name: fadeInDown;
-		}
-
-		.animate-fade-in-up {
-			opacity: 0;
-			animation-duration: var(--animation-duration, 250ms);
-			animation-timing-function: ease-in-out;
-			animation-fill-mode: forwards;
-			animation-name: fadeInUp;
-		}
-
-		.animate-fade-in-right {
-			opacity: 0;
-			animation-duration: var(--animation-duration, 250ms);
-			animation-timing-function: ease-in-out;
-			animation-fill-mode: forwards;
-			animation-name: fadeInRight;
-		}
-
-		.animate-fade-in-left {
-			opacity: 0;
-			animation-duration: var(--animation-duration, 250ms);
-			animation-timing-function: ease-in-out;
-			animation-fill-mode: forwards;
-			animation-name: fadeInLeft;
-		}
-	}
-
 	@keyframes fadeIn {
 		0% {
 			opacity: 0;
