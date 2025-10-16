@@ -11,7 +11,23 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
+.dark\:prose-invert {
+    &:where(.dark, .dark *) {
+		--tw-prose-body: color-mix(in oklab, var(--color-white) 80%, transparent);
+		--tw-prose-headings: var(--color-white);
+		--tw-prose-lead: color-mix(in oklab, var(--color-white) 90%, transparent);
+		--tw-prose-counters: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-bullets: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-hr: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-quotes: color-mix(in oklab, var(--color-white) 80%, transparent);
+		--tw-prose-quote-borders: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-captions: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-th-borders: color-mix(in oklab, var(--color-white) 60%, transparent);
+		--tw-prose-td-borders: color-mix(in oklab, var(--color-white) 50%, transparent);
+	}
+}
+
+@theme {
 	/* Allow us to use a familiar spelling */
 	--color-grey-50: oklch(0.984 0.003 247.858);
 	--color-grey-100: oklch(0.968 0.007 247.896);
@@ -37,9 +53,7 @@
 	--color-blue-800: oklch(0.443 0.11 240.79);
 	--color-blue-900: oklch(0.391 0.09 240.876);
 	--color-blue-950: oklch(0.293 0.066 243.157);
-}
 
-@theme {
 	/* Remove unused colours */
 	--color-amber-*: initial;
 	--color-lime-*: initial;
@@ -52,6 +66,9 @@
 	--color-zinc-*: initial;
 	--color-neutral-*: initial;
 	--color-stone-*: initial;
+
+	--color-neon-pink: #e61980;
+	--color-neon-blue: #19cbe6;
 
 	--font-sans: "Funnel Sans", ui-sans-serif, system-ui, sans-serif,
 		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -78,43 +95,40 @@
 	--size-text: 1em;
 }
 
-@layer base {
-	::selection {
-		background-color: #a721a0;
-		color: #fff;
-	}
+/*
+	The default border color has changed to `currentColor` in Tailwind CSS v4,
+	so we"ve added these compatibility styles to make sure everything still
+	looks the same as it did with Tailwind CSS v3.
 
+	If we ever want to remove these styles, we need to add an explicit border
+	color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
+}
+
+@layer base {
 	svg {
 		height: 1em;
 		width: 1em;
 	}
 
 	a, button, summary, [contenteditable], [tabindex] {
-		@apply transition-all;
-
-		@variant focus-visible {
-			@apply rounded-sm outline-hidden ring-2 ring-purple-800 ring-offset-2;
-
-			@variant dark {
-				@apply ring-purple-400 ring-offset-0;
-			}
-		}
+		@apply transition-all focus-visible:rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-800 focus-visible:ring-offset-2 dark:focus-visible:ring-purple-400 dark:focus-visible:ring-offset-0;
 	}
 
 	a, summary {
 		@apply text-purple-800 underline underline-offset-4;
+		@apply hocus:text-purple-900 hocus:no-underline;
 
-		@variant hocus {
-			@apply text-purple-900 no-underline;
-		}
-
-		@variant dark {
-			@apply text-purple-400;
-
-			@variant hocus {
-				@apply text-purple-300;
-			}
-		}
+		@apply dark:text-purple-300;
+		@apply dark:hocus:text-purple-200;
 	}
 
 	button {

@@ -1,107 +1,68 @@
+@reference "./main.css";
+
 /*
 @utility form-input {
 	@apply block w-full rounded-md px-3 py-2 text-grey-700 shadow-xs outline-hidden;
+	@apply dark:bg-transparent dark:text-white;
+}
 
-	@variant placeholder {
-		@apply text-grey-500;
-	}
+@utility form-select {
+	@apply block w-full appearance-none rounded-md py-2 ps-3 pe-[2.5em] text-grey-700 shadow-xs outline-hidden;
+	@apply dark:bg-transparent dark:text-white;
+
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+	background-position: right 0.5rem center;
+	background-repeat: no-repeat;
+	background-size: 1.5em 1.5em;
 
 	@variant dark {
-		@apply bg-transparent;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff90' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+	}
+
+	.form-field--error & {
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2625' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+
+		@variant dark {
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fda5a5' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+		}
 	}
 }
 
 @utility form-checkbox {
 	@apply mt-0.5 size-4 shrink-0 appearance-none rounded-sm outline-hidden ring-1 ring-grey-300 transition-all;
-
-	@variant hover {
-		@apply ring-2 ring-grey-500;
-
-	}
-
-	@variant focus {
-		@apply ring-2 ring-purple-800;
-	}
-
-	@variant checked {
-		@apply bg-current text-purple-800 ring-current;
-
-		@variant focus {
-			@apply ring-offset-2;
-		}
-	}
-
-	@variant dark {
-		@apply bg-white/20 ring-white/30;
-
-		@variant hover {
-			@apply ring-white/50;
-		}
-
-		@variant focus {
-			@apply ring-purple-400;
-		}
-
-		@variant checked {
-			@apply text-purple-400 ring-current;
-		}
-	}
+	@apply hover:ring-2 hover:ring-grey-500;
+	@apply focus:ring-2 focus:ring-purple-800;
+	@apply checked:bg-current checked:text-purple-800 checked:ring-current;
+	@apply checked:focus:ring-offset-2;
+	@apply dark:bg-white/20 dark:ring-white/30;
+	@apply dark:hover:ring-white/50;
+	@apply dark:focus:ring-purple-400;
+	@apply dark:checked:text-purple-400 dark:checked:ring-current;
 }
 
 @utility form-radio {
 	@apply size-4 appearance-none rounded-full outline-hidden ring-1 ring-grey-300 transition-all;
-
-	@variant hover {
-		@apply ring-2 ring-grey-500;
-	}
-
-	@variant focus {
-		@apply ring-2 ring-purple-800;
-	}
-
-	@variant checked {
-		@apply bg-current text-purple-800 ring-current;
-
-		@variant focus {
-			@apply ring-offset-2;
-		}
-	}
-
-	@variant dark {
-		@apply bg-white/20 ring-white/30;
-
-		@variant hover {
-			@apply ring-white/50;
-		}
-
-		@variant focus {
-			@apply ring-purple-400;
-		}
-
-		@variant checked {
-			@apply text-purple-400 ring-current;
-		}
-	}
+	@apply dark:bg-white/20 dark:ring-white/30;
+	@apply hover:ring-2 hover:ring-grey-500;
+	@apply focus:ring-2 focus:ring-purple-800;
+	@apply checked:bg-current checked:text-purple-800 checked:ring-current;
+	@apply checked:focus:ring-offset-2;
+	@apply dark:hover:ring-white/50;
+	@apply dark:focus:ring-purple-400;
+	@apply dark:checked:text-purple-400 dark:checked:ring-current;
 }
 
 @utility button-group {
 	@apply button--muted cursor-pointer rounded-none transition-all;
-
-	@variant focus {
-		@apply bg-grey-50 border-grey-400 outline-hidden ring-2 ring-purple-800 ring-offset-2;
-	}
-
-	@variant checked {
-		@apply border-purple-800 bg-purple-800 text-white;
-	}
-
-	@variant dark {
-		@apply bg-white/20 border-white/20;
-
-		@variant focus {
-			@apply bg-white/30 border-white/20 ring-purple-400;
-		}
-	}
+	@apply peer-focus:bg-grey-50 peer-focus:border-grey-400;
+	@apply peer-focus:outline-hidden peer-focus:ring-2 peer-focus:ring-purple-800 peer-focus:ring-offset-2;
+	@apply peer-checked:border-purple-900 peer-checked:bg-purple-800 peer-checked:text-white;
+	@apply peer-checked:peer-focus:bg-purple-800 peer-checked:peer-focus:text-white;
+	@apply dark:bg-white/20 dark:border-white/20;
+	@apply dark:peer-focus:bg-white/30 dark:peer-focus:border-white/20;
+	@apply dark:peer-checked:bg-purple-500 dark:peer-checked:border-purple-400;
+	@apply dark:peer-checked:peer-focus:bg-purple-600 dark:peer-checked:peer-focus:border-purple-500;
+	@apply dark:peer-focus:ring-purple-400;
 }
 
 @utility button-group--first {
@@ -116,46 +77,111 @@
 	@apply rounded-e-lg;
 }
 
-@utility form-input--error {
-	@apply ring-red-600;
-
-	@variant dark {
-		@apply ring-red-300;
-	}
+@utility form-field--error {
+	@apply ring-red-600 dark:ring-red-300;
 }
+*/
 
 @layer components {
-	[data-selector="form-input-wrapper"] {
-		@apply ring-1 ring-grey-300 rounded-md;
+	.form-input {
+		@apply block w-full rounded-md px-3 py-2 text-grey-700 shadow-xs outline-hidden;
+		@apply dark:bg-transparent dark:text-white;
+	}
+
+	.form-select {
+		@apply block w-full appearance-none rounded-md py-2 ps-3 pe-[2.5em] text-grey-700 shadow-xs outline-hidden;
+		@apply dark:bg-transparent dark:text-white;
+
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+		background-position: right 0.5rem center;
+		background-repeat: no-repeat;
+		background-size: 1.5em 1.5em;
 
 		@variant dark {
-			@apply bg-white/20 ring-white/30;
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff90' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 		}
+
+		.form-field--error & {
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2625' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+
+			@variant dark {
+				background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fda5a5' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+			}
+		}
+	}
+
+	.form-checkbox {
+		@apply mt-0.5 size-4 shrink-0 appearance-none rounded-sm outline-hidden ring-1 ring-grey-300 transition-all;
+		@apply hover:ring-2 hover:ring-grey-500;
+		@apply focus:ring-2 focus:ring-purple-800;
+		@apply checked:bg-current checked:text-purple-800 checked:ring-current;
+		@apply checked:focus:ring-offset-2;
+		@apply dark:bg-white/20 dark:ring-white/30;
+		@apply dark:hover:ring-white/50;
+		@apply dark:focus:ring-purple-400;
+		@apply dark:checked:text-purple-400 dark:checked:ring-current;
+	}
+
+	.form-radio {
+		@apply size-4 appearance-none rounded-full outline-hidden ring-1 ring-grey-300 transition-all;
+		@apply dark:bg-white/20 dark:ring-white/30;
+		@apply hover:ring-2 hover:ring-grey-500;
+		@apply focus:ring-2 focus:ring-purple-800;
+		@apply checked:bg-current checked:text-purple-800 checked:ring-current;
+		@apply checked:focus:ring-offset-2;
+		@apply dark:hover:ring-white/50;
+		@apply dark:focus:ring-purple-400;
+		@apply dark:checked:text-purple-400 dark:checked:ring-current;
+	}
+
+	.button-group {
+		@apply button--muted cursor-pointer rounded-none transition-all;
+		@apply peer-focus:bg-grey-50 peer-focus:border-grey-400;
+		@apply peer-focus:outline-hidden peer-focus:ring-2 peer-focus:ring-purple-800 peer-focus:ring-offset-2;
+		@apply peer-checked:border-purple-900 peer-checked:bg-purple-800 peer-checked:text-white;
+		@apply peer-checked:peer-focus:bg-purple-800 peer-checked:peer-focus:text-white;
+		@apply dark:bg-white/20 dark:border-white/20;
+		@apply dark:peer-focus:bg-white/30 dark:peer-focus:border-white/20;
+		@apply dark:peer-checked:bg-purple-500 dark:peer-checked:border-purple-400;
+		@apply dark:peer-checked:peer-focus:bg-purple-600 dark:peer-checked:peer-focus:border-purple-500;
+		@apply dark:peer-focus:ring-purple-400;
+	}
+
+	.button-group--first {
+		@apply rounded-s-lg;
+	}
+
+	.button-group--middle {
+		@apply border-s-0;
+	}
+
+	.button-group--last {
+		@apply rounded-e-lg;
+	}
+
+	.form-field--error {
+		@apply ring-red-600 dark:ring-red-300;
+	}
+
+	[data-selector="form-field-wrapper"] {
+		@apply ring-1 ring-grey-300 rounded-md;
+		@apply dark:bg-white/20 dark:ring-white/30;
 
 		&:has(:hover) {
 			@apply ring-grey-400;
-
-			@variant dark {
-				@apply ring-white/50;
-			}
+			@apply dark:ring-white/50;
 		}
 
 		&:has(:focus) {
 			@apply ring-2 ring-purple-800;
-
-			@variant dark {
-				@apply ring-purple-400;
-			}
+			@apply dark:ring-purple-400;
 		}
 	}
 
 	[data-selector="form-prefix"],
 	[data-selector="form-suffix"] {
 		@apply text-grey-500;
-
-		@variant dark {
-			@apply text-grey-300;
-		}
+		@apply dark:text-grey-300;
 
 		& > svg {
 			@apply size-4 stroke-current;
@@ -165,344 +191,6 @@
 	textarea {
 		@apply min-h-40;
 
-		field-sizing: content;
-	}
-
-	[type="checkbox"]:checked {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23FFF' d='m12.796 6.086-5.533 5.706a.675.675 0 0 1-.975 0l-3.086-3.2a.727.727 0 0 1 0-1.005l.861-.889a.675.675 0 0 1 .974 0l1.756 1.757 4.17-4.248a.675.675 0 0 1 .973 0l.86.869c.13.133.204.315.204.505s-.073.371-.204.505'/%3E%3C/svg%3E");
-	}
-
-	[type="radio"]:checked {
-		background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
-	}
-}
-*/
-
-/**
- * We need to include manually generated CSS as it seems currently Tailwind v4
- * doesn't correctly deal with apply with utilities.
- */
-@layer components {
-	input, textarea {
-		outline-style: none;
-
-		@media (forced-colors: active) {
-			outline: 2px solid transparent;
-			outline-offset: 2px;
-		}
-	}
-
-	.form-input {
-		--tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
-
-		border-radius: var(--radius-md);
-		box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-		color: var(--color-grey-700);
-		display: block;
-		outline-style: none;
-		padding-block: calc(var(--spacing) * 2);
-		padding-inline: calc(var(--spacing) * 3);
-		width: 100%;
-
-		@media (forced-colors: active) {
-			outline: 2px solid transparent;
-			outline-offset: 2px;
-		}
-
-		&::placeholder {
-			color: var(--color-grey-500);
-		}
-
-		&:where(.dark, .dark *) {
-			background-color: transparent;
-		}
-	}
-
-	.form-checkbox {
-		margin-top: calc(var(--spacing) * 0.5);
-		width: calc(var(--spacing) * 4);
-		height: calc(var(--spacing) * 4);
-		flex-shrink: 0;
-		appearance: none;
-		border-radius: var(--radius-sm);
-		--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-		box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-		--tw-ring-color: var(--color-grey-300);
-		outline-style: none;
-
-		@media (forced-colors: active) {
-			outline: 2px solid transparent;
-			outline-offset: 2px;
-		}
-
-		transition-property: all;
-		transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-		transition-duration: var(--tw-duration, var(--default-transition-duration));
-
-		&:hover {
-			@media (hover: hover) {
-			--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-			box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-			--tw-ring-color: var(--color-grey-500);
-			}
-		}
-
-		&:focus {
-			--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-			box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-			--tw-ring-color: var(--color-purple-800);
-		}
-
-		&:checked {
-			background-color: currentColor;
-			color: var(--color-purple-800);
-			--tw-ring-color: currentColor;
-
-			&:focus {
-				--tw-ring-offset-width: 2px;
-				--tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-			}
-		}
-
-		&:where(.dark, .dark *) {
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			--tw-ring-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-
-			&:hover {
-				@media (hover: hover) {
-					--tw-ring-color: color-mix(in oklab, var(--color-white) 50%, transparent);
-				}
-			}
-
-			&:focus {
-				--tw-ring-color: var(--color-purple-400);
-			}
-
-			&:checked {
-				color: var(--color-purple-400);
-				--tw-ring-color: currentColor;
-			}
-		}
-	}
-
-	.form-radio {
-		width: calc(var(--spacing) * 4);
-		height: calc(var(--spacing) * 4);
-		appearance: none;
-		border-radius: calc(infinity * 1px);
-		--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-		box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-		--tw-ring-color: var(--color-grey-300);
-		outline-style: none;
-
-		@media (forced-colors: active) {
-			outline: 2px solid transparent;
-			outline-offset: 2px;
-		}
-
-		transition-property: all;
-		transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-		transition-duration: var(--tw-duration, var(--default-transition-duration));
-
-		&:hover {
-			@media (hover: hover) {
-				--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-				box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-				--tw-ring-color: var(--color-grey-500);
-			}
-		}
-
-		&:focus {
-			--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-			box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-			--tw-ring-color: var(--color-purple-800);
-		}
-
-		&:checked {
-			background-color: currentColor;
-			color: var(--color-purple-800);
-			--tw-ring-color: currentColor;
-
-			&:focus {
-				--tw-ring-offset-width: 2px;
-				--tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-			}
-		}
-
-		&:where(.dark, .dark *) {
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			--tw-ring-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-
-			&:hover {
-				@media (hover: hover) {
-					--tw-ring-color: color-mix(in oklab, var(--color-white) 50%, transparent);
-				}
-			}
-
-			&:focus {
-				--tw-ring-color: var(--color-purple-400);
-			}
-
-			&:checked {
-				color: var(--color-purple-400);
-				--tw-ring-color: currentColor;
-			}
-		}
-	}
-
-	.button-group {
-		cursor: pointer;
-		border-radius: var(--radius-md);
-		padding-inline: 1em;
-		padding-block: 0.5em;
-		color: currentColor;
-		text-decoration-line: none;
-		border-style: var(--tw-border-style);
-		border-width: 1px;
-		border-color: var(--color-grey-300);
-		background-color: var(--color-white);
-
-		&:hover {
-			@media (hover: hover) {
-			border-color: var(--color-grey-400);
-			background-color: var(--color-grey-50);
-			color: var(--color-grey-700);
-			}
-		}
-
-		&:active {
-			border-color: var(--color-grey-500);
-			background-color: var(--color-grey-100);
-			color: var(--color-grey-800);
-		}
-
-		&:where(.dark, .dark *) {
-			border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-
-			&:hover {
-				@media (hover: hover) {
-					border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-					background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-					color: var(--color-grey-100);
-				}
-			}
-
-			&:active {
-				border-color: transparent;
-				background-color: color-mix(in oklab, var(--color-white) 40%, transparent);
-				color: var(--color-grey-50);
-			}
-		}
-
-		border-radius: 0;
-		transition-property: all;
-		transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-		transition-duration: var(--tw-duration, var(--default-transition-duration));
-
-		&:focus {
-			border-color: var(--color-grey-400);
-			background-color: var(--color-grey-50);
-			--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-			box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-			--tw-ring-color: var(--color-purple-800);
-			--tw-ring-offset-width: 2px;
-			--tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-			outline-style: none;
-
-			@media (forced-colors: active) {
-				outline: 2px solid transparent;
-				outline-offset: 2px;
-			}
-		}
-
-		&:checked {
-			border-color: var(--color-purple-800);
-			background-color: var(--color-purple-800);
-			color: var(--color-white);
-		}
-
-		&:where(.dark, .dark *) {
-			border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-
-			&:focus {
-				border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-				background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-				--tw-ring-color: var(--color-purple-400);
-			}
-		}
-	}
-
-	.button-group--first {
-		border-start-start-radius: var(--radius-lg);
-		border-end-start-radius: var(--radius-lg);
-	}
-
-	.button-group--middle {
-		border-inline-start-style: var(--tw-border-style);
-		border-inline-start-width: 0px;
-	}
-
-	.button-group--last {
-		border-start-end-radius: var(--radius-lg);
-		border-end-end-radius: var(--radius-lg);
-	}
-
-	.form-input--error {
-		--tw-ring-color: var(--color-red-600);
-
-		&:where(.dark, .dark *) {
-			--tw-ring-color: var(--color-red-300);
-		}
-	}
-
-	[data-selector="form-input-wrapper"] {
-		border-radius: var(--radius-md);
-		--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-		box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-		--tw-ring-color: var(--color-grey-300);
-
-		&:where(.dark, .dark *) {
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			--tw-ring-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-		}
-
-		&:has(:hover) {
-			--tw-ring-color: var(--color-grey-400);
-			&:where(.dark, .dark *) {
-				--tw-ring-color: color-mix(in oklab, var(--color-white) 50%, transparent);
-			}
-		}
-
-		&:has(:focus) {
-			--tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentColor);
-			box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-			--tw-ring-color: var(--color-purple-800);
-
-			&:where(.dark, .dark *) {
-				--tw-ring-color: var(--color-purple-400);
-			}
-		}
-	}
-
-	[data-selector="form-prefix"],
-	[data-selector="form-suffix"] {
-		color: var(--color-grey-500);
-
-		&:where(.dark, .dark *) {
-			color: var(--color-grey-300);
-		}
-
-		& > svg {
-			width: calc(var(--spacing) * 4);
-			height: calc(var(--spacing) * 4);
-			stroke: currentColor;
-		}
-	}
-
-	textarea {
-		min-height: calc(var(--spacing) * 40);
 		field-sizing: content;
 	}
 

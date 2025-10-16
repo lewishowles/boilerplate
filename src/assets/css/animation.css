@@ -1,3 +1,4 @@
+/*
 @utility animate-fast {
 	@media (prefers-reduced-motion: no-preference) {
 		--animation-duration: 150ms;
@@ -65,8 +66,77 @@
 		animation-delay: calc(sibling-index() * 50ms);
 	}
 }
+*/
 
 @layer utilities {
+	.animate-fast {
+		@media (prefers-reduced-motion: no-preference) {
+			--animation-duration: 150ms;
+		}
+	}
+
+	.animate-fade-in {
+		@media (prefers-reduced-motion: no-preference) {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeIn;
+		}
+	}
+
+	.animate-fade-in-up {
+		@media (prefers-reduced-motion: no-preference) {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInUp;
+		}
+	}
+
+	.animate-fade-in-right {
+		@media (prefers-reduced-motion: no-preference) {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInRight;
+		}
+	}
+
+	.animate-fade-in-down {
+		@media (prefers-reduced-motion: no-preference) {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInDown;
+		}
+	}
+
+	.animate-fade-in-left {
+		@media (prefers-reduced-motion: no-preference) {
+			opacity: 0;
+			animation-duration: var(--animation-duration, 250ms);
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
+			animation-name: fadeInLeft;
+		}
+	}
+
+	.delay-micro {
+		@media (prefers-reduced-motion: no-preference) {
+			animation-delay: calc(sibling-index() * 10ms);
+		}
+	}
+
+	.delay {
+		@media (prefers-reduced-motion: no-preference) {
+			animation-delay: calc(sibling-index() * 50ms);
+		}
+	}
+
 	@keyframes fadeIn {
 		0% {
 			opacity: 0;

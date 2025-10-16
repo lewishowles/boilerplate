@@ -1,4 +1,22 @@
+@reference "./main.css";
+
 /*
+@utility link {
+	@apply text-purple-800 underline underline-offset-4;
+	@apply hocus:text-purple-900 hocus:no-underline;
+
+	@apply dark:text-purple-300;
+	@apply dark:hocus:text-purple-200;
+}
+
+@utility link--muted {
+	@apply text-grey-500 underline underline-offset-4;
+	@apply hocus:text-grey-700 hocus:no-underline;
+
+	@apply dark:text-white/60;
+	@apply dark:hocus:text-white/90;
+}
+
 @utility button-padding-x {
 	@apply px-[1em];
 }
@@ -14,155 +32,112 @@
 @utility button--primary {
 	@apply button;
 	@apply font-semibold bg-purple-800 text-white;
+	@apply hocus:bg-purple-900;
+	@apply active:bg-purple-950;
 
-	@variant hover {
-		@apply bg-purple-900;
-	}
-
-	@variant active {
-		@apply bg-purple-950;
-	}
+	@apply dark:bg-purple-500;
+	@apply dark:hocus:bg-purple-600;
+	@apply dark:active:bg-purple-700;
 }
 
 @utility button--muted {
 	@apply button no-underline text-current;
 	@apply bg-white border border-grey-300;
+	@apply hocus:bg-grey-50 hocus:border-grey-400 hocus:text-grey-700;
+	@apply active:bg-grey-100 active:border-grey-500 active:text-grey-800;
 
-	@variant hover {
-		@apply bg-grey-50 border-grey-400 text-grey-700;
-	}
-
-	@variant active {
-		@apply bg-grey-100 border-grey-500 text-grey-800;
-	}
-
-	@variant dark {
-		@apply bg-white/20 border-white/20;
-		@variant hover {
-			@apply bg-white/30 border-white/20 text-grey-100;
-		}
-		@variant active {
-			@apply bg-white/40 border-transparent text-grey-50;
-		}
-	}
+	@apply dark:bg-white/20 dark:border-white/20;
+	@apply dark:hocus:bg-white/30 dark:hocus:border-white/20 dark:hocus:text-grey-100;
+	@apply dark:active:bg-white/40 dark:active:border-transparent dark:active:text-grey-50;
 }
 
 @utility button--danger {
 	@apply button;
 	@apply font-semibold bg-red-700 text-white;
-
-	@variant hover {
-		@apply bg-red-800;
-	}
-
-	@variant active {
-		@apply bg-red-900;
-	}
+	@apply hocus:bg-red-800;
+	@apply active:bg-red-900;
 }
 */
 
-/**
- * We need to include manually generated CSS as it seems currently Tailwind v4
- * doesn't correctly deal with apply with utilities.
- */
+@utility link {
+	@apply text-purple-800 underline underline-offset-4;
+	@apply hocus:text-purple-900 hocus:no-underline;
 
-@layer utilities {
+	@apply dark:text-purple-300;
+	@apply dark:hocus:text-purple-200;
+}
+
+@utility link--muted {
+	@apply text-grey-500 underline underline-offset-4;
+	@apply hocus:text-grey-700 hocus:no-underline;
+
+	@apply dark:text-white/60;
+	@apply dark:hocus:text-white/90;
+}
+
+@utility button-padding-x {
+	@apply px-[1em];
+}
+
+@utility button-padding-y {
+	@apply py-[0.5em];
+}
+
+@utility button {
+	@apply button-padding-x button-padding-y rounded-md
+}
+
+@utility button--muted {
+	@apply button no-underline text-current;
+	@apply bg-white border border-grey-300;
+	@apply hocus:bg-grey-50 hocus:border-grey-400 hocus:text-grey-700;
+	@apply active:bg-grey-100 active:border-grey-500 active:text-grey-800;
+
+	@apply dark:bg-white/20 dark:border-white/20;
+	@apply dark:hocus:bg-white/30 dark:hocus:border-white/20 dark:hocus:text-grey-100;
+	@apply dark:active:bg-white/40 dark:active:border-transparent dark:active:text-grey-50;
+}
+
+@layer components {
+	.link {
+		@apply link;
+	}
+
+	.link--muted {
+		@apply link--muted;
+	}
+
 	.button-padding-x {
-		padding-inline: 1em;
+		@apply button-padding-x;
 	}
 
 	.button-padding-y {
-		padding-block: 0.5em;
-	}
-
-	.button--muted {
-		border-radius: var(--radius-md);
-		padding-inline: 1em;
-		padding-block: 0.5em;
-		color: currentColor;
-		text-decoration-line: none;
-		border-style: var(--tw-border-style);
-		border-width: 1px;
-		border-color: var(--color-grey-300);
-		background-color: var(--color-white);
-
-		&:hover {
-			@media (hover: hover) {
-				border-color: var(--color-grey-400);
-				background-color: var(--color-grey-50);
-				color: var(--color-grey-700);
-			}
-		}
-
-		&:active {
-			border-color: var(--color-grey-500);
-			background-color: var(--color-grey-100);
-			color: var(--color-grey-800);
-		}
-
-		&:where(.dark, .dark *) {
-			border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-			background-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-
-			&:hover {
-				@media (hover: hover) {
-					border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
-					background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-					color: var(--color-grey-100);
-				}
-			}
-
-			&:active {
-				border-color: transparent;
-				background-color: color-mix(in oklab, var(--color-white) 40%, transparent);
-				color: var(--color-grey-50);
-			}
-		}
-	}
-
-	.button--danger {
-		border-radius: var(--radius-md);
-		padding-inline: 1em;
-		padding-block: 0.5em;
-		background-color: var(--color-red-700);
-		--tw-font-weight: var(--font-weight-semibold);
-		font-weight: var(--font-weight-semibold);
-		color: var(--color-white);
-
-		&:hover {
-			@media (hover: hover) {
-				background-color: var(--color-red-800);
-			}
-		}
-
-		&:active {
-			background-color: var(--color-red-900);
-		}
-	}
-
-	.button--primary {
-		border-radius: var(--radius-md);
-		padding-inline: 1em;
-		padding-block: 0.5em;
-		background-color: var(--color-purple-800);
-		--tw-font-weight: var(--font-weight-semibold);
-		font-weight: var(--font-weight-semibold);
-		color: var(--color-white);
-
-		&:hover {
-			@media (hover: hover) {
-				background-color: var(--color-purple-900);
-			}
-		}
-
-		&:active {
-			background-color: var(--color-purple-950);
-		}
+		@apply button-padding-y;
 	}
 
 	.button {
-		border-radius: var(--radius-md);
-		padding-inline: 1em;
-		padding-block: 0.5em;
+		@apply button;
+	}
+
+	.button--primary {
+		@apply button;
+		@apply font-semibold bg-purple-800 text-white;
+		@apply hocus:bg-purple-900;
+		@apply active:bg-purple-950;
+
+		@apply dark:bg-purple-500;
+		@apply dark:hocus:bg-purple-600;
+		@apply dark:active:bg-purple-700;
+	}
+
+	.button--muted {
+		@apply button--muted;
+	}
+
+	.button--danger {
+		@apply button;
+		@apply font-semibold bg-red-700 text-white;
+		@apply hocus:bg-red-800;
+		@apply active:bg-red-900;
 	}
 }
