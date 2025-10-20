@@ -32,6 +32,7 @@ export default defineConfig({
 				resolve: {
 					...viteConfig.resolve,
 				},
+				base: "/",
 			},
 		},
 		viewportWidth: 1000,
