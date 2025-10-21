@@ -49,7 +49,7 @@ describe("use-api", () => {
 		test("Makes the appropriate API call", async() => {
 			const { get } = useApi();
 
-			fetch.mockResolvedValueOnce({ json: () => {} });
+			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
 
 			await get(url);
 
@@ -61,13 +61,21 @@ describe("use-api", () => {
 		test("Unwraps the response", async() => {
 			const { get } = useApi();
 
-			fetch.mockResolvedValueOnce({ json: () => ({ data: { my: "data" } }) });
+			fetch.mockResolvedValueOnce({ ok: true, json: () => ({ my: "data" }) });
 
 			const response = await get(url);
 
 			await flushPromises();
 
 			expect(response).toEqual({ my: "data" });
+		});
+
+		test("Handles errors", async() => {
+			const { get } = useApi();
+
+			fetch.mockRejectedValueOnce({ ok: false, json: () => ({ message: "Error message" }) });
+
+			await expect(get(url)).rejects.toThrow();
 		});
 
 		test("Initialises with isLoading and isReady set to false", () => {
@@ -80,6 +88,8 @@ describe("use-api", () => {
 		test("Sets isLoading to true when load is called", async () => {
 			const { isLoading, get } = useApi();
 
+			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
+
 			const getPromise = get(url);
 
 			expect(isLoading.value).toBe(true);
@@ -90,6 +100,8 @@ describe("use-api", () => {
 		test("Sets isReady to true after loading data", async () => {
 			const { isReady, get } = useApi();
 
+			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
+
 			await get(url);
 
 			expect(isReady.value).toBe(true);
@@ -97,6 +109,8 @@ describe("use-api", () => {
 
 		test("Sets isLoading to false after load completes", async () => {
 			const { isLoading, get } = useApi();
+
+			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
 
 			await get(url);
 
@@ -129,7 +143,7 @@ describe("use-api", () => {
 		test("The base URL can be updated", async() => {
 			const { get, setBaseUrl } = useApi();
 
-			fetch.mockResolvedValueOnce({ json: () => {} });
+			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
 
 			setBaseUrl("testing");
 

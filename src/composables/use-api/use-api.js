@@ -1,4 +1,3 @@
-import { get as getPropertyValue } from "@lewishowles/helpers/object";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { ref } from "vue";
@@ -18,7 +17,7 @@ export default function useApi() {
 
 	/**
 	 * Perform a GET request to the provided endpoint, combined with a known
-	 * base path..
+	 * base path.
 	 *
 	 * @param  {string}  endpoint
 	 *     The endpoint from which to load data.
@@ -29,14 +28,16 @@ export default function useApi() {
 		try {
 			isLoading.value = true;
 
-			let response = await fetch(getFinalUrl(endpoint, parameters));
+			const response = await fetch(getFinalUrl(endpoint, parameters));
+			const body = await response.json();
 
-			response = await response.json();
-			response = getPropertyValue(response, "data");
+			if (!response.ok) {
+				throw new Error(body);
+			}
 
 			isReady.value = true;
 
-			return response;
+			return body;
 		} finally {
 			isLoading.value = false;
 		}
