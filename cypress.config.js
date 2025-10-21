@@ -12,12 +12,15 @@ export default defineConfig({
 
 	e2e: {
 		specPattern: "cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}",
-		baseUrl: "http://localhost:4173",
+		baseUrl: "http://localhost:5173",
 		supportFile: "test/cypress/support/commands.js",
 	},
 
 	component: {
-		specPattern: "src/components/**/*.cy.js",
+		specPattern: [
+			"src/components/**/*.cy.js",
+			"src/views/**/*.cy.js",
+		],
 		indexHtmlFile: "test/cypress/support/component-index.html",
 		supportFile: "test/cypress/support/component.js",
 		devServer: {
