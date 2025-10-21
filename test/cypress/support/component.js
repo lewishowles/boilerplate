@@ -1,2 +1,3 @@
+import "./mount";
 import "@/assets/css/main.css";
-import "./commands";
+import "@lewishowles/testing/src/commands.js";

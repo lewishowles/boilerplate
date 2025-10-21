@@ -11,16 +11,13 @@ export default defineConfig({
 	viewPortHeight: 900,
 
 	e2e: {
-		specPattern: "cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}",
-		baseUrl: "http://localhost:5173",
-		supportFile: "test/cypress/support/commands.js",
+		specPattern: "src/views/**/*.cy.js",
+		baseUrl: "http://localhost:5173/cinewatch/",
+		supportFile: "test/cypress/support/e2e.js",
 	},
 
 	component: {
-		specPattern: [
-			"src/components/**/*.cy.js",
-			"src/views/**/*.cy.js",
-		],
+		specPattern: "src/components/**/*.cy.js",
 		indexHtmlFile: "test/cypress/support/component-index.html",
 		supportFile: "test/cypress/support/component.js",
 		devServer: {
