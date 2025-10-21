@@ -3,8 +3,8 @@
 #
 # Scaffold component
 #
-# Scaffold a new component for the component library, creating basic versions of
-# the files required to get up and running quickly.
+# Scaffold a new component for the app, creating basic versions of the files
+# required to get up and running quickly.
 #
 # Usage: ./support/scaffold-component.sh <component-name> --folder [folder-name] --fragment [parent-component]
 #

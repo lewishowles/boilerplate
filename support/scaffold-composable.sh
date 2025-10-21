@@ -3,8 +3,8 @@
 #
 # Scaffold composable
 #
-# Scaffold a new composable for the component library, creating basic versions
-# of the files required to get up and running quickly.
+# Scaffold a new composable for the app, creating basic versions of the files
+# required to get up and running quickly.
 #
 # Usage: ./support/scaffold-composable.sh <composable-name> --parent [parent-component]
 #
