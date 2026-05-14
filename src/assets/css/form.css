@@ -1,204 +1,340 @@
-@reference "./main.css";
+.form-input {
+	border-radius: var(--radius-md);
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	color: var(--color-grey-700);
+	display: block;
+	outline: 0;
+	padding-block-end: calc(var(--spacing) * 2);
+	padding-inline-start: calc(var(--spacing) * 3);
+	padding-inline-end: calc(var(--spacing) * 3);
+	padding-block-start: calc(var(--spacing) * 2);
+	width: 100%;
 
-/*
-@utility form-input {
-	@apply block w-full rounded-md px-3 py-2 text-grey-700 shadow-xs outline-hidden;
-	@apply dark:bg-transparent dark:text-white;
+	&:where(.dark, .dark *) {
+		background-color: transparent;
+		color: white;
+	}
 }
 
-@utility form-select {
-	@apply block w-full appearance-none rounded-md py-2 ps-3 pe-[2.5em] text-grey-700 shadow-xs outline-hidden;
-	@apply dark:bg-transparent dark:text-white;
-
+.form-select {
+	appearance: none;
 	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 	background-position: right 0.5rem center;
 	background-repeat: no-repeat;
 	background-size: 1.5em 1.5em;
+	border-radius: var(--radius-md);
+	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	color: var(--colour-grey-700);
+	display: block;
+	outline: 0;
+	padding-block-end: calc(var(--spacing) * 2);
+	padding-block-start: calc(var(--spacing) * 2);
+	padding-inline-end: 2.5em;
+	padding-inline-start: calc(var(--spacing) * 3);
+	width: 100%;
 
-	@variant dark {
+	&:where(.dark, .dark *) {
 		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff90' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+		background-color: transparent;
+		color: white;
 	}
 
 	.form-field--error & {
 		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2625' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 
-		@variant dark {
+		&:where(.dark, .dark *) {
 			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fda5a5' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 		}
 	}
 }
 
-@utility form-checkbox {
-	@apply mt-0.5 size-4 shrink-0 appearance-none rounded-sm outline-hidden ring-1 ring-grey-300 transition-all;
-	@apply hover:ring-2 hover:ring-grey-500;
-	@apply focus:ring-2 focus:ring-purple-800;
-	@apply checked:bg-current checked:text-purple-800 checked:ring-current;
-	@apply checked:focus:ring-offset-2;
-	@apply dark:bg-white/20 dark:ring-white/30;
-	@apply dark:hover:ring-white/50;
-	@apply dark:focus:ring-purple-400;
-	@apply dark:checked:text-purple-400 dark:checked:ring-current;
-}
+.form-checkbox {
+	--ring-size: 1px;
+	--ring-colour: var(--color-grey-300);
 
-@utility form-radio {
-	@apply size-4 appearance-none rounded-full outline-hidden ring-1 ring-grey-300 transition-all;
-	@apply dark:bg-white/20 dark:ring-white/30;
-	@apply hover:ring-2 hover:ring-grey-500;
-	@apply focus:ring-2 focus:ring-purple-800;
-	@apply checked:bg-current checked:text-purple-800 checked:ring-current;
-	@apply checked:focus:ring-offset-2;
-	@apply dark:hover:ring-white/50;
-	@apply dark:focus:ring-purple-400;
-	@apply dark:checked:text-purple-400 dark:checked:ring-current;
-}
+	appearance: none;
+	border-radius: var(--radius-sm);
+	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
+	flex-shrink: 0;
+	height: calc(var(--spacing) * 4);
+	margin-block-start: calc(var(--spacing) * 0.5);
+	outline: 0;
+	transition-duration: var(--default-transition-duration);
+	transition-property: all;
+	transition-timing-function: var(--default-transition-timing-function);
+	width: calc(var(--spacing) * 4);
 
-@utility button-group {
-	@apply button--muted cursor-pointer rounded-none transition-all;
-	@apply peer-focus:bg-grey-50 peer-focus:border-grey-400;
-	@apply peer-focus:outline-hidden peer-focus:ring-2 peer-focus:ring-purple-800 peer-focus:ring-offset-2;
-	@apply peer-checked:border-purple-900 peer-checked:bg-purple-800 peer-checked:text-white;
-	@apply peer-checked:peer-focus:bg-purple-800 peer-checked:peer-focus:text-white;
-	@apply dark:bg-white/20 dark:border-white/20;
-	@apply dark:peer-focus:bg-white/30 dark:peer-focus:border-white/20;
-	@apply dark:peer-checked:bg-purple-500 dark:peer-checked:border-purple-400;
-	@apply dark:peer-checked:peer-focus:bg-purple-600 dark:peer-checked:peer-focus:border-purple-500;
-	@apply dark:peer-focus:ring-purple-400;
-}
-
-@utility button-group--first {
-	@apply rounded-s-lg;
-}
-
-@utility button-group--middle {
-	@apply border-s-0;
-}
-
-@utility button-group--last {
-	@apply rounded-e-lg;
-}
-
-@utility form-field--error {
-	@apply ring-red-600 dark:ring-red-300;
-}
-*/
-
-@layer components {
-	.form-input {
-		@apply block w-full rounded-md px-3 py-2 text-grey-700 shadow-xs outline-hidden;
-		@apply dark:bg-transparent dark:text-white;
+	&:hover {
+		--ring-size: 2px;
+		--ring-colour: var(--color-grey-500);
 	}
 
-	.form-select {
-		@apply block w-full appearance-none rounded-md py-2 ps-3 pe-[2.5em] text-grey-700 shadow-xs outline-hidden;
-		@apply dark:bg-transparent dark:text-white;
+	&:focus {
+		--ring-size: 2px;
+		--ring-colour: var(--color-purple-800);
+	}
 
-		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-		background-position: right 0.5rem center;
-		background-repeat: no-repeat;
-		background-size: 1.5em 1.5em;
+	&:checked {
+		--ring-colour: currentColor;
 
-		@variant dark {
-			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff90' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+		background-color: currentColor;
+		color: var(--colour-purple-800);
+	}
+
+	&:where(.dark, .dark *) {
+		--ring-colour: rgb(255 255 255 / 30%);
+
+		background-color: rgb(255 255 255 / 20%);
+
+		&:hover {
+			--ring-colour: rgb(255 255 255 / 50%);
 		}
 
-		.form-field--error & {
-			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2625' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+		&:focus {
+			--ring-colour: var(--color-purple-400);
+		}
 
-			@variant dark {
-				background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fda5a5' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-			}
+		&:checked {
+			--ring-color: currentColor;
+
+			color: var(--colour-purple-400);
+		}
+	}
+}
+
+.form-radio {
+	--ring-size: 1px;
+	--ring-colour: var(--color-grey-300);
+
+	appearance: none;
+	border-radius: 9999px;
+	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
+	flex-shrink: 0;
+	height: calc(var(--spacing) * 4);
+	outline: 0;
+	transition-duration: var(--default-transition-duration);
+	transition-property: all;
+	transition-timing-function: var(--default-transition-timing-function);
+	width: calc(var(--spacing) * 4);
+
+	&:hover {
+		--ring-size: 2px;
+		--ring-colour: var(--color-grey-500);
+	}
+
+	&:focus {
+		--ring-size: 2px;
+		--ring-colour: var(--color-purple-800);
+	}
+
+	&:checked {
+		--ring-colour: currentColor;
+
+		background-color: currentColor;
+		color: var(--color-purple-800);
+	}
+
+	&:where(.dark, .dark *) {
+		--ring-colour: rgb(255 255 255 / 30%);
+
+		background-color: rgb(255 255 255 / 20%);
+
+		&:hover {
+			--ring-colour: rgb(255 255 255 / 50%);
+		}
+
+		&:focus {
+			--ring-colour: var(--color-purple-400);
+		}
+
+		&:checked {
+			--ring-colour: currentColor;
+
+			color: var(--color-purple-400);
+		}
+	}
+}
+
+.button-group {
+	--ring-size: 0;
+	--ring-colour: transparent;
+
+	appearance: none;
+	background-color: white;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--color-grey-300);
+	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
+	color: currentColor;
+	cursor: pointer;
+	display: inline-block;
+	outline: 0;
+	padding-block: 0.5em;
+	padding-inline: 1em;
+	text-decoration: none;
+	transition-duration: var(--default-transition-duration);
+	transition-property: all;
+	transition-timing-function: var(--default-transition-timing-function);
+
+	&:hover,
+	&:focus {
+		background-color: var(--color-grey-50);
+		border-color: var(--color-grey-400);
+		color: var(--color-grey-700);
+	}
+
+	&:active {
+		background-color: var(--color-grey-100);
+		border-color: var(--color-grey-500);
+		color: var(--color-grey-800);
+	}
+
+	&:where(.dark, .dark *) {
+		background-color: rgb(255 255 255 / 20%);
+		border-color: rgb(255 255 255 / 20%);
+
+		&:hover,
+		&:focus {
+			background-color: rgb(255 255 255 / 30%);
+			border-color: rgb(255 255 255 / 20%);
+			color: var(--color-grey-100);
+		}
+
+		&:active {
+			background-color: rgb(255 255 255 / 40%);
+			border-color: transparent;
+			color: var(--color-grey-50);
 		}
 	}
 
-	.form-checkbox {
-		@apply mt-0.5 size-4 shrink-0 appearance-none rounded-sm outline-hidden ring-1 ring-grey-300 transition-all;
-		@apply hover:ring-2 hover:ring-grey-500;
-		@apply focus:ring-2 focus:ring-purple-800;
-		@apply checked:bg-current checked:text-purple-800 checked:ring-current;
-		@apply checked:focus:ring-offset-2;
-		@apply dark:bg-white/20 dark:ring-white/30;
-		@apply dark:hover:ring-white/50;
-		@apply dark:focus:ring-purple-400;
-		@apply dark:checked:text-purple-400 dark:checked:ring-current;
+	&:is(:where(.peer):focus ~ *) {
+		--ring-size: 2px;
+		--ring-colour: var(--color-purple-800);
+
+		background-color: var(--color-grey-50);
+		border-color: var(--color-grey-400);
 	}
 
-	.form-radio {
-		@apply size-4 appearance-none rounded-full outline-hidden ring-1 ring-grey-300 transition-all;
-		@apply dark:bg-white/20 dark:ring-white/30;
-		@apply hover:ring-2 hover:ring-grey-500;
-		@apply focus:ring-2 focus:ring-purple-800;
-		@apply checked:bg-current checked:text-purple-800 checked:ring-current;
-		@apply checked:focus:ring-offset-2;
-		@apply dark:hover:ring-white/50;
-		@apply dark:focus:ring-purple-400;
-		@apply dark:checked:text-purple-400 dark:checked:ring-current;
+	&:is(:where(.peer):checked ~ *) {
+		background-color: var(--color-purple-800);
+		border-color: var(--color-purple-900);
+		color: white;
 	}
 
-	.button-group {
-		@apply button--muted cursor-pointer rounded-none transition-all;
-		@apply peer-focus:bg-grey-50 peer-focus:border-grey-400;
-		@apply peer-focus:outline-hidden peer-focus:ring-2 peer-focus:ring-purple-800 peer-focus:ring-offset-2;
-		@apply peer-checked:border-purple-900 peer-checked:bg-purple-800 peer-checked:text-white;
-		@apply peer-checked:peer-focus:bg-purple-800 peer-checked:peer-focus:text-white;
-		@apply dark:bg-white/20 dark:border-white/20;
-		@apply dark:peer-focus:bg-white/30 dark:peer-focus:border-white/20;
-		@apply dark:peer-checked:bg-purple-500 dark:peer-checked:border-purple-400;
-		@apply dark:peer-checked:peer-focus:bg-purple-600 dark:peer-checked:peer-focus:border-purple-500;
-		@apply dark:peer-focus:ring-purple-400;
+	&:is(:where(.peer):checked:focus ~ *) {
+		background-color: var(--color-purple-800);
+		color: white;
 	}
 
-	.button-group--first {
-		@apply rounded-s-lg;
+	&:where(.dark, .dark *) {
+		background-color: rgb(255 255 255 / 20%);
+		border-color: rgb(255 255 255 / 20%);
+
+		&:is(:where(.peer):focus ~ *) {
+			--ring-size: 2px;
+			--ring-colour: var(--color-purple-400);
+
+			background-color: rgb(255 255 255 / 30%);
+			border-color: rgb(255 255 255 / 20%);
+		}
+
+		&:is(:where(.peer):checked ~ *) {
+			background-color: var(--color-purple-500);
+			border-color: var(--color-purple-400);
+		}
+
+		&:is(:where(.peer):checked:focus ~ *) {
+			background-color: var(--color-purple-600);
+			border-color: var(--color-purple-500);
+		}
+	}
+}
+
+.button-group--first {
+	border-start-start-radius: var(--radius-lg);
+	border-end-start-radius: var(--radius-lg);
+}
+
+.button-group--middle {
+	border-inline-start-width: 0;
+}
+
+.button-group--last {
+	border-start-end-radius: var(--radius-lg);
+	border-end-end-radius: var(--radius-lg);
+}
+
+.form-field--error {
+	--ring-colour: var(--color-red-600);
+
+	box-shadow: 0 0 0 1px var(--ring-colour);
+
+	&:where(.dark, .dark *) {
+		--ring-colour: var(--color-red-300);
+	}
+}
+
+[data-selector="form-field-wrapper"] {
+	--ring-size: 1px;
+	--ring-colour: var(--color-grey-300);
+
+	border-radius: var(--radius-md);
+	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
+
+	&:has(:hover) {
+		--ring-size: 1px;
+		--ring-colour: var(--color-grey-400);
 	}
 
-	.button-group--middle {
-		@apply border-s-0;
+	&:has(:focus) {
+		--ring-size: 2px;
+		--ring-colour: var(--color-purple-800);
 	}
 
-	.button-group--last {
-		@apply rounded-e-lg;
-	}
-
-	.form-field--error {
-		@apply ring-red-600 dark:ring-red-300;
-	}
-
-	[data-selector="form-field-wrapper"] {
-		@apply ring-1 ring-grey-300 rounded-md;
-		@apply dark:bg-white/20 dark:ring-white/30;
+	&:where(.dark, .dark *) {
+		background-color: rgb(255 255 255 / 20%);
+		--ring-colour: rgb(255 255 255 / 30%);
 
 		&:has(:hover) {
-			@apply ring-grey-400;
-			@apply dark:ring-white/50;
+			--ring-colour: rgb(255 255 255 / 50%);
 		}
 
 		&:has(:focus) {
-			@apply ring-2 ring-purple-800;
-			@apply dark:ring-purple-400;
+			--ring-colour: var(--color-purple-400);
 		}
 	}
+}
 
-	[data-selector="form-prefix"],
-	[data-selector="form-suffix"] {
-		@apply text-grey-500;
-		@apply dark:text-grey-300;
+[data-selector="form-prefix"],
+[data-selector="form-suffix"] {
+	color: var(--color-grey-500);
 
-		& > svg {
-			@apply size-4 stroke-current;
-		}
+	& > svg {
+		flex-shrink: 0;
+		height: calc(var(--spacing) * 4);
+		stroke: currentColor;
+		width: calc(var(--spacing) * 4);
 	}
 
-	textarea {
-		@apply min-h-40;
-
-		field-sizing: content;
+	&:where(.dark, .dark *) {
+		color: var(--color-grey-300);
 	}
+}
 
-	[type="checkbox"]:checked {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23FFF' d='m12.796 6.086-5.533 5.706a.675.675 0 0 1-.975 0l-3.086-3.2a.727.727 0 0 1 0-1.005l.861-.889a.675.675 0 0 1 .974 0l1.756 1.757 4.17-4.248a.675.675 0 0 1 .973 0l.86.869c.13.133.204.315.204.505s-.073.371-.204.505'/%3E%3C/svg%3E");
-	}
+textarea {
+	field-sizing: content;
+	min-height: calc(var(--spacing) * 40);
+}
 
-	[type="radio"]:checked {
-		background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
-	}
+[type="checkbox"]:checked {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23FFF' d='m12.796 6.086-5.533 5.706a.675.675 0 0 1-.975 0l-3.086-3.2a.727.727 0 0 1 0-1.005l.861-.889a.675.675 0 0 1 .974 0l1.756 1.757 4.17-4.248a.675.675 0 0 1 .973 0l.86.869c.13.133.204.315.204.505s-.073.371-.204.505'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+[type="radio"]:checked {
+	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
 }

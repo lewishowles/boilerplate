@@ -3,26 +3,26 @@ import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
 /**
- * Simplify the process of making API calls by removing some of the boilerplate.
+ * Composable for making API calls with centralised baseUrl configuration.
+ * Handles fetch requests, error handling, and loading/ready state tracking.
  */
 export default function useApi() {
-	// Our base URL, which is prepended to API calls. We do this so that the
-	// rest of the app doesn't have to think about where data comes from.
+	// Base URL prepended to all API calls—centralises config so callers don't need to know where data comes from
 	let baseUrl = "http://localhost:3000/api";
 
-	// Whether data is currently loading.
+	// Whether fetch is currently in progress
 	const isLoading = ref(false);
-	// Whether data has loaded successfully.
+	// Whether data has loaded successfully
 	const isReady = ref(false);
 
 	/**
-	 * Perform a GET request to the provided endpoint, combined with a known
-	 * base path.
+	 * Perform a GET request to the provided endpoint (with optional query params).
+	 * Sets isLoading to true during the request and isReady on success.
 	 *
 	 * @param  {string}  endpoint
-	 *     The endpoint from which to load data.
+	 *     API endpoint path
 	 * @param  {object}  parameters
-	 *     Any parameters to add as a query string.
+	 *     Query string parameters
 	 */
 	async function get(endpoint, parameters) {
 		try {
@@ -44,13 +44,13 @@ export default function useApi() {
 	}
 
 	/**
-	 * Combine the provided endpoint and the base URL to create our final URL to
-	 * call.
+	 * Combine baseUrl + endpoint into final URL; serialize query params.
+	 * Validates both inputs to fail fast on misconfiguration.
 	 *
 	 * @param  {string}  endpoint
-	 *     The endpoint for a single call, to be appended to the base URL.
+	 *     Endpoint path to append to baseUrl
 	 * @param  {object}  parameters
-	 *     Any parameters to add as a query string.
+	 *     Query string parameters
 	 */
 	function getFinalUrl(endpoint, parameters) {
 		if (!isNonEmptyString(baseUrl)) {
@@ -68,17 +68,18 @@ export default function useApi() {
 	}
 
 	/**
-	 * Retrieve the current base URL.
+	 * Get the current base URL.
 	 */
 	function getBaseUrl() {
 		return baseUrl;
 	}
 
 	/**
-	 * Update the default base URL for this instance of the composable.
+	 * Update the base URL for this instance.
+	 * Allows runtime config updates without remounting.
 	 *
 	 * @param  {string}  url
-	 *     The URL to set.
+	 *     The URL to set
 	 */
 	function setBaseUrl(url) {
 		if (!isNonEmptyString(url)) {

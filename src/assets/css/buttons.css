@@ -1,143 +1,138 @@
-@reference "./main.css";
+.link {
+	color: var(--color-purple-800);
+	text-decoration: underline;
+	text-decoration-skip-ink: auto;
+	text-underline-offset: 4px;
 
-/*
-@utility link {
-	@apply text-purple-800 underline underline-offset-4;
-	@apply hocus:text-purple-900 hocus:no-underline;
-
-	@apply dark:text-purple-300;
-	@apply dark:hocus:text-purple-200;
-}
-
-@utility link--muted {
-	@apply text-grey-500 underline underline-offset-4;
-	@apply hocus:text-grey-700 hocus:no-underline;
-
-	@apply dark:text-white/60;
-	@apply dark:hocus:text-white/90;
-}
-
-@utility button-padding-x {
-	@apply px-[1em];
-}
-
-@utility button-padding-y {
-	@apply py-[0.5em];
-}
-
-@utility button {
-	@apply button-padding-x button-padding-y rounded-md;
-}
-
-@utility button--primary {
-	@apply button;
-	@apply font-semibold bg-purple-800 text-white;
-	@apply hocus:bg-purple-900;
-	@apply active:bg-purple-950;
-
-	@apply dark:bg-purple-500;
-	@apply dark:hocus:bg-purple-600;
-	@apply dark:active:bg-purple-700;
-}
-
-@utility button--muted {
-	@apply button no-underline text-current;
-	@apply bg-white border border-grey-300;
-	@apply hocus:bg-grey-50 hocus:border-grey-400 hocus:text-grey-700;
-	@apply active:bg-grey-100 active:border-grey-500 active:text-grey-800;
-
-	@apply dark:bg-white/20 dark:border-white/20;
-	@apply dark:hocus:bg-white/30 dark:hocus:border-white/20 dark:hocus:text-grey-100;
-	@apply dark:active:bg-white/40 dark:active:border-transparent dark:active:text-grey-50;
-}
-
-@utility button--danger {
-	@apply button;
-	@apply font-semibold bg-red-700 text-white;
-	@apply hocus:bg-red-800;
-	@apply active:bg-red-900;
-}
-*/
-
-@utility link {
-	@apply text-purple-800 underline underline-offset-4;
-	@apply hocus:text-purple-900 hocus:no-underline;
-
-	@apply dark:text-purple-300;
-	@apply dark:hocus:text-purple-200;
-}
-
-@utility link--muted {
-	@apply text-grey-500 underline underline-offset-4;
-	@apply hocus:text-grey-700 hocus:no-underline;
-
-	@apply dark:text-white/60;
-	@apply dark:hocus:text-white/90;
-}
-
-@utility button-padding-x {
-	@apply px-[1em];
-}
-
-@utility button-padding-y {
-	@apply py-[0.5em];
-}
-
-@utility button {
-	@apply button-padding-x button-padding-y rounded-md
-}
-
-@utility button--muted {
-	@apply button no-underline text-current;
-	@apply bg-white border border-grey-300;
-	@apply hocus:bg-grey-50 hocus:border-grey-400 hocus:text-grey-700;
-	@apply active:bg-grey-100 active:border-grey-500 active:text-grey-800;
-
-	@apply dark:bg-white/20 dark:border-white/20;
-	@apply dark:hocus:bg-white/30 dark:hocus:border-white/20 dark:hocus:text-grey-100;
-	@apply dark:active:bg-white/40 dark:active:border-transparent dark:active:text-grey-50;
-}
-
-@layer components {
-	.link {
-		@apply link;
+	&:is(:hover, :focus) {
+		color: var(--color-purple-900);
+		text-decoration: none;
 	}
 
-	.link--muted {
-		@apply link--muted;
+	&:where(.dark, .dark *) {
+		color: var(--color-purple-300);
+
+		&:is(:hover, :focus) {
+			color: var(--color-purple-200);
+		}
+	}
+}
+
+.link--muted {
+	color: var(--color-grey-500);
+	text-decoration: underline;
+	text-decoration-skip-ink: auto;
+	text-underline-offset: 4px;
+
+	&:is(:hover, :focus) {
+		color: var(--color-grey-700);
+		text-decoration: none;
 	}
 
-	.button-padding-x {
-		@apply button-padding-x;
+	&:where(.dark, .dark *) {
+		color: rgb(255 255 255 / 60%);
+
+		&:is(:hover, :focus) {
+			color: rgb(255 255 255 / 90%);
+		}
+	}
+}
+
+.button-padding-x {
+	padding-inline: 1em;
+}
+
+.button-padding-y {
+	padding-block: 0.5em;
+}
+
+.button {
+	border-radius: var(--radius-md);
+	padding-block: 0.5em;
+	padding-inline: 1em;
+}
+
+.button--primary {
+	background-color: var(--color-purple-800);
+	border-radius: var(--radius-md);
+	color: white;
+	font-weight: 600;
+	padding-block: 0.5em;
+	padding-inline: 1em;
+
+	&:is(:hover, :focus) {
+		background-color: var(--color-purple-900);
 	}
 
-	.button-padding-y {
-		@apply button-padding-y;
+	&:active {
+		background-color: var(--color-purple-950);
 	}
 
-	.button {
-		@apply button;
+	&:where(.dark, .dark *) {
+		background-color: var(--color-purple-500);
+
+		&:is(:hover, :focus) {
+			background-color: var(--color-purple-600);
+		}
+
+		&:active {
+			background-color: var(--color-purple-700);
+		}
+	}
+}
+
+.button--muted {
+	background-color: white;
+	border: 1px solid var(--color-grey-300);
+	border-radius: var(--radius-md);
+	color: currentColor;
+	padding-block: 0.5em;
+	padding-inline: 1em;
+	text-decoration: none;
+
+	&:is(:hover, :focus) {
+		background-color: var(--color-grey-50);
+		border-color: var(--color-grey-400);
+		color: var(--color-grey-700);
 	}
 
-	.button--primary {
-		@apply button;
-		@apply font-semibold bg-purple-800 text-white;
-		@apply hocus:bg-purple-900;
-		@apply active:bg-purple-950;
-
-		@apply dark:bg-purple-500;
-		@apply dark:hocus:bg-purple-600;
-		@apply dark:active:bg-purple-700;
+	&:active {
+		background-color: var(--color-grey-100);
+		border-color: var(--color-grey-500);
+		color: var(--color-grey-800);
 	}
 
-	.button--muted {
-		@apply button--muted;
+	&:where(.dark, .dark *) {
+		background-color: rgb(255 255 255 / 20%);
+		border-color: rgb(255 255 255 / 20%);
+
+		&:is(:hover, :focus) {
+			background-color: rgb(255 255 255 / 30%);
+			border-color: rgb(255 255 255 / 20%);
+			color: var(--color-grey-100);
+		}
+
+		&:active {
+			background-color: rgb(255 255 255 / 40%);
+			border-color: transparent;
+			color: var(--color-grey-50);
+		}
+	}
+}
+
+.button--danger {
+	background-color: var(--color-red-700);
+	border-radius: var(--radius-md);
+	color: white;
+	font-weight: 600;
+	padding-block: 0.5em;
+	padding-inline: 1em;
+
+	&:is(:hover, :focus) {
+		background-color: var(--color-red-800);
 	}
 
-	.button--danger {
-		@apply button;
-		@apply font-semibold bg-red-700 text-white;
-		@apply hocus:bg-red-800;
-		@apply active:bg-red-900;
+	&:active {
+		background-color: var(--color-red-900);
 	}
 }

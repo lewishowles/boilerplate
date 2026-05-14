@@ -1,9 +1,13 @@
+# Secrets
+.env
+
 # npm
 node_modules
 .npmrc
 
 # Build artifacts
 dist
+build
 
 # macOS files
 .DS_Store
@@ -11,3 +15,4 @@ dist
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+

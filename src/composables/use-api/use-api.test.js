@@ -5,7 +5,16 @@ import { flushPromises } from "@vue/test-utils";
 describe("use-api", () => {
 	const url = "test";
 
-	describe("Throws an error if the provided url is not a non-empty string", () => {
+	describe("initialization", () => {
+		test("initialises isLoading and isReady to false", () => {
+			const { isLoading, isReady } = useApi();
+
+			expect(isLoading.value).toBe(false);
+			expect(isReady.value).toBe(false);
+		});
+	});
+
+	describe("get", () => {
 		test.for([
 			["number (positive)", 1],
 			["number (negative)", -1],
@@ -17,36 +26,13 @@ describe("use-api", () => {
 			["array (empty)", []],
 			["null", null],
 			["undefined", undefined],
-		])("%s", async ([, url]) => {
+		])("rejects invalid endpoints: %s", async ([, endpoint]) => {
 			const { get } = useApi();
 
-			await expect(get(url)).rejects.toThrow();
-		});
-	});
-
-	describe("get", () => {
-		describe("Expects a valid endpoint", () => {
-			test.for([
-				["boolean (true)", true],
-				["boolean (false)", false],
-				["number (positive)", 1],
-				["number (negative)", -1],
-				["number (NaN)", NaN],
-				["string (empty)", ""],
-				["object (non-empty)", { property: "value" }],
-				["object (empty)", {}],
-				["array (non-empty)", [1, 2, 3]],
-				["array (empty)", []],
-				["null", null],
-				["undefined", undefined],
-			])("%s", async([, endpoint]) => {
-				const { get } = useApi();
-
-				await expect(get(endpoint)).rejects.toThrow();
-			});
+			await expect(get(endpoint)).rejects.toThrow();
 		});
 
-		test("Makes the appropriate API call", async() => {
+		test("calls fetch with correct URL", async () => {
 			const { get } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
@@ -58,7 +44,7 @@ describe("use-api", () => {
 			expect(fetch).toHaveBeenCalledWith("http://localhost:3000/api/test");
 		});
 
-		test("Unwraps the response", async() => {
+		test("returns response body", async () => {
 			const { get } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => ({ my: "data" }) });
@@ -70,7 +56,7 @@ describe("use-api", () => {
 			expect(response).toEqual({ my: "data" });
 		});
 
-		test("Handles errors", async() => {
+		test("rejects on API error", async () => {
 			const { get } = useApi();
 
 			fetch.mockRejectedValueOnce({ ok: false, json: () => ({ message: "Error message" }) });
@@ -78,14 +64,7 @@ describe("use-api", () => {
 			await expect(get(url)).rejects.toThrow();
 		});
 
-		test("Initialises with isLoading and isReady set to false", () => {
-			const { isLoading, isReady } = useApi();
-
-			expect(isLoading.value).toBe(false);
-			expect(isReady.value).toBe(false);
-		});
-
-		test("Sets isLoading to true when load is called", async () => {
+		test("sets isLoading during fetch", async () => {
 			const { isLoading, get } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
@@ -97,7 +76,7 @@ describe("use-api", () => {
 			await getPromise;
 		});
 
-		test("Sets isReady to true after loading data", async () => {
+		test("sets isReady after success", async () => {
 			const { isReady, get } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
@@ -107,7 +86,7 @@ describe("use-api", () => {
 			expect(isReady.value).toBe(true);
 		});
 
-		test("Sets isLoading to false after load completes", async () => {
+		test("clears isLoading after fetch", async () => {
 			const { isLoading, get } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
@@ -119,28 +98,26 @@ describe("use-api", () => {
 	});
 
 	describe("setBaseUrl", () => {
-		describe("Expects a valid base URL", () => {
-			test.for([
-				["boolean (true)", true],
-				["boolean (false)", false],
-				["number (positive)", 1],
-				["number (negative)", -1],
-				["number (NaN)", NaN],
-				["string (empty)", ""],
-				["object (non-empty)", { property: "value" }],
-				["object (empty)", {}],
-				["array (non-empty)", [1, 2, 3]],
-				["array (empty)", []],
-				["null", null],
-				["undefined", undefined],
-			])("%s", async([, url]) => {
-				const { setBaseUrl } = useApi();
+		test.for([
+			["boolean (true)", true],
+			["boolean (false)", false],
+			["number (positive)", 1],
+			["number (negative)", -1],
+			["number (NaN)", NaN],
+			["string (empty)", ""],
+			["object (non-empty)", { property: "value" }],
+			["object (empty)", {}],
+			["array (non-empty)", [1, 2, 3]],
+			["array (empty)", []],
+			["null", null],
+			["undefined", undefined],
+		])("rejects invalid URLs: %s", async ([, invalidUrl]) => {
+			const { setBaseUrl } = useApi();
 
-				expect(() => setBaseUrl(url)).toThrow();
-			});
+			expect(() => setBaseUrl(invalidUrl)).toThrow();
 		});
 
-		test("The base URL can be updated", async() => {
+		test("updates base URL", async () => {
 			const { get, setBaseUrl } = useApi();
 
 			fetch.mockResolvedValueOnce({ ok: true, json: () => {} });
@@ -156,13 +133,13 @@ describe("use-api", () => {
 	});
 
 	describe("getBaseUrl", () => {
-		test("Reflects the default base URL", () => {
+		test("returns default URL", () => {
 			const { getBaseUrl } = useApi();
 
 			expect(getBaseUrl()).toBe("http://localhost:3000/api");
 		});
 
-		test("Reflects an updated base URL", () => {
+		test("reflects updated URL", () => {
 			const { getBaseUrl, setBaseUrl } = useApi();
 
 			setBaseUrl("testing");
