@@ -44,8 +44,8 @@ export default function useApi() {
 	}
 
 	/**
-	 * Combine baseUrl + endpoint into final URL; serialize query params.
-	 * Validates both inputs to fail fast on misconfiguration.
+	 * Combine our baseUrl, endpoint and parameters into final URL, serialising
+	 * provided query params.
 	 *
 	 * @param  {string}  endpoint
 	 *     Endpoint path to append to baseUrl
