@@ -60,6 +60,11 @@
 	padding-block: 0.5em;
 	padding-inline: 1em;
 
+	&:has([data-test="ui-button-label"].sr-only) {
+		padding-block: 0.75em;
+		padding-inline: 0.75em;
+	}
+
 	&:is(:hover, :focus) {
 		background-color: var(--color-purple-900);
 	}
@@ -89,6 +94,11 @@
 	padding-block: 0.5em;
 	padding-inline: 1em;
 	text-decoration: none;
+
+	&:has([data-test="ui-button-label"].sr-only) {
+		padding-block: 0.75em;
+		padding-inline: 0.75em;
+	}
 
 	&:is(:hover, :focus) {
 		background-color: var(--color-grey-50);
@@ -127,6 +137,11 @@
 	font-weight: 600;
 	padding-block: 0.5em;
 	padding-inline: 1em;
+
+	&:has([data-test="ui-button-label"].sr-only) {
+		padding-block: 0.75em;
+		padding-inline: 0.75em;
+	}
 
 	&:is(:hover, :focus) {
 		background-color: var(--color-red-800);
