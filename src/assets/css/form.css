@@ -57,7 +57,7 @@
 	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
 	flex-shrink: 0;
 	height: calc(var(--spacing) * 4);
-	margin-block-start: calc(var(--spacing) * 0.5);
+	margin-block-start: var(--spacing);
 	outline: 0;
 	transition-duration: var(--default-transition-duration);
 	transition-property: all;
@@ -111,6 +111,7 @@
 	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
 	flex-shrink: 0;
 	height: calc(var(--spacing) * 4);
+	margin-block-start: var(--spacing);
 	outline: 0;
 	transition-duration: var(--default-transition-duration);
 	transition-property: all;
@@ -175,8 +176,7 @@
 	transition-property: all;
 	transition-timing-function: var(--default-transition-timing-function);
 
-	&:hover,
-	&:focus {
+	&:hover, &:focus {
 		background-color: var(--color-grey-50);
 		border-color: var(--color-grey-400);
 		color: var(--color-grey-700);
@@ -192,8 +192,7 @@
 		background-color: rgb(255 255 255 / 20%);
 		border-color: rgb(255 255 255 / 20%);
 
-		&:hover,
-		&:focus {
+		&:hover, &:focus {
 			background-color: rgb(255 255 255 / 30%);
 			border-color: rgb(255 255 255 / 20%);
 			color: var(--color-grey-100);
