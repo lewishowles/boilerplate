@@ -1,12 +1,24 @@
-.link {
-	color: var(--color-purple-800);
+:root {
+	--button-padding-x: 1em;
+	--button-padding-y: 0.5em;
+}
+
+.link,
+.link--muted {
 	text-decoration: underline;
 	text-decoration-skip-ink: auto;
 	text-underline-offset: 4px;
 
 	&:is(:hover, :focus) {
-		color: var(--color-purple-900);
 		text-decoration: none;
+	}
+}
+
+.link {
+	color: var(--text-brand);
+
+	&:is(:hover, :focus) {
+		color: var(--color-purple-900);
 	}
 
 	&:where(.dark, .dark *) {
@@ -20,13 +32,9 @@
 
 .link--muted {
 	color: var(--color-grey-500);
-	text-decoration: underline;
-	text-decoration-skip-ink: auto;
-	text-underline-offset: 4px;
 
 	&:is(:hover, :focus) {
 		color: var(--color-grey-700);
-		text-decoration: none;
 	}
 
 	&:where(.dark, .dark *) {
@@ -39,225 +47,171 @@
 }
 
 .button-padding-x {
-	padding-inline: 1em;
+	padding-inline: var(--button-padding-x);
 }
 
 .button-padding-y {
-	padding-block: 0.5em;
+	padding-block: var(--button-padding-y);
 }
 
-.button {
+:is(.button, .button--primary, .button--muted, .button--toggle, .button--ghost, .button--danger) {
 	border-radius: var(--radius-md);
-	padding-block: 0.5em;
-	padding-inline: 1em;
+	padding-block: var(--button-padding-y);
+	padding-inline: var(--button-padding-x);
+
+	&:has([data-part="label"].sr-only) svg {
+		min-block-size: 1lh;
+	}
+}
+
+:is(.button--primary, .button--muted, .button--toggle, .button--ghost, .button--danger) {
+	background-color: var(--background-colour);
+	color: var(--colour, currentColor);
+}
+
+:is(.button--primary, .button--danger) {
+	--colour: white;
+
+	font-weight: 500;
+	outline: 0;
+
+	&:focus-visible {
+		outline: 2px solid var(--outline-colour);
+	}
+}
+
+:is(.button--muted, .button--toggle, .button--ghost) {
+	border: 1px solid var(--border-colour);
+	text-decoration: none;
+}
+
+:is(.button--muted, .button--ghost),
+.button--toggle:not([aria-pressed="true"]) {
+	--background-colour: white;
+	--colour: currentColor;
+	--border-colour: var(--border-strong);
+
+	&:is(:hover, :focus) {
+		--background-colour: var(--color-grey-50);
+		--colour: var(--color-grey-700);
+		--border-colour: var(--color-grey-400);
+	}
+
+	&:active {
+		--background-colour: var(--color-grey-100);
+		--colour: var(--color-grey-800);
+		--border-colour: var(--color-grey-500);
+	}
+}
+
+:is(.button--muted, .button--ghost):where(.dark, .dark *),
+.button--toggle:where(.dark, .dark *):not([aria-pressed="true"]) {
+	--background-colour: rgb(255 255 255 / 20%);
+	--colour: currentColor;
+	--border-colour: rgb(255 255 255 / 20%);
+
+	&:is(:hover, :focus) {
+		--background-colour: rgb(255 255 255 / 30%);
+		--colour: var(--color-grey-100);
+	}
+
+	&:active {
+		--background-colour: rgb(255 255 255 / 40%);
+		--colour: var(--color-grey-50);
+		--border-colour: transparent;
+	}
 }
 
 .button--primary {
-	background-color: var(--color-purple-800);
-	border-radius: var(--radius-md);
-	color: white;
-	font-weight: 500;
-	padding-block: 0.5em;
-	padding-inline: 1em;
-
-	&:has([data-test="ui-button-label"].sr-only) {
-		padding-block: 0.75em;
-		padding-inline: 0.75em;
-	}
+	--background-colour: var(--text-brand);
+	--outline-colour: var(--text-brand);
 
 	&:is(:hover, :focus) {
-		background-color: var(--color-purple-900);
+		--background-colour: var(--color-purple-900);
+	}
+
+	&:focus-visible {
+		box-shadow: none;
+		outline-offset: 2px;
 	}
 
 	&:active {
-		background-color: var(--color-purple-950);
+		--background-colour: var(--color-purple-950);
 	}
 
 	&:where(.dark, .dark *) {
-		background-color: var(--color-purple-500);
+		--background-colour: var(--color-purple-500);
 
 		&:is(:hover, :focus) {
-			background-color: var(--color-purple-600);
+			--background-colour: var(--color-purple-600);
+			--outline-colour: var(--color-purple-600);
 		}
 
 		&:active {
-			background-color: var(--color-purple-700);
+			--background-colour: var(--color-purple-700);
 		}
 	}
 }
 
-.button--muted {
-	background-color: white;
-	border: 1px solid var(--color-grey-300);
-	border-radius: var(--radius-md);
-	color: currentColor;
-	padding-block: 0.5em;
-	padding-inline: 1em;
-	text-decoration: none;
-
-	&:has([data-test="ui-button-label"].sr-only) {
-		padding-block: 0.75em;
-		padding-inline: 0.75em;
-	}
+.button--toggle[aria-pressed="true"] {
+	--background-colour: var(--color-purple-50);
+	--colour: var(--color-purple-600);
+	--border-colour: var(--color-purple-400);
 
 	&:is(:hover, :focus) {
-		background-color: var(--color-grey-50);
-		border-color: var(--color-grey-400);
-		color: var(--color-grey-700);
+		--background-colour: var(--color-purple-100);
+		--colour: var(--color-purple-700);
+		--border-colour: var(--color-purple-500);
 	}
 
 	&:active {
-		background-color: var(--color-grey-100);
-		border-color: var(--color-grey-500);
-		color: var(--color-grey-800);
-	}
-
-	&:where(.dark, .dark *) {
-		background-color: rgb(255 255 255 / 20%);
-		border-color: rgb(255 255 255 / 20%);
-
-		&:is(:hover, :focus) {
-			background-color: rgb(255 255 255 / 30%);
-			border-color: rgb(255 255 255 / 20%);
-			color: var(--color-grey-100);
-		}
-
-		&:active {
-			background-color: rgb(255 255 255 / 40%);
-			border-color: transparent;
-			color: var(--color-grey-50);
-		}
+		--background-colour: var(--color-purple-200);
+		--colour: var(--text-brand);
+		--border-colour: var(--color-purple-600);
 	}
 }
 
-.button--toggle {
-	border-radius: var(--radius-md);
-	border: 1px solid var(--color-grey-300);
-	color: currentColor;
-	padding-block: 0.5em;
-	padding-inline: 1em;
-	text-decoration: none;
-
-	&:has([data-test="ui-button-label"].sr-only) {
-		padding-block: 0.75em;
-		padding-inline: 0.75em;
-	}
-
-	&:not([aria-pressed="true"]) {
-		background-color: white;
-
-		&:is(:hover, :focus) {
-			background-color: var(--color-grey-50);
-			border-color: var(--color-grey-400);
-			color: var(--color-grey-700);
-		}
-
-		&:active {
-			background-color: var(--color-grey-100);
-			border-color: var(--color-grey-500);
-			color: var(--color-grey-800);
-		}
-	}
-
-	&[aria-pressed="true"] {
-		background-color: var(--color-purple-50);
-		border-color: var(--color-purple-400);
-		color: var(--color-purple-600);
-
-		&:is(:hover, :focus) {
-			background-color: var(--color-purple-100);
-			border-color: var(--color-purple-500);
-			color: var(--color-purple-700);
-		}
-
-		&:active {
-			background-color: var(--color-purple-200);
-			border-color: var(--color-purple-600);
-			color: var(--color-purple-800);
-		}
-	}
-
-	&:where(.dark, .dark *) {
-		&:not([aria-pressed="true"]) {
-			background-color: rgb(255 255 255 / 20%);
-			border-color: rgb(255 255 255 / 20%);
-
-			&:is(:hover, :focus) {
-				background-color: rgb(255 255 255 / 30%);
-				border-color: rgb(255 255 255 / 20%);
-				color: var(--color-grey-100);
-			}
-
-			&:active {
-				background-color: rgb(255 255 255 / 40%);
-				border-color: transparent;
-				color: var(--color-grey-50);
-			}
-		}
-
-		&[aria-pressed="true"] {
-			background-color: rgb(from var(--color-purple-400) r g b / 10%);
-			border-color: var(--color-purple-400);
-			color: var(--color-purple-300);
-
-			&:is(:hover, :focus) {
-				background-color: rgb(from var(--color-purple-400) r g b / 20%);
-				border-color: var(--color-purple-300);
-				color: var(--color-purple-200);
-			}
-
-			&:active {
-				background-color: rgb(from var(--color-purple-400) r g b / 30%);
-				border-color: var(--color-purple-200);
-				color: var(--color-purple-100);
-			}
-		}
-	}
-}
-
-.button--disabled {
-	background-color: var(--color-grey-100);
-	border-color: var(--color-grey-100);
-	color: var(--color-grey-600);
-	cursor: not-allowed;
+.button--toggle:where(.dark, .dark *)[aria-pressed="true"] {
+	--background-colour: rgb(from var(--color-purple-400) r g b / 10%);
+	--colour: var(--color-purple-300);
+	--border-colour: var(--color-purple-400);
 
 	&:is(:hover, :focus) {
-		background-color: var(--color-grey-100);
-		border-color: var(--color-grey-100);
-		color: var(--color-grey-600);
+		--background-colour: rgb(from var(--color-purple-400) r g b / 20%);
+		--colour: var(--color-purple-200);
+		--border-colour: var(--color-purple-300);
 	}
 
-	&:where(.dark, .dark *) {
-		background-color: rgb(255 255 255 / 10%);
-		border-color: rgb(255 255 255 / 10%);
-		color: rgb(255 255 255 / 40%);
+	&:active {
+		--background-colour: rgb(from var(--color-purple-400) r g b / 30%);
+		--colour: var(--color-purple-100);
+		--border-colour: var(--color-purple-200);
+	}
+}
 
-		&:is(:hover, :focus) {
-			background-color: rgb(255 255 255 / 10%);
-			border-color: rgb(255 255 255 / 10%);
-			color: rgb(255 255 255 / 40%);
-		}
+.button--ghost {
+	--background-colour: transparent;
+	--border-colour: transparent;
+
+	&:where(.dark, .dark *) {
+		--background-colour: transparent;
+		--border-colour: transparent;
 	}
 }
 
 .button--danger {
-	background-color: var(--color-red-700);
-	border-radius: var(--radius-md);
-	color: white;
-	font-weight: 500;
-	padding-block: 0.5em;
-	padding-inline: 1em;
-
-	&:has([data-test="ui-button-label"].sr-only) {
-		padding-block: 0.75em;
-		padding-inline: 0.75em;
-	}
+	--background-colour: var(--color-red-700);
+	--outline-colour: var(--color-red-800);
 
 	&:is(:hover, :focus) {
-		background-color: var(--color-red-800);
+		--background-colour: var(--color-red-800);
+	}
+
+	&:focus-visible {
+		outline-offset: 4px;
 	}
 
 	&:active {
-		background-color: var(--color-red-900);
+		--background-colour: var(--color-red-900);
 	}
 }

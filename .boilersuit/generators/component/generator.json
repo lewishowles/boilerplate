@@ -1,0 +1,52 @@
+{
+	"schema_version": 1,
+	"id": "component",
+	"display_name": "Component",
+	"description": "Create a Vue component with unit and optional integration tests.",
+	"default_path": "src/components",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Component name",
+			"hint": "Use at least two words, e.g. app-header.",
+			"required": true
+		},
+		{
+			"token": "TEST",
+			"label": "Prop name",
+			"description": "Used for the main prop exposed by the component.",
+			"required": true
+		}
+	],
+	"files": [
+		{
+			"template": "main.vue",
+			"output_path": "{{ NAME | kebab }}.vue",
+			"required": true
+		},
+		{
+			"template": "unit.test.js",
+			"output_path": "{{ NAME | kebab }}.test.js",
+			"label": "Unit test",
+			"required": true
+		},
+		{
+			"template": "integration.cy.js",
+			"output_path": "{{ NAME | kebab }}.cy.js",
+			"label": "Integration test",
+			"required": false,
+			"include_when": {
+				"test_framework": "cypress"
+			}
+		},
+		{
+			"template": "integration.pw.js",
+			"output_path": "{{ NAME | kebab }}.spec.js",
+			"label": "Integration test",
+			"required": false,
+			"include_when": {
+				"test_framework": "playwright"
+			}
+		}
+	]
+}

@@ -1,0 +1,75 @@
+{
+	"name": "Vue app boilerplate",
+	"description": "Creates a minimal Vue app with Boilersuit generators.",
+	"placeholders": [
+		{
+			"token": "PROJECT_NAME",
+			"label": "Project name",
+			"description": "Used in package.json, README, and app metadata.",
+			"placeholder": "my-new-project",
+			"required": true
+		},
+		{
+			"token": "BASE_URL",
+			"label": "Base URL",
+			"description": "The Vite base path for the deployed app.",
+			"default_value": "/",
+			"required": true
+		},
+		{
+			"token": "API_BASE_URL",
+			"label": "API base URL",
+			"description": "The base URL used by the fetch API helper.",
+			"default_value": "http://localhost:3000/api",
+			"required": true
+		},
+		{
+			"token": "API_TYPE",
+			"label": "API type",
+			"description": "Chooses which starter API helper and query generator imports to keep.",
+			"type": "select",
+			"default_value": "fetch",
+			"options": [
+				{
+					"label": "Fetch",
+					"value": "fetch",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/fetch/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api/fetch",
+						"MOCK_API_NAME": "mockApi"
+					}
+				},
+				{
+					"label": "Xano",
+					"value": "xano",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/xano/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api/xano",
+						"MOCK_API_NAME": "mockApi"
+					}
+				}
+			],
+			"required": true
+		}
+	],
+	"files": [
+		{
+			"paths": ["src/composables/api/fetch/**"],
+			"include_when": { "API_TYPE": "fetch" }
+		},
+		{
+			"paths": ["src/composables/api/xano/**"],
+			"include_when": { "API_TYPE": "xano" }
+		},
+		{
+			"paths": ["test/unit/support/mock-api/fetch/**"],
+			"include_when": { "API_TYPE": "fetch" }
+		},
+		{
+			"paths": ["test/unit/support/mock-api/xano/**"],
+			"include_when": { "API_TYPE": "xano" }
+		}
+	]
+}

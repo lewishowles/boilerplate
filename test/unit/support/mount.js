@@ -1,6 +1,6 @@
 import { deepMerge } from "@lewishowles/helpers/object";
 import { mount, shallowMount, RouterLinkStub } from "@vue/test-utils";
-import { vi } from "vitest";
+import { vi } from "vite-plus/test";
 
 const globalOptions = {
 	global: {

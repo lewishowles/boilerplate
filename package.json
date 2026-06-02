@@ -1,25 +1,28 @@
 {
-	"name": "boilerplate",
+	"name": "{{ PROJECT_NAME | kebab }}",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
-		"preview": "vite preview",
-		"test:unit": "vitest",
-		"test:unit:ui": "vitest --ui",
-		"test:unit:run": "vitest run",
-		"lint": "eslint . --fix"
+		"dev": "vp dev",
+		"build": "vp build",
+		"preview": "vp preview",
+		"test:unit": "vp test",
+		"test:unit:ui": "vp test --ui",
+		"test:unit:run": "vp test run",
+		"lint": "vp lint . --fix",
+		"prepare": "vp config"
 	},
 	"dependencies": {
-		"@lewishowles/components": "^1.6.0",
+		"@lewishowles/components": "^1.11.0",
 		"@lewishowles/helpers": "^0.19.0",
 		"@lewishowles/testing": "^0.10.0",
+		"@pinia/colada": "^1.3.1",
 		"@xano/js-sdk": "^3.0.1",
+		"pinia": "^3.0.4",
 		"tailwindcss": "^4.3.0",
-		"vue": "^3.5.34",
-		"vue-router": "^4.5.0"
+		"vue": "^3.5.35",
+		"vue-router": "^5.1.0"
 	},
 	"trustedDependencies": [
 		"@tailwindcss/oxide",
@@ -32,17 +35,18 @@
 		"@tailwindcss/forms": "^0.5.11",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.3.0",
-		"@vitejs/plugin-vue": "^6.0.6",
-		"@vitest/eslint-plugin": "1.6.17",
-		"@vitest/ui": "^4.1.6",
+		"@vitejs/plugin-vue": "^6.0.7",
+		"@vitest/eslint-plugin": "1.6.19",
+		"@vitest/ui": "^4.1.8",
 		"@vue/test-utils": "^2.4.10",
-		"eslint": "^10.3.0",
 		"eslint-plugin-vue": "^10.9.1",
 		"globals": "^17.6.0",
 		"happy-dom": "^20.9.0",
 		"tailwindcss-hocus": "^1.0.0",
-		"vite": "^8.0.12",
+		"vite": "^8.0.16",
 		"vite-plugin-vue-devtools": "^8.1.2",
-		"vitest": "^4.1.6"
-	}
+		"vite-plus": "latest",
+		"vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+	},
+	"packageManager": "bun@1.3.14"
 }

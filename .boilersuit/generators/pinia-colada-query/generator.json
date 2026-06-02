@@ -1,0 +1,111 @@
+{
+	"schema_version": 1,
+	"id": "pinia-colada-query",
+	"display_name": "Pinia Colada query",
+	"description": "Creates a Pinia Colada query wrapper with a matching starter unit test.",
+	"default_path": "src/queries",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Query name",
+			"description": "Used for the folder name, composable name, query key name, returned data name, and test name.",
+			"hint": "Use lowercase kebab-case, e.g. user-list.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z0-9-]+$",
+				"message": "Use lowercase kebab-case for query name."
+			}
+		},
+		{
+			"token": "API_TYPE",
+			"label": "API type",
+			"description": "Chooses which project API helper this query calls.",
+			"type": "select",
+			"options": [
+				{
+					"label": "Fetch",
+					"value": "fetch",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/fetch/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api/fetch",
+						"MOCK_API_NAME": "mockApi"
+					}
+				},
+				{
+					"label": "Xano",
+					"value": "xano",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/xano/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api/xano",
+						"MOCK_API_NAME": "mockApi"
+					}
+				}
+			],
+			"default_value": "fetch",
+			"required": true
+		},
+		{
+			"token": "ENDPOINT",
+			"label": "Endpoint",
+			"description": "The API endpoint passed to the request helper.",
+			"hint": "Enter the endpoint without a leading slash, e.g. `users` or `account/profile`.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-zA-Z0-9_/-]+$",
+				"message": "Use a valid API endpoint path without a leading slash."
+			}
+		},
+		{
+			"token": "ID_NAME",
+			"label": "ID parameter name",
+			"description": "The JavaScript variable name used for the item ID in details queries.",
+			"placeholder": "itemId",
+			"default_value": "id",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z][a-zA-Z0-9]*$",
+				"message": "Use a camelCase JavaScript variable name."
+			}
+		}
+	],
+	"variants": [
+		{
+			"id": "list",
+			"label": "List",
+			"description": "Retrieve a list from an endpoint.",
+			"default_path": "src/queries",
+			"files": [
+				{
+					"output_path": "index.js",
+					"template": "list.js",
+					"required": true
+				},
+				{
+					"output_path": "{{ NAME | kebab }}.test.js",
+					"template": "list.test.js",
+					"required": true
+				}
+			]
+		},
+		{
+			"id": "details",
+			"label": "Details",
+			"description": "Retrieve the details of a single item by ID.",
+			"default_path": "src/queries",
+			"files": [
+				{
+					"output_path": "index.js",
+					"template": "details.js",
+					"required": true
+				},
+				{
+					"output_path": "{{ NAME | kebab }}.test.js",
+					"template": "details.test.js",
+					"required": true
+				}
+			]
+		}
+	]
+}

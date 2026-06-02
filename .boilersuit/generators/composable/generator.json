@@ -1,0 +1,27 @@
+{
+	"schema_version": 1,
+	"id": "composable",
+	"display_name": "Composable",
+	"default_path": "src/composables",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Composable name",
+			"hint": "Use the composable name without the `use` prefix.",
+			"required": true
+		}
+	],
+	"files": [
+		{
+			"template": "main.js",
+			"output_path": "{{ NAME | kebab }}.js",
+			"required": true
+		},
+		{
+			"template": "unit.test.js",
+			"output_path": "{{ NAME | kebab }}.test.js",
+			"label": "Unit test",
+			"required": true
+		}
+	]
+}

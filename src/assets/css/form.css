@@ -70,8 +70,10 @@
 	}
 
 	&:focus {
-		--ring-size: 2px;
 		--ring-colour: var(--color-purple-800);
+
+		outline: 2px solid var(--ring-colour);
+		outline-offset: 2px;
 	}
 
 	&:checked {
@@ -124,8 +126,10 @@
 	}
 
 	&:focus {
-		--ring-size: 2px;
 		--ring-colour: var(--color-purple-800);
+
+		outline: 2px solid var(--ring-colour);
+		outline-offset: 2px;
 	}
 
 	&:checked {
@@ -176,7 +180,8 @@
 	transition-property: all;
 	transition-timing-function: var(--default-transition-timing-function);
 
-	&:hover, &:focus {
+	&:hover,
+	&:focus {
 		background-color: var(--color-grey-50);
 		border-color: var(--color-grey-400);
 		color: var(--color-grey-700);
@@ -192,7 +197,8 @@
 		background-color: rgb(255 255 255 / 20%);
 		border-color: rgb(255 255 255 / 20%);
 
-		&:hover, &:focus {
+		&:hover,
+		&:focus {
 			background-color: rgb(255 255 255 / 30%);
 			border-color: rgb(255 255 255 / 20%);
 			color: var(--color-grey-100);

@@ -16,3 +16,6 @@ build
 .vscode/*
 !.vscode/extensions.json
 
+# Boilersuit project setup and generators
+!.boilersuit/
+!.boilersuit/**

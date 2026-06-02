@@ -1,9 +1,11 @@
-@import url("font.css");
-@import url("buttons.css");
-@import url("form.css");
-@import url("animation.css");
-
 @import "tailwindcss";
+
+@import "./font.css";
+@import "./colour.css";
+@import "./buttons.css";
+@import "./form.css";
+@import "./animation.css";
+@import "../../../node_modules/@lewishowles/components/dist/components.css";
 
 @plugin "@tailwindcss/container-queries";
 @plugin "tailwindcss-hocus";
@@ -67,10 +69,12 @@
 	--color-neutral-*: initial;
 	--color-stone-*: initial;
 
-	--font-sans: "Funnel Sans", ui-sans-serif, system-ui, sans-serif,
-		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-	--font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-		Consolas, "Liberation Mono", "Courier New", monospace;
+	--font-sans:
+		"Funnel Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+		"Segoe UI Symbol", "Noto Color Emoji";
+	--font-mono:
+		"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		"Courier New", monospace;
 
 	--container-3xs: 12rem;
 	--container-2xs: 16rem;
@@ -109,8 +113,11 @@
 		transition-timing-function: var(--default-transition-timing-function);
 
 		&:focus-visible {
+			outline: 0;
 			box-shadow: 0 0 0 2px var(--color-purple-800);
-			box-shadow: 0 0 0 2px var(--color-purple-800), 0 0 0 4px rgb(120 81 169 / 0.1);
+			box-shadow:
+				0 0 0 2px var(--color-purple-800),
+				0 0 0 4px rgb(120 81 169 / 0.1);
 		}
 
 		&:where(.dark, .dark *):focus-visible {
