@@ -17,36 +17,6 @@
 			}
 		},
 		{
-			"token": "API_TYPE",
-			"label": "API type",
-			"description": "Chooses which project API helper this query calls.",
-			"type": "select",
-			"options": [
-				{
-					"label": "Fetch",
-					"value": "fetch",
-					"tokens": {
-						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/fetch/use-api",
-						"MOCK_API_IMPORT": "@test/unit/support/mock-api/fetch",
-						"MOCK_API_NAME": "mockApi"
-					}
-				},
-				{
-					"label": "Xano",
-					"value": "xano",
-					"tokens": {
-						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/xano/use-api",
-						"MOCK_API_IMPORT": "@test/unit/support/mock-api/xano",
-						"MOCK_API_NAME": "mockApi"
-					}
-				}
-			],
-			"default_value": "fetch",
-			"required": true
-		},
-		{
 			"token": "ENDPOINT",
 			"label": "Endpoint",
 			"description": "The API endpoint passed to the request helper.",
