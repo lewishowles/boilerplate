@@ -17,6 +17,34 @@
 			"required": true
 		},
 		{
+			"token": "SITE_TITLE",
+			"label": "Site title",
+			"description": "Used for the HTML title and social sharing metadata.",
+			"placeholder": "My new app",
+			"required": true
+		},
+		{
+			"token": "SITE_DESCRIPTION",
+			"label": "Site description",
+			"description": "Used for the page description and social sharing metadata.",
+			"placeholder": "A short description of the site.",
+			"required": true
+		},
+		{
+			"token": "SITE_URL",
+			"label": "Site URL",
+			"description": "The canonical production URL used in social sharing metadata.",
+			"placeholder": "https://example.com",
+			"required": true
+		},
+		{
+			"token": "THEME_COLOUR",
+			"label": "Theme colour",
+			"description": "Browser and icon theme colour metadata.",
+			"default_value": "#ffffff",
+			"required": true
+		},
+		{
 			"token": "API_BASE_URL",
 			"label": "API base URL",
 			"description": "The base URL used by the fetch API helper.",
@@ -35,8 +63,8 @@
 					"value": "fetch",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/fetch/use-api",
-						"MOCK_API_IMPORT": "@test/unit/support/mock-api/fetch",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}
 				},
@@ -45,8 +73,8 @@
 					"value": "xano",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/xano/use-api",
-						"MOCK_API_IMPORT": "@test/unit/support/mock-api/xano",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}
 				}
@@ -57,19 +85,23 @@
 	"files": [
 		{
 			"paths": ["src/composables/api/fetch/**"],
-			"include_when": { "API_TYPE": "fetch" }
+			"include_when": { "API_TYPE": "fetch" },
+			"move_to": "src/composables/api"
 		},
 		{
 			"paths": ["src/composables/api/xano/**"],
-			"include_when": { "API_TYPE": "xano" }
+			"include_when": { "API_TYPE": "xano" },
+			"move_to": "src/composables/api"
 		},
 		{
 			"paths": ["test/unit/support/mock-api/fetch/**"],
-			"include_when": { "API_TYPE": "fetch" }
+			"include_when": { "API_TYPE": "fetch" },
+			"move_to": "test/unit/support/mock-api"
 		},
 		{
 			"paths": ["test/unit/support/mock-api/xano/**"],
-			"include_when": { "API_TYPE": "xano" }
+			"include_when": { "API_TYPE": "xano" },
+			"move_to": "test/unit/support/mock-api"
 		}
 	]
 }

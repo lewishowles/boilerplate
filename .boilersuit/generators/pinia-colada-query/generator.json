@@ -40,6 +40,18 @@
 			}
 		}
 	],
+	"files": [
+		{
+			"output_path": "index.js",
+			"template": "list.js",
+			"required": true
+		},
+		{
+			"output_path": "{{ NAME | kebab }}.test.js",
+			"template": "list.test.js",
+			"required": true
+		}
+	],
 	"variants": [
 		{
 			"id": "list",
