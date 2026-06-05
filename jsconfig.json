@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"paths": {
 			"@/*": ["./src/*"],
-			"@test/*": ["./test/*"]
+			"@test/*": ["./test/*"],
+			"@unit/*": ["./test/unit/*"]
 		}
 	},
 	"exclude": ["node_modules", "build"]
