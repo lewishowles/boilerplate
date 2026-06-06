@@ -1,19 +1,20 @@
-.form-input {
+.form-input,
+.form-select {
 	border-radius: var(--radius-md);
 	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-	color: var(--color-grey-700);
+	color: var(--content);
 	display: block;
 	outline: 0;
-	padding-block-end: calc(var(--spacing) * 2);
-	padding-inline-start: calc(var(--spacing) * 3);
-	padding-inline-end: calc(var(--spacing) * 3);
-	padding-block-start: calc(var(--spacing) * 2);
 	width: 100%;
 
 	&:where(.dark, .dark *) {
 		background-color: transparent;
-		color: white;
 	}
+}
+
+.form-input {
+	padding-block: calc(var(--spacing) * 2);
+	padding-inline: calc(var(--spacing) * 3);
 }
 
 .form-select {
@@ -22,21 +23,12 @@
 	background-position: right 0.5rem center;
 	background-repeat: no-repeat;
 	background-size: 1.5em 1.5em;
-	border-radius: var(--radius-md);
-	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-	color: var(--color-grey-700);
-	display: block;
-	outline: 0;
-	padding-block-end: calc(var(--spacing) * 2);
-	padding-block-start: calc(var(--spacing) * 2);
+	padding-block: calc(var(--spacing) * 2);
 	padding-inline-end: 2.5em;
 	padding-inline-start: calc(var(--spacing) * 3);
-	width: 100%;
 
 	&:where(.dark, .dark *) {
 		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff90' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-		background-color: transparent;
-		color: white;
 	}
 
 	.form-field--error & {
@@ -48,68 +40,12 @@
 	}
 }
 
-.form-checkbox {
-	--ring-size: 1px;
-	--ring-colour: var(--color-grey-300);
-
-	appearance: none;
-	border-radius: var(--radius-sm);
-	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
-	flex-shrink: 0;
-	height: calc(var(--spacing) * 4);
-	margin-block-start: var(--spacing);
-	outline: 0;
-	transition-duration: var(--default-transition-duration);
-	transition-property: all;
-	transition-timing-function: var(--default-transition-timing-function);
-	width: calc(var(--spacing) * 4);
-
-	&:hover {
-		--ring-size: 2px;
-		--ring-colour: var(--color-grey-500);
-	}
-
-	&:focus {
-		--ring-colour: var(--color-purple-800);
-
-		outline: 2px solid var(--ring-colour);
-		outline-offset: 2px;
-	}
-
-	&:checked {
-		--ring-colour: currentColor;
-
-		background-color: currentColor;
-		color: var(--color-purple-800);
-	}
-
-	&:where(.dark, .dark *) {
-		--ring-colour: rgb(255 255 255 / 30%);
-
-		background-color: rgb(255 255 255 / 20%);
-
-		&:hover {
-			--ring-colour: rgb(255 255 255 / 50%);
-		}
-
-		&:focus {
-			--ring-colour: var(--color-purple-400);
-		}
-
-		&:checked {
-			--ring-colour: currentColor;
-
-			color: var(--color-purple-400);
-		}
-	}
-}
-
+.form-checkbox,
 .form-radio {
 	--ring-size: 1px;
 	--ring-colour: var(--color-grey-300);
 
 	appearance: none;
-	border-radius: 9999px;
 	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
 	flex-shrink: 0;
 	height: calc(var(--spacing) * 4);
@@ -126,7 +62,7 @@
 	}
 
 	&:focus {
-		--ring-colour: var(--color-purple-800);
+		--ring-colour: var(--primary-fill);
 
 		outline: 2px solid var(--ring-colour);
 		outline-offset: 2px;
@@ -136,7 +72,7 @@
 		--ring-colour: currentColor;
 
 		background-color: currentColor;
-		color: var(--color-purple-800);
+		color: var(--primary-fill);
 	}
 
 	&:where(.dark, .dark *) {
@@ -148,27 +84,26 @@
 			--ring-colour: rgb(255 255 255 / 50%);
 		}
 
-		&:focus {
-			--ring-colour: var(--color-purple-400);
-		}
-
 		&:checked {
 			--ring-colour: currentColor;
 
-			color: var(--color-purple-400);
+			color: var(--primary-fill);
 		}
 	}
 }
 
-.button-group {
-	--ring-size: 0;
-	--ring-colour: transparent;
+.form-checkbox {
+	border-radius: var(--radius-sm);
+}
 
+.form-radio {
+	border-radius: 9999px;
+}
+
+.button-group {
 	appearance: none;
 	background-color: white;
-	border-radius: var(--radius-md);
-	border: 1px solid var(--color-grey-300);
-	box-shadow: 0 0 0 var(--ring-size) var(--ring-colour);
+	border: 1px solid var(--border-strong);
 	color: currentColor;
 	cursor: pointer;
 	display: inline-block;
@@ -212,44 +147,43 @@
 	}
 
 	&:is(:where(.peer):focus ~ *) {
-		--ring-size: 2px;
-		--ring-colour: var(--color-purple-800);
-
-		background-color: var(--color-grey-50);
+		background-color: var(--surface-subtle);
 		border-color: var(--color-grey-400);
 	}
 
 	&:is(:where(.peer):checked ~ *) {
-		background-color: var(--color-purple-800);
-		border-color: var(--color-purple-900);
-		color: white;
+		background-color: var(--primary-fill);
+		border-color: var(--primary-900);
+		color: var(--primary-foreground);
 	}
 
 	&:is(:where(.peer):checked:focus ~ *) {
-		background-color: var(--color-purple-800);
-		color: white;
+		background-color: var(--primary-fill);
+		color: var(--primary-foreground);
+	}
+
+	&:is(:where(.peer):checked:focus-visible ~ *) {
+		outline: 2px solid var(--primary-fill);
+		outline-offset: 2px;
 	}
 
 	&:where(.dark, .dark *) {
-		background-color: rgb(255 255 255 / 20%);
-		border-color: rgb(255 255 255 / 20%);
-
 		&:is(:where(.peer):focus ~ *) {
 			--ring-size: 2px;
-			--ring-colour: var(--color-purple-400);
+			--ring-colour: var(--primary-fill);
 
 			background-color: rgb(255 255 255 / 30%);
 			border-color: rgb(255 255 255 / 20%);
 		}
 
 		&:is(:where(.peer):checked ~ *) {
-			background-color: var(--color-purple-500);
-			border-color: var(--color-purple-400);
+			background-color: var(--primary-500);
+			border-color: var(--primary-400);
 		}
 
 		&:is(:where(.peer):checked:focus ~ *) {
-			background-color: var(--color-purple-600);
-			border-color: var(--color-purple-500);
+			background-color: var(--primary-600);
+			border-color: var(--primary-500);
 		}
 	}
 }
@@ -269,12 +203,12 @@
 }
 
 .form-field--error {
-	--ring-colour: var(--color-red-600);
+	--ring-colour: var(--danger-600);
 
 	box-shadow: 0 0 0 1px var(--ring-colour);
 
 	&:where(.dark, .dark *) {
-		--ring-colour: var(--color-red-300);
+		--ring-colour: var(--danger-300);
 	}
 }
 
@@ -292,7 +226,7 @@
 
 	&:has(:focus) {
 		--ring-size: 2px;
-		--ring-colour: var(--color-purple-800);
+		--ring-colour: var(--primary-fill);
 	}
 
 	&:where(.dark, .dark *) {
@@ -302,26 +236,18 @@
 		&:has(:hover) {
 			--ring-colour: rgb(255 255 255 / 50%);
 		}
-
-		&:has(:focus) {
-			--ring-colour: var(--color-purple-400);
-		}
 	}
 }
 
 [data-selector="form-prefix"],
 [data-selector="form-suffix"] {
-	color: var(--color-grey-500);
+	color: var(--content-muted);
 
 	& > svg {
 		flex-shrink: 0;
 		height: calc(var(--spacing) * 4);
 		stroke: currentColor;
 		width: calc(var(--spacing) * 4);
-	}
-
-	&:where(.dark, .dark *) {
-		color: var(--color-grey-300);
 	}
 }
 

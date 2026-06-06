@@ -12,6 +12,7 @@ const defaultBaseUrl = "{{ API_BASE_URL }}";
 export default function useApi() {
 	// Base URL prepended to all API calls.
 	let baseUrl = defaultBaseUrl;
+
 	// Whether fetch is currently in progress.
 	const isLoading = ref(false);
 	// Whether data has loaded successfully.
@@ -31,11 +32,15 @@ export default function useApi() {
 		try {
 			isLoading.value = true;
 
-			const response = await fetch(getFinalUrl(endpoint, method === "get" ? parameters : undefined), {
-				method: method.toUpperCase(),
-				headers: getHeaders(parameters, method),
-				body: getBody(parameters, method),
-			});
+			const response = await fetch(
+				getFinalUrl(endpoint, method === "get" ? parameters : undefined),
+				{
+					method: method.toUpperCase(),
+					headers: getHeaders(parameters, method),
+					body: getBody(parameters, method),
+				},
+			);
+
 			const body = await response.json();
 
 			if (!response.ok) {
@@ -96,7 +101,9 @@ export default function useApi() {
 	 */
 	function getFinalUrl(endpoint, parameters) {
 		if (!isNonEmptyString(baseUrl)) {
-			throw new Error(`Expected non-empty string <baseUrl>, received ${getFriendlyDisplay(baseUrl)}`);
+			throw new Error(
+				`Expected non-empty string <baseUrl>, received ${getFriendlyDisplay(baseUrl)}`,
+			);
 		}
 
 		const standardisedEndpoint = ltrim(endpoint, "/");
