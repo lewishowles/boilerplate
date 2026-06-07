@@ -1,12 +1,13 @@
-import tailwindcss from "@tailwindcss/vite";
-import vue from "@vitejs/plugin-vue";
-import Components from "unplugin-vue-components/vite";
-import vueDevTools from "vite-plugin-vue-devtools";
+import { alias } from "./support/aliases.js";
 import { componentsResolver } from "@lewishowles/components/resolver";
 import { defineConfig } from "vite-plus";
-import { alias } from "./support/aliases.js";
-import fmt from "./support/oxfmt.config.js";
-import lint from "./support/oxlint.config.js";
+import Components from "unplugin-vue-components/vite";
+import VueRouter from "vue-router/vite";
+import fmt from "./.oxfmtrc.json" with { type: "json" };
+import lint from "./.oxlintrc.json" with { type: "json" };
+import tailwindcss from "@tailwindcss/vite";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig({
 	staged: {
@@ -14,8 +15,22 @@ export default defineConfig({
 	},
 	fmt,
 	lint,
-	base: "{{ BASE_URL }}",
-	plugins: [vue(), Components({ resolvers: [componentsResolver()] }), vueDevTools(), tailwindcss()],
+	base: "/",
+	plugins: [
+		VueRouter({
+			dts: false,
+		}),
+		Components({
+			dts: false,
+			// Automatically resolve components and layout components.
+			dirs: ["src/components", "src/layout"],
+			// Automatically resolve components in the component library.
+			resolvers: [componentsResolver()],
+		}),
+		tailwindcss(),
+		vue(),
+		vueDevTools(),
+	],
 	resolve: {
 		alias,
 	},

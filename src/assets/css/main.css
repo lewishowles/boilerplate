@@ -1,11 +1,11 @@
 @import "tailwindcss";
+@import "@lewishowles/components/styles.css";
 
 @import "./theme.css";
 @import "./font.css";
 @import "./buttons.css";
 @import "./form.css";
 @import "./animation.css";
-@import "@lewishowles/components/source";
 
 @plugin "@tailwindcss/container-queries";
 @plugin "tailwindcss-hocus";
