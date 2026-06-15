@@ -77,5 +77,20 @@
 	"options": {
 		"typeAware": false,
 		"typeCheck": false
-	}
+	},
+	"overrides": [
+		{
+			"files": [
+				"playwright*.config.js",
+				"test/playwright*.config.js",
+				"playwright/**/*.js",
+				"test/e2e/**/*.js",
+				"test/support/**/*.js",
+				"**/*.ct.js"
+			],
+			"env": {
+				"node": true
+			}
+		}
+	]
 }

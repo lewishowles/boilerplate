@@ -10,6 +10,10 @@
 		"test:unit": "vp test",
 		"test:unit:ui": "vp test --ui",
 		"test:unit:run": "vp test run",
+		"test:ct": "playwright test -c test/playwright-ct.config.js",
+		"test:ct:ui": "playwright test -c test/playwright-ct.config.js --ui",
+		"test:e2e": "playwright test -c test/playwright.config.js",
+		"test:e2e:ui": "playwright test -c test/playwright.config.js --ui",
 		"lint": "vp lint . --fix",
 		"prepare": "vp config"
 	},
@@ -27,6 +31,8 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@playwright/experimental-ct-vue": "^1.51.0",
+		"@playwright/test": "^1.51.0",
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/forms": "^0.5.11",
