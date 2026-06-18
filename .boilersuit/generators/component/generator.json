@@ -31,15 +31,6 @@
 			"required": true
 		},
 		{
-			"template": "integration.cy.js",
-			"output_path": "{{ NAME | kebab }}.cy.js",
-			"label": "Integration test",
-			"required": false,
-			"include_when": {
-				"test_framework": "cypress"
-			}
-		},
-		{
 			"template": "integration.pw.js",
 			"output_path": "{{ NAME | kebab }}.spec.js",
 			"label": "Integration test",

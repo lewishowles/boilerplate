@@ -2,6 +2,21 @@ import { describe, expect, test, vi } from "vite-plus/test";
 
 import { withAppContext } from "@test/unit/support/app-context";
 
+/**
+ * Create a promise that can be resolved or rejected by the test.
+ */
+function createDeferred() {
+	let reject;
+	let resolve;
+
+	const promise = new Promise((promiseResolve, promiseReject) => {
+		reject = promiseReject;
+		resolve = promiseResolve;
+	});
+
+	return { promise, reject, resolve };
+}
+
 import { useQueryWrapper } from "./use-query-wrapper";
 
 // The stable key used by the test query.
@@ -99,6 +114,34 @@ describe("useQueryWrapper", () => {
 			expect(data.value).toBe(null);
 			expect(isReady.value).toBe(false);
 			expect(lastFetched.value).toBe(null);
+		});
+
+		test("Does not update the fetch time while a refresh is in flight", async () => {
+			const firstResult = { name: "Sophie" };
+			const secondResult = { name: "Jane" };
+			const secondRequest = createDeferred();
+
+			const query = vi
+				.fn()
+				.mockResolvedValueOnce(firstResult)
+				.mockReturnValueOnce(secondRequest.promise);
+
+			const { data, lastFetched, refetch } = createTestQuery({ query });
+
+			await refetch(true);
+
+			const firstFetchTime = lastFetched.value;
+			const refresh = refetch(true);
+
+			expect(lastFetched.value).toBe(firstFetchTime);
+
+			secondRequest.resolve(secondResult);
+			await refresh;
+
+			expect(data.value).toEqual(secondResult);
+			expect(firstFetchTime).toBeInstanceOf(Date);
+			expect(lastFetched.value).toBeInstanceOf(Date);
+			expect(lastFetched.value.getTime()).toBeGreaterThanOrEqual(firstFetchTime.getTime());
 		});
 	});
 });
