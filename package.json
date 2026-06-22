@@ -14,7 +14,7 @@
 		"test:ct:ui": "playwright test -c test/playwright-ct.config.js --ui",
 		"test:e2e": "playwright test -c test/playwright.config.js",
 		"test:e2e:ui": "playwright test -c test/playwright.config.js --ui",
-		"lint": "vp lint . --fix",
+		"check": "vp check . --fix",
 		"prepare": "vp config"
 	},
 	"dependencies": {
