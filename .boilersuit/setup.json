@@ -84,9 +84,8 @@
 	],
 	"files": [
 		{
-			"paths": ["src/composables/api/fetch/**"],
-			"include_when": { "API_TYPE": "fetch" },
-			"move_to": "src/composables/api"
+			"paths": ["src/composables/api/use-api/**"],
+			"include_when": { "API_TYPE": "fetch" }
 		},
 		{
 			"paths": ["src/composables/api/xano/**"],
@@ -94,9 +93,8 @@
 			"move_to": "src/composables/api"
 		},
 		{
-			"paths": ["test/unit/support/mock-api/fetch/**"],
-			"include_when": { "API_TYPE": "fetch" },
-			"move_to": "test/unit/support/mock-api"
+			"paths": ["test/unit/support/mock-api/index.js"],
+			"include_when": { "API_TYPE": "fetch" }
 		},
 		{
 			"paths": ["test/unit/support/mock-api/xano/**"],

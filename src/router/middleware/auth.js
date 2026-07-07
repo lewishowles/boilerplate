@@ -1,4 +1,4 @@
-import useApi from "@/composables/api/xano/use-api";
+import useApi from "@/composables/api/use-api";
 
 /**
  * Guard protected routes behind authentication. Redirects unauthenticated

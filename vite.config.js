@@ -48,7 +48,4 @@ export default defineConfig({
 	build: {
 		outDir: "build",
 	},
-	optimizeDeps: {
-		exclude: ["@lewishowles/components", "@lewishowles/helpers"],
-	},
 });

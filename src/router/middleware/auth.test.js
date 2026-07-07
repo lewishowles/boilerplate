@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
-vi.mock("@/composables/api/xano/use-api", () => ({
+vi.mock("@/composables/api/use-api", () => ({
 	default: () => ({
 		hasAuthToken: mockHasAuthToken,
 		setAuthToken: mockSetAuthToken,

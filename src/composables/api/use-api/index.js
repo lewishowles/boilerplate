@@ -6,6 +6,9 @@ import { ref } from "vue";
 // Base URL prepended to all API calls.
 const defaultBaseUrl = "{{ API_BASE_URL }}";
 
+// localStorage key used to persist the auth token.
+const authTokenStorageKey = "authToken";
+
 /**
  * Composable for making API calls with fetch.
  */
@@ -121,7 +124,8 @@ export default function useApi() {
 	}
 
 	/**
-	 * Return JSON headers when a request body is present.
+	 * Build the headers for a request: a bearer auth header when a token is
+	 * stored, and a JSON content-type header when a request body is present.
 	 *
 	 * @param  {object}  parameters
 	 *     Request body parameters.
@@ -129,13 +133,18 @@ export default function useApi() {
 	 *     The HTTP method to use.
 	 */
 	function getHeaders(parameters, method) {
-		if (method === "get" || !isNonEmptyObject(parameters)) {
-			return undefined;
+		const headers = {};
+		const authToken = localStorage.getItem(authTokenStorageKey);
+
+		if (isNonEmptyString(authToken)) {
+			headers.Authorization = `Bearer ${authToken}`;
 		}
 
-		return {
-			"Content-Type": "application/json",
-		};
+		if (method !== "get" && isNonEmptyObject(parameters)) {
+			headers["Content-Type"] = "application/json";
+		}
+
+		return Object.keys(headers).length > 0 ? headers : undefined;
 	}
 
 	/**
@@ -175,14 +184,37 @@ export default function useApi() {
 		baseUrl = url;
 	}
 
+	/**
+	 * Check whether an auth token is currently stored.
+	 */
+	function hasAuthToken() {
+		return isNonEmptyString(localStorage.getItem(authTokenStorageKey));
+	}
+
+	/**
+	 * Store the auth token for authenticated requests.
+	 *
+	 * @param  {string|null}  authToken
+	 *     The token returned from the login endpoint, or null to clear it.
+	 */
+	function setAuthToken(authToken) {
+		if (isNonEmptyString(authToken)) {
+			localStorage.setItem(authTokenStorageKey, authToken);
+		} else {
+			localStorage.removeItem(authTokenStorageKey);
+		}
+	}
+
 	return {
 		get,
 		getBaseUrl,
 		getFinalUrl,
+		hasAuthToken,
 		isLoading,
 		isReady,
 		patch,
 		post,
+		setAuthToken,
 		setBaseUrl,
 	};
 }

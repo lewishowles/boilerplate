@@ -28,10 +28,7 @@
 			"template": "integration.pw.js",
 			"output_path": "{{ NAME | kebab }}.ct.js",
 			"label": "Integration test",
-			"required": false,
-			"include_when": {
-				"test_framework": "playwright"
-			}
+			"required": false
 		}
 	]
 }

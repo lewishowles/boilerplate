@@ -1,6 +1,6 @@
 import { toValue } from "vue";
 import { defineQueryOptions, useMutation, useQueryCache } from "@pinia/colada";
-import useApi from "@/composables/api/xano/use-api";
+import useApi from "@/composables/api/use-api";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import { EXAMPLE_KEYS } from "./keys.js";
