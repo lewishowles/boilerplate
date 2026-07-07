@@ -1,8 +1,9 @@
 {{ set QUERY_KEY = NAME | constant }}
 {{ set COMPOSABLE_NAME = NAME | pascal }}
 {{ set DATA_NAME = NAME | camel }}
-import { describe, expect, test, vi } from "vite-plus/test";
+import { describe, expect, test } from "vite-plus/test";
 import { withAppContext } from "@lewishowles/testing/vue";
+import { setupConsole } from "@lewishowles/testing/vitest";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
@@ -19,7 +20,7 @@ function create{{ COMPOSABLE_NAME }}({{ ID_NAME }} = "item-123") {
 }
 
 describe("{{ NAME | kebab }}", () => {
-	console.error = vi.fn();
+	setupConsole();
 
 	const sampleResponse = {
 		id: "item-123",

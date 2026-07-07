@@ -9,6 +9,11 @@ node_modules
 dist
 build
 
+# Playwright artefacts
+test/ct/.cache
+test-results
+playwright-report
+
 # Auto-generated component type declarations (unplugin-vue-components)
 components.d.ts
 

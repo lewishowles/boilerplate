@@ -1,10 +1,6 @@
-import { computed, ref } from "vue";
-
 /**
- *
+ * Composable for {{NAME | kebab}}.
  */
 export default function {{NAME | camel}}() {
-	return {
-
-	};
+	return {};
 }

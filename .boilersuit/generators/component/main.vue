@@ -1,11 +1,6 @@
 <template>
+	<div data-test="{{NAME | kebab}}">{{NAME | kebab}}</div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-
-const props = defineProps({
-	"{{ TEST }}": one,
-	"{{ TWO }}": two,
-});
 </script>
