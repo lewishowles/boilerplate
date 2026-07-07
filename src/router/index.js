@@ -1,3 +1,4 @@
+import { installUnsavedChangesGuard, useModalDialog } from "@lewishowles/components/composables";
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import authMiddleware from "./middleware/auth.js";
@@ -20,5 +21,15 @@ const router = createRouter({
 });
 
 router.beforeEach(composeMiddleware(authMiddleware));
+
+// Close any open modal on navigation, regardless of how the navigation
+// happened, so a modal never lingers over the wrong page.
+router.afterEach(() => {
+	useModalDialog()._clearModals();
+});
+
+// Safe to wire unconditionally — a no-op until a form opts into useForm's
+// unsavedChangesGuard option.
+installUnsavedChangesGuard(router);
 
 export default router;

@@ -1,4 +1,6 @@
 <template>
+	<modal-controller />
+
 	<RouterView />
 </template>
 
