@@ -2,7 +2,7 @@
 {{ set COMPOSABLE_NAME = NAME | pascal }}
 {{ set DATA_NAME = NAME | camel }}
 import { describe, expect, test, vi } from "vite-plus/test";
-import { withAppContext } from "@test/unit/support/app-context";
+import { withAppContext } from "@lewishowles/testing/vue";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 

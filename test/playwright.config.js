@@ -1,18 +1,21 @@
-import { defineConfig } from "@playwright/test";
-
 import {
 	chromiumProject,
 	loadTestEnv,
-	sharedSnapshotDir,
 	sharedUse,
-} from "./playwright-shared.config.js";
+	snapshotDir,
+} from "@lewishowles/testing/playwright";
+import { defineConfig } from "@playwright/test";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-loadTestEnv();
+const configDir = dirname(fileURLToPath(import.meta.url));
+
+loadTestEnv(configDir);
 
 export default defineConfig({
 	testDir: "./e2e/journeys",
 	testMatch: "**/*.e2e.js",
-	snapshotDir: sharedSnapshotDir,
+	snapshotDir: snapshotDir(configDir),
 	use: {
 		...sharedUse,
 		baseURL: process.env.VITE_APP_URL ?? "http://localhost:5173",

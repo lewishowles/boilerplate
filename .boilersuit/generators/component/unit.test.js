@@ -1,4 +1,4 @@
-import { createMount } from "@unit/support/mount";
+import { createMount } from "@lewishowles/testing/vue";
 import { describe, expect, test } from "vite-plus/test";
 import {{NAME | pascal}} from "./{{NAME | kebab}}.vue";
 

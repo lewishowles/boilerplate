@@ -3,8 +3,9 @@
 document.title = "App";
 
 import componentLibrary from "@lewishowles/components";
-import { afterEach, beforeEach, vi } from "vite-plus/test";
-import { cleanupMountedWrappers } from "./support/mount";
+import { mockLocalStorage, setupConsole } from "@lewishowles/testing/vitest";
+import { setupVueMounting } from "@lewishowles/testing/vue";
+import { beforeEach } from "vite-plus/test";
 import { config } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 
@@ -14,20 +15,6 @@ beforeEach(() => {
 	setActivePinia(createPinia());
 });
 
-// Provide a consistent localStorage mock.
-const localStorageMock = {
-	getItem: vi.fn(),
-	setItem: vi.fn(),
-	removeItem: vi.fn(),
-	clear: vi.fn(),
-	key: vi.fn(),
-	length: 0,
-};
-
-vi.stubGlobal("localStorage", localStorageMock);
-
-// Clean up all mounted component instances after each test to prevent global
-// listener pollution from @vueuse/core handlers (e.g., onKeyStroke).
-afterEach(() => {
-	cleanupMountedWrappers();
-});
+mockLocalStorage();
+setupConsole();
+setupVueMounting();

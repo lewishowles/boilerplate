@@ -1,4 +1,10 @@
 import { alias } from "../support/aliases.js";
+import {
+	chromiumProject,
+	loadTestEnv,
+	sharedUse,
+	snapshotDir,
+} from "@lewishowles/testing/playwright";
 import { componentsResolver } from "@lewishowles/components/resolver";
 import { defineConfig } from "@playwright/experimental-ct-vue";
 import { dirname, join } from "node:path";
@@ -8,21 +14,14 @@ import VueRouter from "vue-router/vite";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 
-import {
-	chromiumProject,
-	loadTestEnv,
-	sharedSnapshotDir,
-	sharedUse,
-} from "./playwright-shared.config.js";
+const configDir = dirname(fileURLToPath(import.meta.url));
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-loadTestEnv();
+loadTestEnv(configDir);
 
 export default defineConfig({
-	testDir: join(__dirname, "../src"),
+	testDir: join(configDir, "../src"),
 	testMatch: "**/*.ct.js",
-	snapshotDir: sharedSnapshotDir,
+	snapshotDir: snapshotDir(configDir),
 	use: {
 		...sharedUse,
 		ctPort: 3100,
@@ -38,7 +37,7 @@ export default defineConfig({
 				tailwindcss(),
 				vue(),
 			],
-			envDir: join(__dirname, ".."),
+			envDir: join(configDir, ".."),
 			resolve: { alias },
 			optimizeDeps: {
 				exclude: ["@lewishowles/components", "@lewishowles/helpers"],
