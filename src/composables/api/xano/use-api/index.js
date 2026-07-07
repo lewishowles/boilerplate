@@ -1,4 +1,4 @@
-import { get as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
+import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { isNonEmptyString, ltrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";

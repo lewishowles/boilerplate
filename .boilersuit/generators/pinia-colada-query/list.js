@@ -3,7 +3,7 @@
 {{ set DATA_NAME = NAME | camel }}
 import { computed } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
-import { get as getPropertyValue } from "@lewishowles/helpers/object";
+import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
