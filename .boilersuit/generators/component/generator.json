@@ -10,12 +10,6 @@
 			"label": "Component name",
 			"hint": "Use at least two words, e.g. app-header.",
 			"required": true
-		},
-		{
-			"token": "TEST",
-			"label": "Prop name",
-			"description": "Used for the main prop exposed by the component.",
-			"required": true
 		}
 	],
 	"files": [
