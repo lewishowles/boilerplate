@@ -9,7 +9,7 @@
 	font-style: normal;
 	font-weight: 100 900;
 	font-display: swap;
-	src: local("Funnel Sans"), url("../fonts/FunnelSansVariable.woff2") format("woff2");
+	src: url("../fonts/FunnelSansVariable.woff2") format("woff2");
 }
 
 @font-face {
@@ -17,12 +17,12 @@
 	font-style: italic;
 	font-weight: 100 900;
 	font-display: swap;
-	src: local("Funnel Sans"), url("../fonts/FunnelSansVariable-Italic.woff2") format("woff2");
+	src: url("../fonts/FunnelSansVariable-Italic.woff2") format("woff2");
 }
 
 @font-face {
 	font-family: "IBM Plex Mono";
 	font-style: normal;
 	font-weight: 400;
-	src: local("IBM Plex Mono"), local("IBMPlexMono"), url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
+	src: url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
 }
