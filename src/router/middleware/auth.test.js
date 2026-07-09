@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
+const mockClearCurrentUser = vi.hoisted(() => vi.fn());
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
@@ -8,6 +9,10 @@ vi.mock("@/composables/api/use-api", () => ({
 		hasAuthToken: mockHasAuthToken,
 		setAuthToken: mockSetAuthToken,
 	}),
+}));
+
+vi.mock("@/queries/auth/current-user", () => ({
+	clearCurrentUser: mockClearCurrentUser,
 }));
 
 import authMiddleware from "./auth.js";
@@ -45,6 +50,14 @@ describe("authMiddleware", () => {
 			await authMiddleware(loginRoute, {});
 
 			expect(mockSetAuthToken).toHaveBeenCalledWith(null);
+		});
+
+		test("Clears the cached current user when a token exists", async () => {
+			mockHasAuthToken.mockReturnValue(true);
+
+			await authMiddleware(loginRoute, {});
+
+			expect(mockClearCurrentUser).toHaveBeenCalled();
 		});
 
 		test("Allows access when not authenticated", async () => {
