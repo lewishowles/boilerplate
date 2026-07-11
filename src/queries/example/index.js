@@ -1,6 +1,7 @@
 import { toValue } from "vue";
-import { defineQueryOptions, useMutation, useQueryCache } from "@pinia/colada";
+import { defineQueryOptions } from "@pinia/colada";
 import useApi from "@/composables/api/use-api";
+import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import { EXAMPLE_KEYS } from "./keys.js";
@@ -8,8 +9,6 @@ import { EXAMPLE_KEYS } from "./keys.js";
 const { get, post } = useApi();
 
 export function useExample(id) {
-	const queryCache = useQueryCache();
-
 	const example = useQueryWrapper({
 		queryOptions: () => ({
 			...exampleQueryOptions(toValue(id)),
@@ -17,11 +16,9 @@ export function useExample(id) {
 		}),
 	});
 
-	const { mutateAsync: createExample } = useMutation({
+	const { mutateAsync: createExample } = useMutationWrapper({
+		invalidates: EXAMPLE_KEYS.root,
 		mutation: (parameters) => post("examples", parameters),
-		async onSettled() {
-			await queryCache.invalidateQueries({ key: EXAMPLE_KEYS.root });
-		},
 	});
 
 	return {
