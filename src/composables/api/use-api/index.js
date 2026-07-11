@@ -164,6 +164,16 @@ export default function useApi() {
 	}
 
 	/**
+	 * Perform a DELETE request.
+	 *
+	 * @param  {string}  endpoint
+	 *     API endpoint path.
+	 */
+	async function remove(endpoint) {
+		return makeApiCall("delete", endpoint);
+	}
+
+	/**
 	 * Get the current base URL.
 	 */
 	function getBaseUrl() {
@@ -206,6 +216,7 @@ export default function useApi() {
 	}
 
 	return {
+		delete: remove,
 		get,
 		getBaseUrl,
 		getFinalUrl,
