@@ -35,10 +35,8 @@
 		"**/dist/*",
 		"**/dist-docs/*",
 		"**/build/*",
-		".codebase-memory/**",
-		".boilersuit/**",
-		"test/ct/.cache/**",
 		"test-results/**",
-		"playwright-report/**"
+		"playwright-report/**",
+		"**/.*"
 	]
 }
