@@ -19,6 +19,7 @@ export default defineConfig({
 	use: {
 		...sharedUse,
 		baseURL: process.env.VITE_APP_URL ?? "http://localhost:5173",
+		trace: "retain-on-failure-and-retries",
 	},
 	projects: [chromiumProject],
 	webServer: {
