@@ -23,10 +23,11 @@ bun run preview         # Preview the production build
 
 bun run test:unit:run   # Run unit tests once
 bun run test:unit       # Run unit tests in watch mode
-bun run test:ct         # Run Playwright component tests
+bun run test:component  # Run Playwright component tests
 bun run test:e2e        # Run Playwright end-to-end tests
 
-bun run check           # Format and lint (oxfmt + oxlint), auto-fixing
+bun run lint            # Check formatting and linting
+bun run lint:fix        # Format and lint, auto-fixing where possible
 ```
 
 ## Dependencies

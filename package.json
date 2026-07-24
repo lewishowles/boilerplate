@@ -10,11 +10,12 @@
 		"test:unit": "vp test",
 		"test:unit:ui": "vp test --ui",
 		"test:unit:run": "vp test run",
-		"test:ct": "playwright test -c test/playwright-ct.config.js",
-		"test:ct:ui": "playwright test -c test/playwright-ct.config.js --ui",
+		"test:component": "playwright test -c test/playwright-ct.config.js",
+		"test:component:ui": "playwright test -c test/playwright-ct.config.js --ui",
 		"test:e2e": "playwright test -c test/playwright.config.js",
 		"test:e2e:ui": "playwright test -c test/playwright.config.js --ui",
-		"check": "vp check --fix .",
+		"lint": "vp check .",
+		"lint:fix": "vp check --fix .",
 		"prepare": "vp config"
 	},
 	"dependencies": {
