@@ -22,11 +22,15 @@ export default defineConfig({
 	testDir: join(configDir, "../src"),
 	testMatch: "**/*.ct.js",
 	snapshotDir: snapshotDir(configDir),
+	reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
+	fullyParallel: Boolean(process.env.CI),
+	retries: process.env.CI ? 1 : 0,
+	workers: process.env.CI ? 2 : 1,
 	use: {
 		...sharedUse,
 		ctPort: 3100,
 		ctTemplateDir: "ct",
-		trace: "retain-on-failure-and-retries",
+		trace: process.env.CI ? "on-first-retry" : "off",
 		ctViteConfig: {
 			plugins: [
 				VueRouter({ dts: false }),
