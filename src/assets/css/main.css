@@ -7,7 +7,6 @@
 @import "./form.css";
 @import "./animation.css";
 
-@plugin "@tailwindcss/container-queries";
 @plugin "tailwindcss-hocus";
 @plugin "@tailwindcss/typography";
 
