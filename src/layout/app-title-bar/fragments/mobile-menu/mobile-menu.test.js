@@ -38,14 +38,6 @@ describe("mobile-menu", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("Initialisation", () => {
-		test("A Vue component should exist", () => {
-			const wrapper = mount();
-
-			expect(wrapper.vm).toBeTypeOf("object");
-		});
-	});
-
 	describe("Interactions", () => {
 		test("Opens the dialog when the mobile menu button is clicked", async () => {
 			const wrapper = mount();

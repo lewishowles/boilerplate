@@ -5,14 +5,6 @@ import PageTitle from "./page-title.vue";
 const mount = createMount(PageTitle);
 
 describe("page-title", () => {
-	describe("Initialisation", () => {
-		test("A Vue component should exist", () => {
-			const wrapper = mount();
-
-			expect(wrapper.vm).toBeTypeOf("object");
-		});
-	});
-
 	describe("Render contracts", () => {
 		test("Does not render introduction content by default", () => {
 			const wrapper = mount();

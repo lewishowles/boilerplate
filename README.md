@@ -38,6 +38,8 @@ bun run lint:fix        # Format and lint, auto-fixing where possible
 
 Unit tests run on Vitest (via `vite-plus`) and use `@lewishowles/testing/vue` for component mounting (`createMount`, `createDeepMount`) and composable testing (`withAppContext`), and `@lewishowles/testing/vitest` for `localStorage` mocking and console suppression: see `test/unit/setup.js`. Component and end-to-end tests run on Playwright, sharing config presets from `@lewishowles/testing/playwright`.
 
+The router's auth guard (`src/router/middleware/auth.js`) only checks for a truthy `authToken` in `localStorage`; it doesn't validate against a real backend. To browse protected routes locally before a real auth backend exists, run `localStorage.setItem("authToken", "dev")` in devtools and reload.
+
 ## Modal support
 
 `<modal-controller />` and an unsaved-changes guard (`installUnsavedChangesGuard`) are wired up by default in `src/App.vue` and `src/router/index.js`, so any component can open a modal via `useModalDialog` or use `useForm`'s `unsavedChangesGuard` option with zero extra setup. Both are inert until you actually use them. To remove: delete the `<modal-controller />` line from `src/App.vue`, and the `router.afterEach`/`installUnsavedChangesGuard` calls from `src/router/index.js`.

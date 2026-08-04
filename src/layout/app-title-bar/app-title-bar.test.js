@@ -11,14 +11,6 @@ describe("app-title-bar", () => {
 		showSidebar.value = true;
 	});
 
-	describe("Initialisation", () => {
-		test("A Vue component should exist", () => {
-			const wrapper = mount();
-
-			expect(wrapper.vm).toBeTypeOf("object");
-		});
-	});
-
 	describe("Interactions", () => {
 		test("Toggles the sidebar when the desktop toggle is clicked", async () => {
 			const wrapper = mount();

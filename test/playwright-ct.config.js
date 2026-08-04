@@ -36,7 +36,7 @@ export default defineConfig({
 				VueRouter({ dts: false }),
 				Components({
 					dts: false,
-					dirs: ["src/components", "src/layout"],
+					dirs: [join(configDir, "../src/components"), join(configDir, "../src/layout")],
 					resolvers: [componentsResolver()],
 				}),
 				tailwindcss(),
