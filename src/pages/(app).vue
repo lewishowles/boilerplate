@@ -4,11 +4,13 @@
 	<div class="flex min-h-screen">
 		<app-sidebar />
 
-		<main id="main" class="grow">
+		<div class="app-shell w-full grow">
 			<app-title-bar />
 
-			<RouterView />
-		</main>
+			<main id="main" class="app-main pb-4">
+				<RouterView />
+			</main>
+		</div>
 	</div>
 </template>
 

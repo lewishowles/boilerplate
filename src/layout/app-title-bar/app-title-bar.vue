@@ -1,6 +1,7 @@
 <template>
-	<header>
+	<header class="app-title-bar">
 		<ui-button
+			class="hidden lg:block"
 			v-bind="{ iconStart: 'icon-sidebar', iconOnly: true, pressed: showSidebar }"
 			@click="toggleSidebar"
 		>

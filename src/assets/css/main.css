@@ -6,6 +6,7 @@
 @import "./buttons.css";
 @import "./form.css";
 @import "./animation.css";
+@import "./layout.css";
 
 @plugin "tailwindcss-hocus";
 @plugin "@tailwindcss/typography";

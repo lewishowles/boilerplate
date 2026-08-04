@@ -1,5 +1,5 @@
 <template>
-	<ui-button @click="openMobileMenu">Open navigation menu</ui-button>
+	<ui-button class="lg:hidden" @click="openMobileMenu">Open navigation menu</ui-button>
 
 	<modal-dialog ref="mobile-menu" v-bind="{ initiallyOpen: false }">
 		<template #title>Navigation</template>

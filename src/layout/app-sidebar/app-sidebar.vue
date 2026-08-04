@@ -1,5 +1,11 @@
 <template>
-	<aside class="flex flex-col gap-6" :class="{ 'sr-only': !props.alwaysVisible && !showSidebar }">
+	<aside
+		class="flex flex-col gap-6"
+		:class="{
+			'max-lg:hidden': !props.alwaysVisible,
+			'sr-only': !props.alwaysVisible && !showSidebar,
+		}"
+	>
 		<div class="flex items-center justify-between gap-2">
 			<slot name="logo" />
 		</div>

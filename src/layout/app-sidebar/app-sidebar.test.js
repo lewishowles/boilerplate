@@ -37,6 +37,7 @@ describe("app-sidebar", () => {
 			const wrapper = mount({ props: { alwaysVisible: true } });
 
 			expect(wrapper.find("aside").classes()).not.toContain("sr-only");
+			expect(wrapper.find("aside").classes()).not.toContain("max-lg:hidden");
 		});
 
 		test("Hides the sidebar by default when it is closed", () => {
@@ -44,6 +45,12 @@ describe("app-sidebar", () => {
 			const wrapper = mount();
 
 			expect(wrapper.find("aside").classes()).toContain("sr-only");
+		});
+
+		test("Hides the sidebar below the desktop breakpoint unless alwaysVisible is true", () => {
+			const wrapper = mount();
+
+			expect(wrapper.find("aside").classes()).toContain("max-lg:hidden");
 		});
 	});
 });

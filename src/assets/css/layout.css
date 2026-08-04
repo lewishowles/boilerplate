@@ -1,0 +1,56 @@
+.app-shell {
+	--app-shell-gutter: calc(var(--spacing) * 6);
+
+	container-type: inline-size;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	grid-template-columns:
+		[full-start]
+		var(--app-shell-gutter)
+		[content-start]
+		minmax(0, 1fr)
+		[content-end]
+		var(--app-shell-gutter)
+		[full-end];
+
+	@variant lg {
+		--app-shell-gutter: calc(var(--spacing) * 10);
+	}
+}
+
+.app-shell-bounded {
+	width: calc(100cqw - var(--app-shell-gutter) - var(--app-shell-gutter));
+}
+
+.app-title-bar {
+	grid-column: full;
+	display: grid;
+	grid-template-columns: subgrid;
+
+	:where(&) > * {
+		grid-column: content;
+	}
+}
+
+.app-main {
+	grid-column: full;
+	display: grid;
+	grid-template-columns: subgrid;
+	align-content: start;
+
+	:where(&) > * {
+		grid-column: content;
+		padding-block: calc(var(--spacing) * 6);
+	}
+}
+
+.boxed-section {
+	grid-column: full;
+	display: grid;
+	grid-template-columns: subgrid;
+	border-bottom: 1px solid var(--border);
+
+	:where(&) > * {
+		grid-column: content;
+	}
+}
