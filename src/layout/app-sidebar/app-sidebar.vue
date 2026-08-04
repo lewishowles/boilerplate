@@ -1,14 +1,7 @@
 <template>
-	<aside class="flex flex-col gap-6" :class="{ 'sr-only': !showSidebar }">
+	<aside class="flex flex-col gap-6" :class="{ 'sr-only': !props.alwaysVisible && !showSidebar }">
 		<div class="flex items-center justify-between gap-2">
 			<slot name="logo" />
-
-			<ui-button
-				v-bind="{ iconStart: 'icon-sidebar', iconOnly: true, pressed: showSidebar }"
-				@click="toggleSidebar"
-			>
-				Toggle sidebar
-			</ui-button>
 		</div>
 
 		<nav class="flex flex-col gap-6" aria-label="Primary navigation">
@@ -41,9 +34,19 @@ import { useSidebar } from "@/composables/layout/use-sidebar";
 
 import { IconHome } from "@lewishowles/components";
 
+const props = defineProps({
+	/**
+	 * Whether the sidebar should remain visible when the desktop sidebar is closed.
+	 */
+	alwaysVisible: {
+		type: Boolean,
+		default: false,
+	},
+});
+
 const { haveUser, userDetails } = useCurrentUser();
 const { logout } = useAuth();
-const { showSidebar, toggleSidebar } = useSidebar();
+const { showSidebar } = useSidebar();
 
 // The user's display name.
 const userName = computed(() => getPathValue(userDetails.value, "display_name"));

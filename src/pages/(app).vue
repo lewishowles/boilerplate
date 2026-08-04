@@ -5,6 +5,8 @@
 		<app-sidebar />
 
 		<main id="main" class="grow">
+			<app-title-bar />
+
 			<RouterView />
 		</main>
 	</div>
