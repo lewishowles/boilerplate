@@ -3,8 +3,9 @@ import useApi from "@/composables/api/use-api";
 
 /**
  * Guard protected routes behind authentication. Redirects unauthenticated
- * users to login, and clears any stale token and cached user when visiting
- * the login page.
+ * users to login, recording the intended path so login can return them
+ * there, and clears any stale token and cached user when visiting the
+ * login page.
  *
  * @param  {object}  to
  *     The route being navigated to.
@@ -13,7 +14,7 @@ export default async function authMiddleware(to) {
 	const { hasAuthToken, setAuthToken } = useApi();
 
 	if (to.meta.requiresAuth && !hasAuthToken()) {
-		return { path: "/login" };
+		return { path: "/login", query: { redirect: to.fullPath } };
 	}
 
 	if (to.path === "/login" && hasAuthToken()) {

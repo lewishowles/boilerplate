@@ -20,14 +20,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { definePage } from "vue-router/experimental";
-
+import { isNonEmptyString } from "@lewishowles/helpers/string";
+import { ref } from "vue";
 import { useAuth } from "@/queries/auth";
+import { useRoute, useRouter } from "vue-router";
 
 const { errorMessage, login } = useAuth();
-
+// Current route, including any redirect query value.
+const route = useRoute();
 const router = useRouter();
 
 // Our form data.
@@ -39,13 +40,31 @@ const rules = {
 };
 
 /**
- * Attempt login for the user. If successful, redirect to the homepage.
+ * Return a safe internal redirect, or null when the value is not usable.
+ *
+ * @param  {unknown}  redirect
+ *     The candidate redirect value from the login route query.
+ * @returns {string|null}
+ *     The internal redirect path, or null when the value is unsafe.
+ */
+function getSafeRedirect(redirect) {
+	if (!isNonEmptyString(redirect) || !redirect.startsWith("/") || redirect.startsWith("//")) {
+		return null;
+	}
+
+	return redirect;
+}
+
+/**
+ * Attempt login for the user. If successful, redirect to the intended internal route.
  */
 async function performLogin() {
 	try {
 		await login(formData.value);
 
-		await router.push({ name: "home" });
+		const redirect = getSafeRedirect(route.query?.redirect);
+
+		await router.push(redirect ?? { name: "home" });
 	} catch (error) {
 		console.error("login[performLogin]: Could not log in.", error);
 	}

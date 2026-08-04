@@ -24,12 +24,19 @@ describe("authMiddleware", () => {
 	});
 
 	describe("Protected routes", () => {
-		const protectedRoute = { meta: { requiresAuth: true }, path: "/dashboard" };
+		const protectedRoute = {
+			fullPath: "/account?tab=security",
+			meta: { requiresAuth: true },
+			path: "/account",
+		};
 
-		test("Redirects to login when no auth token exists", async () => {
+		test("Redirects to login with the complete route when no auth token exists", async () => {
 			const result = await authMiddleware(protectedRoute, {});
 
-			expect(result).toEqual({ path: "/login" });
+			expect(result).toEqual({
+				path: "/login",
+				query: { redirect: "/account?tab=security" },
+			});
 		});
 
 		test("Allows navigation when an auth token exists", async () => {
