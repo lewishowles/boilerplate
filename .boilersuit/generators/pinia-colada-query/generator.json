@@ -88,6 +88,59 @@
 					"required": true
 				}
 			]
+		},
+		{
+			"id": "domain",
+			"label": "Domain",
+			"description": "Create a complete resource domain with queries, mutations, cache keys, and tests.",
+			"default_path": "src/queries",
+			"files": [
+				{
+					"output_path": "keys.js",
+					"template": "keys.js",
+					"required": true
+				},
+				{
+					"output_path": "list.js",
+					"template": "domain-list.js",
+					"required": true
+				},
+				{
+					"output_path": "list.test.js",
+					"template": "domain-list.test.js",
+					"required": true
+				},
+				{
+					"output_path": "details.js",
+					"template": "domain-details.js",
+					"required": true
+				},
+				{
+					"output_path": "details.test.js",
+					"template": "domain-details.test.js",
+					"required": true
+				},
+				{
+					"output_path": "actions.js",
+					"template": "actions.js",
+					"required": true
+				},
+				{
+					"output_path": "actions.test.js",
+					"template": "actions.test.js",
+					"required": true
+				},
+				{
+					"output_path": "helpers.js",
+					"template": "helpers.js",
+					"required": true
+				},
+				{
+					"output_path": "index.js",
+					"template": "index.js",
+					"required": true
+				}
+			]
 		}
 	]
 }
