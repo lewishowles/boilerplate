@@ -23,8 +23,7 @@ export function use{{ COMPOSABLE_NAME }}Actions() {
 			{{ QUERY_KEY }}_KEYS.list(),
 			{{ QUERY_KEY }}_KEYS.byId(variables.{{ ID_NAME }}),
 		],
-		mutation: ({ {{ ID_NAME }}, ...parameters }) =>
-			patch(`{{ ENDPOINT }}/${{{ ID_NAME }}}`, parameters),
+		mutation: ({ {{ ID_NAME }}, ...parameters }) => patch(`{{ ENDPOINT }}/${{{ ID_NAME }}}`, parameters),
 	});
 
 	return {

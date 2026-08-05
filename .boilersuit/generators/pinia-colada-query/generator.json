@@ -2,7 +2,7 @@
 	"schema_version": 1,
 	"id": "pinia-colada-query",
 	"display_name": "Pinia Colada query",
-	"description": "Creates a Pinia Colada query wrapper with a matching starter unit test.",
+	"description": "Creates a complete Pinia Colada resource domain with queries, mutations, cache keys, and tests. Reruns against an existing resource folder require `boilersuit generate --skip-existing`.",
 	"default_path": "src/queries",
 	"fields": [
 		{
@@ -38,109 +38,88 @@
 				"pattern": "^[a-z][a-zA-Z0-9]*$",
 				"message": "Use a camelCase JavaScript variable name."
 			}
+		},
+		{
+			"token": "API_TYPE",
+			"label": "API type",
+			"description": "Chooses which starter API helper and query generator imports to use.",
+			"type": "select",
+			"default_value": "fetch",
+			"options": [
+				{
+					"label": "Fetch",
+					"value": "fetch",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
+				},
+				{
+					"label": "Xano",
+					"value": "xano",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
+				}
+			],
+			"required": true
 		}
 	],
 	"files": [
 		{
+			"output_path": "keys.js",
+			"template": "keys.js",
+			"required": true
+		},
+		{
+			"output_path": "list.js",
+			"template": "domain-list.js",
+			"required": true
+		},
+		{
+			"output_path": "list.test.js",
+			"template": "domain-list.test.js",
+			"required": true
+		},
+		{
+			"output_path": "details.js",
+			"template": "domain-details.js",
+			"required": true
+		},
+		{
+			"output_path": "details.test.js",
+			"template": "domain-details.test.js",
+			"required": true
+		},
+		{
+			"output_path": "actions.js",
+			"template": "actions.js",
+			"required": true
+		},
+		{
+			"output_path": "actions.test.js",
+			"template": "actions.test.js",
+			"required": true
+		},
+		{
+			"output_path": "helpers.js",
+			"template": "helpers.js",
+			"required": true
+		},
+		{
+			"output_path": "helpers.test.js",
+			"template": "helpers.test.js",
+			"required": true
+		},
+		{
 			"output_path": "index.js",
-			"template": "list.js",
+			"template": "index.js",
 			"required": true
-		},
-		{
-			"output_path": "{{ NAME | kebab }}.test.js",
-			"template": "list.test.js",
-			"required": true
-		}
-	],
-	"variants": [
-		{
-			"id": "list",
-			"label": "List",
-			"description": "Retrieve a list from an endpoint.",
-			"default_path": "src/queries",
-			"files": [
-				{
-					"output_path": "index.js",
-					"template": "list.js",
-					"required": true
-				},
-				{
-					"output_path": "{{ NAME | kebab }}.test.js",
-					"template": "list.test.js",
-					"required": true
-				}
-			]
-		},
-		{
-			"id": "details",
-			"label": "Details",
-			"description": "Retrieve the details of a single item by ID.",
-			"default_path": "src/queries",
-			"files": [
-				{
-					"output_path": "index.js",
-					"template": "details.js",
-					"required": true
-				},
-				{
-					"output_path": "{{ NAME | kebab }}.test.js",
-					"template": "details.test.js",
-					"required": true
-				}
-			]
-		},
-		{
-			"id": "domain",
-			"label": "Domain",
-			"description": "Create a complete resource domain with queries, mutations, cache keys, and tests.",
-			"default_path": "src/queries",
-			"files": [
-				{
-					"output_path": "keys.js",
-					"template": "keys.js",
-					"required": true
-				},
-				{
-					"output_path": "list.js",
-					"template": "domain-list.js",
-					"required": true
-				},
-				{
-					"output_path": "list.test.js",
-					"template": "domain-list.test.js",
-					"required": true
-				},
-				{
-					"output_path": "details.js",
-					"template": "domain-details.js",
-					"required": true
-				},
-				{
-					"output_path": "details.test.js",
-					"template": "domain-details.test.js",
-					"required": true
-				},
-				{
-					"output_path": "actions.js",
-					"template": "actions.js",
-					"required": true
-				},
-				{
-					"output_path": "actions.test.js",
-					"template": "actions.test.js",
-					"required": true
-				},
-				{
-					"output_path": "helpers.js",
-					"template": "helpers.js",
-					"required": true
-				},
-				{
-					"output_path": "index.js",
-					"template": "index.js",
-					"required": true
-				}
-			]
 		}
 	]
 }

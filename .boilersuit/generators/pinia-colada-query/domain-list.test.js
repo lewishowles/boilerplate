@@ -40,7 +40,7 @@ describe("{{ NAME | kebab }} list", () => {
 				create{{ COMPOSABLE_NAME }}List();
 
 			expect({{ DATA_NAME }}.value).toEqual([]);
-			expect(isInitialLoading.value).toBe(false);
+			expect(isInitialLoading.value).toBe(true);
 			expect(isReady.value).toBe(false);
 			expect(isRefreshing.value).toBe(false);
 			expect(lastFetched.value).toBe(null);

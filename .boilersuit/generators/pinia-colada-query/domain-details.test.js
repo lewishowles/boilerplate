@@ -82,8 +82,7 @@ describe("{{ NAME | kebab }} details", () => {
 		test("Does not update {{ NAME | kebab }} details when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { have{{ COMPOSABLE_NAME }}, isReady, lastFetched, refetch, {{ DATA_NAME }} } =
-				create{{ COMPOSABLE_NAME }}Details();
+			const { have{{ COMPOSABLE_NAME }}, isReady, lastFetched, refetch, {{ DATA_NAME }} } = create{{ COMPOSABLE_NAME }}Details();
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 
