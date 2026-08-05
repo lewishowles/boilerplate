@@ -1,0 +1,33 @@
+{
+	"schema_version": 1,
+	"id": "table-fragment",
+	"display_name": "Table fragment",
+	"description": "Creates a client-side data-table fragment wired to a Pinia Colada list query.",
+	"default_path": "src/pages/(app)",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Table name",
+			"description": "Used for the page filename, table name, query composable, and returned data variable.",
+			"hint": "Use lowercase kebab-case, e.g. user.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z0-9-]+$",
+				"message": "Use lowercase kebab-case for table name."
+			}
+		}
+	],
+	"files": [
+		{
+			"template": "main.vue",
+			"output_path": "{{ NAME | kebab }}.vue",
+			"required": true
+		},
+		{
+			"template": "main.test.js",
+			"output_path": "{{ NAME | kebab }}.test.js",
+			"label": "Unit test",
+			"required": true
+		}
+	]
+}
