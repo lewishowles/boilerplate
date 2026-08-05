@@ -24,7 +24,10 @@ describe("{{ NAME | kebab }} list", () => {
 
 	const parameters = {
 		page: 2,
-		sort: "name",
+		sort: {
+			column: "name",
+			direction: "descending",
+		},
 		search: "example",
 	};
 	const validResponse = {
@@ -33,6 +36,7 @@ describe("{{ NAME | kebab }} list", () => {
 				id: "item-123",
 			},
 		],
+		itemsTotal: 42,
 	};
 
 	describe("{{ QUERY_KEY }}_KEYS", () => {
@@ -48,10 +52,11 @@ describe("{{ NAME | kebab }} list", () => {
 
 	describe("use{{ COMPOSABLE_NAME }}List", () => {
 		test("Initialises with no {{ NAME | kebab }}", () => {
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }} } =
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }}, totalRows } =
 				create{{ COMPOSABLE_NAME }}List(parameters);
 
 			expect({{ DATA_NAME }}.value).toEqual([]);
+			expect(totalRows.value).toBe(0);
 			expect(isInitialLoading.value).toBe(true);
 			expect(isReady.value).toBe(false);
 			expect(isRefreshing.value).toBe(false);
@@ -62,7 +67,7 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Loads and stores {{ NAME | kebab }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }} } =
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }}, totalRows } =
 				create{{ COMPOSABLE_NAME }}List(parameters);
 
 			expect(lastFetched.value).toBe(null);
@@ -71,6 +76,7 @@ describe("{{ NAME | kebab }} list", () => {
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
 			expect({{ DATA_NAME }}.value).toEqual(validResponse.items);
+			expect(totalRows.value).toBe(validResponse.itemsTotal);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);
 			expect(isReady.value).toBe(true);

@@ -42,6 +42,9 @@ export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
 		return items;
 	});
 
+	// The total rows returned by the server for the current request.
+	const totalRows = computed(() => getPropertyValue(data.value, "itemsTotal") ?? 0);
+
 	// Whether any {{ NAME | kebab }} items have been returned.
 	const have{{ COMPOSABLE_NAME }} = computed(() => isNonEmptyArray({{ DATA_NAME }}.value));
 
@@ -49,6 +52,7 @@ export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
 		...current{{ COMPOSABLE_NAME }},
 		have{{ COMPOSABLE_NAME }},
 		{{ DATA_NAME }},
+		totalRows,
 	};
 }
 
@@ -59,7 +63,17 @@ export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
  *     Query parameters for the {{ NAME | kebab }} list.
  */
 async function load{{ COMPOSABLE_NAME }}(parameters) {
-	return shape{{ COMPOSABLE_NAME }}Response(await get("{{ ENDPOINT }}", parameters));
+	const queryParameters = {
+		...parameters,
+		sort: parameters.sort
+			? {
+					column: parameters.sort.column,
+					direction: parameters.sort.direction,
+				}
+			: null,
+	};
+
+	return shape{{ COMPOSABLE_NAME }}Response(await get("{{ ENDPOINT }}", queryParameters));
 }
 
 const {{ DATA_NAME }}QueryOptions = defineQueryOptions((parameters = {}) => ({

@@ -19,5 +19,6 @@ export function shape{{ COMPOSABLE_NAME }}Response(response) {
 
 	return {
 		...payload,
+		itemsTotal: response.itemsTotal ?? payload.itemsTotal,
 	};
 }

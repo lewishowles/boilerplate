@@ -16,6 +16,22 @@ describe("{{ NAME | kebab }} response helper", () => {
 		expect(shapedResponse).toEqual(response.data);
 	});
 
+	test("Preserves an envelope-level item total", () => {
+		const response = {
+			data: {
+				items: [{ id: "item-123" }],
+			},
+			itemsTotal: 42,
+		};
+
+		const shapedResponse = shape{{ COMPOSABLE_NAME }}Response(response);
+
+		expect(shapedResponse).toEqual({
+			items: response.data.items,
+			itemsTotal: 42,
+		});
+	});
+
 	test("Returns null and non-object responses unchanged", () => {
 		const nullResponse = null;
 		const textResponse = "response";

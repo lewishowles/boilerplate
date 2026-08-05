@@ -13,7 +13,7 @@ const searchDebounceDelay = 300;
 export function use{{ COMPOSABLE_NAME }}Table() {
 	// Create controls inside the composable so table instances do not share state.
 	const page = ref(1);
-	const sort = ref("");
+	const sort = ref(null);
 	const search = ref("");
 	const debouncedSearch = refDebounced(search, searchDebounceDelay);
 
@@ -24,22 +24,30 @@ export function use{{ COMPOSABLE_NAME }}Table() {
 	}));
 
 	const {
+		error,
 		isInitialLoading,
 		isLoading,
+		isReady,
 		isRefreshing,
+		lastFetched,
 		refetch,
 		{{ DATA_NAME }}: items,
+		totalRows,
 	} = use{{ COMPOSABLE_NAME }}List(parameters);
 
 	return {
+		error,
 		isFetching: isLoading,
 		isInitialLoading,
+		isReady,
 		isRefreshing,
 		items,
+		lastFetched,
 		page,
 		parameters,
 		refetch,
 		search,
 		sort,
+		totalRows,
 	};
 }
