@@ -121,5 +121,64 @@
 			"template": "index.js",
 			"required": true
 		}
+	],
+	"variants": [
+		{
+			"id": "server",
+			"label": "Server query",
+			"description": "Creates a parameterised list query that keeps previous data visible while its cache key changes.",
+			"files": [
+				{
+					"output_path": "keys.js",
+					"template": "server-keys.js",
+					"required": true
+				},
+				{
+					"output_path": "list.js",
+					"template": "server-list.js",
+					"required": true
+				},
+				{
+					"output_path": "list.test.js",
+					"template": "server-list.test.js",
+					"required": true
+				},
+				{
+					"output_path": "details.js",
+					"template": "domain-details.js",
+					"required": true
+				},
+				{
+					"output_path": "details.test.js",
+					"template": "domain-details.test.js",
+					"required": true
+				},
+				{
+					"output_path": "actions.js",
+					"template": "actions.js",
+					"required": true
+				},
+				{
+					"output_path": "actions.test.js",
+					"template": "actions.test.js",
+					"required": true
+				},
+				{
+					"output_path": "helpers.js",
+					"template": "helpers.js",
+					"required": true
+				},
+				{
+					"output_path": "helpers.test.js",
+					"template": "helpers.test.js",
+					"required": true
+				},
+				{
+					"output_path": "index.js",
+					"template": "index.js",
+					"required": true
+				}
+			]
+		}
 	]
 }
