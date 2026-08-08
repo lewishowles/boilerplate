@@ -1,6 +1,6 @@
 import { alias } from "./support/aliases.js";
 import { componentsResolver } from "@lewishowles/components/resolver";
-import { defineConfig } from "vite-plus";
+import { defineConfig, lazyPlugins } from "vite-plus";
 import Components from "unplugin-vue-components/vite";
 import VueRouter from "vue-router/vite";
 import baseLintConfig from "@lewishowles/lint-config/base.json" with { type: "json" };
@@ -27,7 +27,7 @@ export default defineConfig({
 	fmt,
 	lint,
 	base: "/",
-	plugins: [
+	plugins: lazyPlugins(() => [
 		VueRouter({
 			dts: false,
 		}),
@@ -41,7 +41,7 @@ export default defineConfig({
 		tailwindcss(),
 		vue(),
 		vueDevTools(),
-	],
+	]),
 	resolve: {
 		alias,
 	},
