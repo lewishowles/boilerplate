@@ -45,16 +45,9 @@
 			"required": true
 		},
 		{
-			"token": "API_BASE_URL",
-			"label": "API base URL",
-			"description": "The base URL used by the fetch API helper.",
-			"default_value": "http://localhost:3000/api",
-			"required": true
-		},
-		{
 			"token": "API_TYPE",
 			"label": "API type",
-			"description": "Chooses which starter API helper and query generator imports to keep.",
+			"description": "Chooses the fetch, single-group Xano, or grouped Xano API setup.",
 			"type": "select",
 			"default_value": "fetch",
 			"options": [
@@ -65,7 +58,9 @@
 						"API_COMPOSABLE": "useApi",
 						"API_IMPORT": "@/composables/api/use-api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
-						"MOCK_API_NAME": "mockApi"
+						"MOCK_API_NAME": "mockApi",
+						"HAS_XANO": "false",
+						"AUTH_API_MODE": "standard"
 					}
 				},
 				{
@@ -75,11 +70,33 @@
 						"API_COMPOSABLE": "useApi",
 						"API_IMPORT": "@/composables/api/use-api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
-						"MOCK_API_NAME": "mockApi"
+						"MOCK_API_NAME": "mockApi",
+						"HAS_XANO": "true",
+						"AUTH_API_MODE": "standard"
+					}
+				},
+				{
+					"label": "Xano (with grouped APIs)",
+					"value": "xano-grouped",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi",
+						"HAS_XANO": "true",
+						"AUTH_API_MODE": "grouped"
 					}
 				}
 			],
 			"required": true
+		}
+	],
+	"package_dependencies": [
+		{
+			"name": "@xano/js-sdk",
+			"version": "^3.0.1",
+			"section": "dependencies",
+			"include_when": { "HAS_XANO": "true" }
 		}
 	],
 	"files": [
@@ -88,18 +105,69 @@
 			"include_when": { "API_TYPE": "fetch" }
 		},
 		{
-			"paths": ["src/composables/api/xano/**"],
+			"paths": ["src/composables/api/use-auth-api/**"],
+			"include_when": { "AUTH_API_MODE": "standard" }
+		},
+		{
+			"paths": ["src/composables/api/xano/use-api/**"],
 			"include_when": { "API_TYPE": "xano" },
 			"move_to": "src/composables/api"
+		},
+		{
+			"paths": ["src/composables/api/xano/xano-client.js"],
+			"include_when": { "API_TYPE": "xano" }
+		},
+		{
+			"paths": ["src/composables/api/xano/xano-api.js"],
+			"include_when": { "HAS_XANO": "true" }
+		},
+		{
+			"paths": ["src/composables/api/xano/grouped/use-api/**"],
+			"include_when": { "API_TYPE": "xano-grouped" },
+			"move_to": "src/composables/api"
+		},
+		{
+			"paths": ["src/composables/api/xano/grouped/use-auth-api/**"],
+			"include_when": { "API_TYPE": "xano-grouped" },
+			"move_to": "src/composables/api"
+		},
+		{
+			"paths": ["src/composables/api/xano/grouped/use-group-api/**"],
+			"include_when": { "API_TYPE": "xano-grouped" },
+			"move_to": "src/composables/api"
+		},
+		{
+			"paths": ["src/composables/api/xano/grouped/xano-client.js"],
+			"include_when": { "API_TYPE": "xano-grouped" }
 		},
 		{
 			"paths": ["test/unit/support/mock-api/index.js"],
 			"include_when": { "API_TYPE": "fetch" }
 		},
 		{
-			"paths": ["test/unit/support/mock-api/xano/**"],
+			"paths": ["test/unit/support/mock-api/xano/index.js"],
 			"include_when": { "API_TYPE": "xano" },
 			"move_to": "test/unit/support/mock-api"
+		},
+		{
+			"paths": ["test/unit/support/mock-api/xano/grouped/index.js"],
+			"include_when": { "API_TYPE": "xano-grouped" },
+			"move_to": "test/unit/support/mock-api"
+		},
+		{
+			"paths": [".boilersuit/env/fetch/**"],
+			"include_when": { "API_TYPE": "fetch" },
+			"move_to": "."
+		},
+		{
+			"paths": [".boilersuit/env/xano/**"],
+			"include_when": { "API_TYPE": "xano" },
+			"move_to": "."
+		},
+		{
+			"paths": [".boilersuit/env/xano-grouped/**"],
+			"include_when": { "API_TYPE": "xano-grouped" },
+			"move_to": "."
 		}
 	]
 }

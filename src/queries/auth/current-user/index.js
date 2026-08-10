@@ -2,7 +2,7 @@ import { computed } from "vue";
 import { defineQueryOptions, useQueryCache } from "@pinia/colada";
 import { isNonEmptyObject } from "@lewishowles/helpers/object";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
-import useApi from "@/composables/api/use-api";
+import useAuthApi from "@/composables/api/use-auth-api";
 
 import { AUTH_KEYS } from "../keys.js";
 
@@ -10,7 +10,7 @@ import { AUTH_KEYS } from "../keys.js";
  * Provide access to the logged-in user's details.
  */
 export function useCurrentUser() {
-	const { hasAuthToken } = useApi();
+	const { hasAuthToken } = useAuthApi();
 
 	const currentUser = useQueryWrapper({
 		queryOptions: () => ({
@@ -80,7 +80,7 @@ const currentUserQueryOptions = defineQueryOptions({
  * Load the current user's details.
  */
 async function getCurrentUser() {
-	const { get } = useApi();
+	const { get } = useAuthApi();
 
 	return get("auth/me");
 }

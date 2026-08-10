@@ -65,6 +65,16 @@
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}
+				},
+				{
+					"label": "Xano (with grouped APIs)",
+					"value": "xano-grouped",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
 				}
 			],
 			"required": true

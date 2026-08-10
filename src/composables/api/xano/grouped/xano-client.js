@@ -1,7 +1,7 @@
 import { XanoClient, XanoLocalStorage } from "@xano/js-sdk";
 
-// Shared Xano client used by the Xano API helper.
+// Shared Xano instance client for all grouped API adapters.
 export const xano = new XanoClient({
-	apiGroupBaseUrl: import.meta.env.VITE_API_BASE_URL,
+	instanceBaseUrl: import.meta.env.VITE_XANO_INSTANCE_BASE_URL,
 	storage: new XanoLocalStorage(),
 });

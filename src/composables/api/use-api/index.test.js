@@ -2,18 +2,20 @@ import { describe, expect, test } from "vite-plus/test";
 
 import useApi from "./index";
 
+const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
+
 describe("useApi (fetch)", () => {
 	describe("getFinalUrl", () => {
 		test("Strips a leading slash from the endpoint", () => {
 			const { getFinalUrl } = useApi();
 
-			expect(getFinalUrl("/examples")).toBe("{{ API_BASE_URL }}/examples");
+			expect(getFinalUrl("/examples")).toBe(`${defaultBaseUrl}/examples`);
 		});
 
 		test("Appends serialised query parameters when provided", () => {
 			const { getFinalUrl } = useApi();
 
-			expect(getFinalUrl("examples", { page: 2 })).toBe("{{ API_BASE_URL }}/examples?page=2");
+			expect(getFinalUrl("examples", { page: 2 })).toBe(`${defaultBaseUrl}/examples?page=2`);
 		});
 
 		test("Throws when the endpoint is not a non-empty string", () => {

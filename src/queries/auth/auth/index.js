@@ -4,7 +4,7 @@ import { getPathValue } from "@lewishowles/helpers/object";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { useCurrentUser } from "../current-user";
 import { resetAuthSession } from "@/composables/api/session-reset";
-import useApi from "@/composables/api/use-api";
+import useAuthApi from "@/composables/api/use-auth-api";
 
 import { AUTH_KEYS } from "../keys.js";
 
@@ -15,7 +15,7 @@ import { AUTH_KEYS } from "../keys.js";
  *     Login form data.
  */
 async function loginUser(credentials) {
-	const { post } = useApi();
+	const { post } = useAuthApi();
 
 	return post("auth/login", credentials);
 }
@@ -30,7 +30,7 @@ const loginMutation = defineMutationOptions({
  * User authentication.
  */
 export function useAuth() {
-	const { hasAuthToken, setAuthToken } = useApi();
+	const { hasAuthToken, setAuthToken } = useAuthApi();
 	const { refetch: refetchCurrentUser } = useCurrentUser();
 
 	const loginUserMutation = useMutation({

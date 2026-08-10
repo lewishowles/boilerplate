@@ -4,7 +4,7 @@ import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
 // Base URL prepended to all API calls.
-const defaultBaseUrl = "{{ API_BASE_URL }}";
+const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
 
 // localStorage key used to persist the auth token.
 const authTokenStorageKey = "authToken";

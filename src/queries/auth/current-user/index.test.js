@@ -4,7 +4,7 @@ import { withAppContext } from "@lewishowles/testing/vue";
 const mockGet = vi.hoisted(() => vi.fn());
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
 
-vi.mock("@/composables/api/use-api", () => ({
+vi.mock("@/composables/api/use-auth-api", () => ({
 	default: () => ({
 		get: mockGet,
 		hasAuthToken: mockHasAuthToken,

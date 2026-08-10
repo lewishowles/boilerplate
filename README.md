@@ -14,6 +14,30 @@ bun install
 bun run dev
 ```
 
+## API setup
+
+Choose one API mode when creating a project with `boilersuit new`:
+
+- `fetch` keeps the native fetch client and `VITE_API_BASE_URL`
+- `xano` keeps one Xano API-group client and `VITE_API_BASE_URL`
+- `xano-grouped` uses one Xano instance client with `VITE_XANO_APP_GROUP` and `VITE_XANO_AUTH_GROUP`
+
+Copy the generated `.env.example` to `.env` and fill in the values for the selected mode. `.env` is ignored by Git. In grouped mode, application queries use `useApi()` and authentication queries use `useAuthApi()`.
+
+Add another grouped API by defining one environment value and a named adapter:
+
+```js
+import useGroupApi from "@/composables/api/use-group-api";
+
+const reportsGroupId = import.meta.env.VITE_XANO_REPORTS_GROUP;
+
+export default function useReportsApi() {
+	return useGroupApi(reportsGroupId);
+}
+```
+
+To remove grouping, point authentication calls at `useApi()`, remove `useAuthApi()` and any named group adapters, then remove the grouped environment values.
+
 ## Common commands
 
 ```bash
