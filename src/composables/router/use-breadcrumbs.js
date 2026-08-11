@@ -72,8 +72,9 @@ export function useBreadcrumbs() {
 function haveBreadcrumb(record) {
 	const key = keyForRecord(record);
 	const label = breadcrumbLabels[key];
+	const breadcrumb = record.meta?.breadcrumb;
 
-	return Boolean(key && (label !== undefined || record.meta?.breadcrumb));
+	return Boolean(key && (label !== undefined || breadcrumb?.label));
 }
 
 /**
@@ -89,7 +90,7 @@ function labelForRecord(record, key) {
 		return breadcrumbLabels[key];
 	}
 
-	return record.meta.breadcrumb ?? key;
+	return record.meta.breadcrumb?.label ?? key;
 }
 
 /**
@@ -114,6 +115,11 @@ function keyForRecord(record) {
  */
 function locationForRecord(record, records, currentParams) {
 	const params = parametersForRecords(records, currentParams);
+	const breadcrumbLink = record.meta?.breadcrumb?.to;
+
+	if (breadcrumbLink) {
+		return breadcrumbLink;
+	}
 
 	if (record.name) {
 		return {

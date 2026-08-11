@@ -1,20 +1,21 @@
 .app-shell {
-	--app-shell-gutter: calc(var(--spacing) * 6);
+	--app-shell-gutter: calc(var(--spacing) * 4);
+	--app-shell-content-max: 94rem;
 
 	container-type: inline-size;
 	display: grid;
 	grid-template-rows: auto 1fr;
 	grid-template-columns:
 		[full-start]
-		var(--app-shell-gutter)
+		minmax(var(--app-shell-gutter), 1fr)
 		[content-start]
-		minmax(0, 1fr)
+		minmax(0, var(--app-shell-content-max))
 		[content-end]
-		var(--app-shell-gutter)
+		minmax(var(--app-shell-gutter), 1fr)
 		[full-end];
 
 	@variant lg {
-		--app-shell-gutter: calc(var(--spacing) * 10);
+		--app-shell-gutter: calc(var(--spacing) * 8);
 	}
 }
 
@@ -26,6 +27,7 @@
 	grid-column: full;
 	display: grid;
 	grid-template-columns: subgrid;
+	border-color: var(--border);
 
 	:where(&) > * {
 		grid-column: content;
@@ -37,10 +39,14 @@
 	display: grid;
 	grid-template-columns: subgrid;
 	align-content: start;
+	padding-block: calc(var(--spacing) * 5);
 
 	:where(&) > * {
 		grid-column: content;
-		padding-block: calc(var(--spacing) * 6);
+	}
+
+	@variant lg {
+		padding-block: calc(var(--spacing) * 8);
 	}
 }
 
@@ -48,9 +54,19 @@
 	grid-column: full;
 	display: grid;
 	grid-template-columns: subgrid;
-	border-block-end: 1px solid var(--border);
 
 	:where(&) > * {
 		grid-column: content;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:where(.sidebar-link-group > ul > li) {
+		opacity: 0;
+		animation-duration: var(--animation-duration, 250ms);
+		animation-timing-function: ease-in-out;
+		animation-fill-mode: forwards;
+		animation-name: fadeInUp;
+		animation-delay: calc(sibling-index() * 50ms);
 	}
 }

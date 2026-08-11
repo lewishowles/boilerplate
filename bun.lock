@@ -5,7 +5,7 @@
     "": {
       "name": "boilerplate",
       "dependencies": {
-        "@lewishowles/components": "^3.0.5",
+        "@lewishowles/components": "^3.1.3",
         "@lewishowles/helpers": "^1.7.1",
         "@pinia/colada": "^1.4.2",
         "@vueuse/core": "^14.4.0",
@@ -211,7 +211,7 @@
 
     "@lewishowles/cli-style": ["@lewishowles/cli-style@0.11.0", "", { "bin": { "cli-style": "bin/cli-style.js" } }, "sha512-969Jpajbl5wDIzSn7QlgyCCwhJtkynnMcq43T7zv7mHic7ezSXpYd0sGVm40DnnHQzZklngDBd7S2ApVm0xNEg=="],
 
-    "@lewishowles/components": ["@lewishowles/components@3.0.5", "", { "dependencies": { "@clack/prompts": "^1.7.0", "@lewishowles/cli-style": "^0.11.0", "@lewishowles/helpers": "^1.7.1", "@vueuse/core": "^14.4.0", "cli-highlight": "^2.1.11", "clsx": "^2.1.1", "nanoid": "^6.0.1", "tailwind-merge": "^3.6.0", "temporal-polyfill": "^1.0.3" }, "peerDependencies": { "vue": "^3.4.0" }, "bin": { "components": "bin/cli.js" } }, "sha512-DEhviIZ6j1uI+UNcmxjHVdbNlmTFOAmJnmoT+QGJ6Y9PvaPM8+BiK0eN7/TYz98JL/U1sLUOak0CXgu9GGFmAg=="],
+    "@lewishowles/components": ["@lewishowles/components@3.1.3", "", { "dependencies": { "@clack/prompts": "^1.7.0", "@lewishowles/cli-style": "^0.11.0", "@lewishowles/helpers": "^1.7.1", "@vueuse/core": "^14.4.0", "cli-highlight": "^2.1.11", "clsx": "^2.1.1", "nanoid": "^6.0.1", "tailwind-merge": "^3.6.0", "temporal-polyfill": "^1.0.3" }, "peerDependencies": { "vue": "^3.4.0" }, "bin": { "components": "bin/cli.js" } }, "sha512-hKS2A/9tekD5LfbcKrC7CtW35o1s38TpcEH87cRWWmtR4fkgOd3y6xkyAwIulZSgaTnfL4b2QI2MvAFhBa8hyg=="],
 
     "@lewishowles/helpers": ["@lewishowles/helpers@1.7.1", "", { "dependencies": { "dayjs": "^1.11.21", "temporal-polyfill": "^1.0.1" }, "peerDependencies": { "vue": "^3.5.39" }, "optionalPeers": ["vue"] }, "sha512-qo1c3EhG0qiNwRdsW+10iGXEy4BtzuhpCbFqJQLtHpKP+hctOPcUXLbD6CdMkUj8eo+7HyE9PZqGXfwbEcyXnQ=="],
 

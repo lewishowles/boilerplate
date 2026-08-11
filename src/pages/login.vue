@@ -64,7 +64,7 @@ async function performLogin() {
 
 		const redirect = getSafeRedirect(route.query?.redirect);
 
-		await router.push(redirect ?? { name: "home" });
+		await router.push(redirect ?? { name: "page-one" });
 	} catch (error) {
 		console.error("login[performLogin]: Could not log in.", error);
 	}
@@ -72,6 +72,6 @@ async function performLogin() {
 
 definePage({
 	name: "login",
-	meta: { title: "Login" },
+	meta: { page_title: "Login" },
 });
 </script>

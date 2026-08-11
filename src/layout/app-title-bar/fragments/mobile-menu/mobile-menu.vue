@@ -1,10 +1,15 @@
 <template>
-	<ui-button class="lg:hidden" @click="openMobileMenu">Open navigation menu</ui-button>
+	<ui-button
+		class="button--muted inline-flex lg:hidden"
+		icon-start="icon-hamburger"
+		icon-only
+		@click="openMobileMenu"
+	>
+		Open navigation menu
+	</ui-button>
 
-	<modal-dialog ref="mobile-menu" v-bind="{ initiallyOpen: false }">
-		<template #title>Navigation</template>
-
-		<app-sidebar v-bind="{ alwaysVisible: true }" />
+	<modal-dialog ref="mobile-menu" v-bind="{ initiallyOpen: false }" aria-label="Navigation">
+		<app-sidebar class="h-screen" v-bind="{ alwaysVisible: true }" />
 	</modal-dialog>
 </template>
 

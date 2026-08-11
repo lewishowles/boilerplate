@@ -18,11 +18,11 @@ export function usePageTitle(title) {
 	const documentTitle = useTitle();
 
 	watchEffect(() => {
-		documentTitle.value = getPageTitle(toValue(title) || route.meta?.title);
+		documentTitle.value = getPageTitle(toValue(title) || route.meta?.page_title);
 	});
 
 	onScopeDispose(() => {
-		documentTitle.value = getPageTitle(route.meta?.title);
+		documentTitle.value = getPageTitle(route.meta?.page_title);
 	});
 }
 
@@ -35,7 +35,7 @@ export function usePageTitles() {
 	const documentTitle = useTitle();
 
 	watchEffect(() => {
-		documentTitle.value = getPageTitle(route.meta?.title);
+		documentTitle.value = getPageTitle(route.meta?.page_title);
 	});
 }
 

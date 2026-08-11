@@ -67,7 +67,7 @@ describe("usePageTitle", () => {
 		});
 
 		test("Falls back to the route meta title when the title resolves to a falsy value", async () => {
-			route.meta = { title: "Sites" };
+			route.meta = { page_title: "Sites" };
 
 			const title = ref("Locations");
 			const scope = effectScope();
@@ -105,7 +105,7 @@ describe("usePageTitle", () => {
 
 	describe("Cleanup", () => {
 		test("Restores the route meta title when the scope is disposed", () => {
-			route.meta = { title: "Sites" };
+			route.meta = { page_title: "Sites" };
 
 			const scope = effectScope();
 
@@ -140,7 +140,7 @@ describe("usePageTitles", () => {
 
 	describe("Initialisation", () => {
 		test("Applies the route meta title on mount", () => {
-			route.meta = { title: "Sites" };
+			route.meta = { page_title: "Sites" };
 
 			usePageTitles();
 
@@ -156,11 +156,11 @@ describe("usePageTitles", () => {
 
 	describe("Route changes", () => {
 		test("Updates the document title when the route meta title changes", async () => {
-			route.meta = { title: "Sites" };
+			route.meta = { page_title: "Sites" };
 
 			usePageTitles();
 
-			route.meta = { title: "Locations" };
+			route.meta = { page_title: "Locations" };
 
 			await nextTick();
 
@@ -168,7 +168,7 @@ describe("usePageTitles", () => {
 		});
 
 		test("Falls back to the base title when the route meta title is removed", async () => {
-			route.meta = { title: "Sites" };
+			route.meta = { page_title: "Sites" };
 
 			usePageTitles();
 

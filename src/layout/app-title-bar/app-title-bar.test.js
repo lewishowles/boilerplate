@@ -14,9 +14,13 @@ describe("app-title-bar", () => {
 	describe("Interactions", () => {
 		test("Toggles the sidebar when the desktop toggle is clicked", async () => {
 			const wrapper = mount();
-			const toggleButton = wrapper.get("ui-button-stub");
 
-			await toggleButton.trigger("click");
+			// The desktop sidebar control remains the only pressed button.
+			const toggleButton = wrapper
+				.findAll("ui-button-stub")
+				.find((button) => button.props("pressed") !== undefined);
+
+			await toggleButton?.trigger("click");
 
 			expect(showSidebar.value).toBe(false);
 		});

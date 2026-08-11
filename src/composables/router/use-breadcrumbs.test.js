@@ -31,7 +31,11 @@ describe("useBreadcrumbs", () => {
 			route.name = "location";
 			route.params = { locationId: "location-123" };
 			route.matched = [
-				{ name: "location", path: "/locations/:locationId", meta: { breadcrumb: "Location" } },
+				{
+					name: "location",
+					path: "/locations/:locationId",
+					meta: { breadcrumb: { label: "Location" } },
+				},
 			];
 
 			const breadcrumbs = useBreadcrumbs();
@@ -54,7 +58,11 @@ describe("useBreadcrumbs", () => {
 			route.name = "dashboard";
 			route.params = { siteId: "site-123" };
 			route.matched = [
-				{ name: undefined, path: "/site/:siteId", meta: { breadcrumb: "Site" } },
+				{
+					name: undefined,
+					path: "/site/:siteId",
+					meta: { breadcrumb: { label: "Site" } },
+				},
 				{ name: "dashboard", path: "", meta: {} },
 			];
 
@@ -231,6 +239,29 @@ describe("useBreadcrumbs", () => {
 	});
 
 	describe("Route records", () => {
+		test("Uses an explicit destination for a parent breadcrumb", () => {
+			route.name = "page-three";
+			route.params = { recordId: "record-123" };
+			route.matched = [
+				{
+					name: "section-one-layout",
+					path: "/records",
+					meta: { breadcrumb: { label: "Page two", to: { name: "page-two" } } },
+				},
+				{
+					name: "page-three",
+					path: "/records/:recordId",
+					meta: { breadcrumb: { label: "Record" } },
+				},
+			];
+
+			const breadcrumbs = useBreadcrumbs();
+
+			expect(breadcrumbs.value[0].to).toEqual({
+				name: "page-two",
+			});
+		});
+
 		test("Uses breadcrumb keys for unnamed parent records", () => {
 			route.name = "location";
 			route.params = {

@@ -19,7 +19,7 @@
 			<template #no-data-message>No {{ NAME | lower }} to display</template>
 		</data-table>
 
-		<div class="mt-10 flex items-center justify-end gap-4 text-sm">
+		<div class="mbs-10 flex items-center justify-end gap-4">
 			<p class="flex shrink-0 gap-2">
 				<span>Last updated</span>
 				<relative-date v-bind="{ date: lastFetched }" />

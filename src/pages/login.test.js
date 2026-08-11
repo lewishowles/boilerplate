@@ -59,7 +59,7 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "home" });
+			expect(mockRouterPush).toHaveBeenCalledWith({ name: "page-one" });
 		});
 
 		test("Redirects to the safe internal route on success", async () => {
@@ -87,7 +87,7 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "home" });
+			expect(mockRouterPush).toHaveBeenCalledWith({ name: "page-one" });
 		});
 
 		test("Does not throw or redirect when login fails", async () => {
