@@ -10,7 +10,7 @@ const mockPatch = vi.hoisted(() => vi.fn());
 const mockPost = vi.hoisted(() => vi.fn());
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
-vi.mock("@/composables/api/use-api", () => ({
+vi.mock("@/composables/api", () => ({
 	default: () => ({
 		delete: mockDelete,
 		get: mockGet,

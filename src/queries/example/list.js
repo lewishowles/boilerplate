@@ -4,7 +4,7 @@ import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
-import useApi from "@/composables/api/use-api";
+import useApi from "@/composables/api";
 
 import { shapeExampleResponse } from "./helpers.js";
 import { EXAMPLE_KEYS } from "./keys.js";

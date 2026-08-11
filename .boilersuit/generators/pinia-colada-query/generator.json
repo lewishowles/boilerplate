@@ -51,7 +51,7 @@
 					"value": "fetch",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}
@@ -61,7 +61,7 @@
 					"value": "xano",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}
@@ -71,7 +71,7 @@
 					"value": "xano-grouped",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi"
 					}

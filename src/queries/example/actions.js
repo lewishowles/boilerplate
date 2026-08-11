@@ -1,6 +1,6 @@
 import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 
-import useApi from "@/composables/api/use-api";
+import useApi from "@/composables/api";
 
 import { EXAMPLE_KEYS } from "./keys.js";
 

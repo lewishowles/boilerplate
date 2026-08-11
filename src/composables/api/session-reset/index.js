@@ -1,5 +1,5 @@
 import { clearCurrentUser } from "@/queries/auth/current-user";
-import useApi from "@/composables/api/use-api";
+import useApi from "@/composables/api";
 import router from "@/router";
 
 /**

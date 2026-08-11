@@ -4,7 +4,7 @@ const mockClearCurrentUser = vi.hoisted(() => vi.fn());
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
-vi.mock("@/composables/api/use-api", () => ({
+vi.mock("@/composables/api", () => ({
 	default: () => ({
 		hasAuthToken: mockHasAuthToken,
 		setAuthToken: mockSetAuthToken,

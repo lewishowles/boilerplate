@@ -25,11 +25,11 @@
 		</DefineSearchTemplate>
 
 		<ReuseSearchTemplate
-			class="col-start-3 row-start-1 hidden w-full max-w-sm min-w-0 justify-self-end lg:block"
+			class="animate-fade-in-left col-start-3 row-start-1 hidden w-full max-w-sm min-w-0 justify-self-end lg:block"
 		/>
 
 		<ui-button
-			class="button--muted col-start-3 row-start-1 justify-self-end lg:hidden"
+			class="button--muted animate-fade-in-left col-start-3 row-start-1 justify-self-end lg:hidden"
 			v-bind="{
 				'aria-controls': 'app-search-mobile-panel',
 				'aria-expanded': showMobileSearch,

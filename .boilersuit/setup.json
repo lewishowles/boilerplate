@@ -56,7 +56,7 @@
 					"value": "fetch",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi",
 						"HAS_XANO": "false",
@@ -68,7 +68,7 @@
 					"value": "xano",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi",
 						"HAS_XANO": "true",
@@ -80,7 +80,7 @@
 					"value": "xano-grouped",
 					"tokens": {
 						"API_COMPOSABLE": "useApi",
-						"API_IMPORT": "@/composables/api/use-api",
+						"API_IMPORT": "@/composables/api",
 						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
 						"MOCK_API_NAME": "mockApi",
 						"HAS_XANO": "true",
@@ -102,7 +102,8 @@
 	"files": [
 		{
 			"paths": ["src/composables/api/use-api/**"],
-			"include_when": { "API_TYPE": "fetch" }
+			"include_when": { "API_TYPE": "fetch" },
+			"move_to": "src/composables/api"
 		},
 		{
 			"paths": ["src/composables/api/use-auth-api/**"],
@@ -129,12 +130,12 @@
 		{
 			"paths": ["src/composables/api/xano/grouped/use-auth-api/**"],
 			"include_when": { "API_TYPE": "xano-grouped" },
-			"move_to": "src/composables/api"
+			"move_to": "src/composables/api/use-auth-api"
 		},
 		{
 			"paths": ["src/composables/api/xano/grouped/use-group-api/**"],
 			"include_when": { "API_TYPE": "xano-grouped" },
-			"move_to": "src/composables/api"
+			"move_to": "src/composables/api/use-group-api"
 		},
 		{
 			"paths": ["src/composables/api/xano/grouped/xano-client.js"],

@@ -1,4 +1,4 @@
-import useGroupApi from "../use-group-api";
+import useGroupApi from "@/composables/api/use-group-api";
 
 const authenticationGroupId = import.meta.env.VITE_XANO_AUTH_GROUP;
 
