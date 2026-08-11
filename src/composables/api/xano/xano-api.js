@@ -43,10 +43,12 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     Query string parameters or request body.
 	 */
 	async function makeApiCall(method, endpoint, parameters) {
+		let finalEndpoint;
+
 		try {
 			isLoading.value = true;
 
-			const finalEndpoint = getFinalUrl(endpoint);
+			finalEndpoint = getFinalUrl(endpoint);
 
 			const response = isNonEmptyObject(parameters)
 				? await client[method](finalEndpoint, parameters)
@@ -58,7 +60,13 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 
 			return body;
 		} catch (error) {
-			throw getErrorBody(error);
+			const body = getErrorBody(error);
+
+			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(body)) {
+				resetAuthSessionSilently();
+			}
+
+			throw body;
 		} finally {
 			isLoading.value = false;
 		}
@@ -164,6 +172,20 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 */
 	function isUnauthorisedError(body) {
 		return getPropertyValue(body, "code") === unauthorisedErrorCode;
+	}
+
+	/**
+	 * Reset auth without replacing the original API error.
+	 *
+	 * Imported dynamically to break a real circular dependency: session-reset
+	 * imports the application `useApi` composable, which imports the group
+	 * API composable, which imports this file. A static import here would
+	 * hit that cycle during module initialisation.
+	 */
+	function resetAuthSessionSilently() {
+		import("@/composables/api/session-reset")
+			.then(({ resetAuthSession }) => resetAuthSession().catch(() => null))
+			.catch(() => null);
 	}
 
 	return {
