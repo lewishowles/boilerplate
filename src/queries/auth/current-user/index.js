@@ -6,6 +6,9 @@ import useAuthApi from "@/composables/api/use-auth-api";
 
 import { AUTH_KEYS } from "../keys.js";
 
+// Development-only bypass driven by VITE_MOCK_AUTH.
+const isMockAuth = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === "true";
+
 /**
  * Provide access to the logged-in user's details.
  */
@@ -15,7 +18,7 @@ export function useCurrentUser() {
 	const currentUser = useQueryWrapper({
 		queryOptions: () => ({
 			...currentUserQueryOptions,
-			enabled: hasAuthToken(),
+			enabled: isMockAuth || hasAuthToken(),
 		}),
 		isReady: (data) => isNonEmptyObject(data),
 	});
@@ -77,9 +80,17 @@ const currentUserQueryOptions = defineQueryOptions({
 });
 
 /**
- * Load the current user's details.
+ * Load the current user's details. In dev, returns fixture data instead of
+ * calling the API when VITE_MOCK_AUTH=true.
  */
 async function getCurrentUser() {
+	if (isMockAuth) {
+		return {
+			display_name: "Sophie Wardhaugh",
+			permissions: [],
+		};
+	}
+
 	const { get } = useAuthApi();
 
 	return get("auth/me");

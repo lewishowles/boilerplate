@@ -5,7 +5,7 @@ import useApi from "@/composables/api";
  * Guard protected routes behind authentication. Redirects unauthenticated
  * users to login, recording the intended path so login can return them
  * there, and clears any stale token and cached user when visiting the
- * login page.
+ * login page. In dev, set VITE_MOCK_AUTH=true to bypass the guard.
  *
  * @param  {object}  to
  *     The route being navigated to.
@@ -13,7 +13,10 @@ import useApi from "@/composables/api";
 export default async function authMiddleware(to) {
 	const { hasAuthToken, setAuthToken } = useApi();
 
-	if (to.meta.requiresAuth && !hasAuthToken()) {
+	// Development-only bypass driven by VITE_MOCK_AUTH.
+	const isMockAuth = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === "true";
+
+	if (to.meta.requiresAuth && !isMockAuth && !hasAuthToken()) {
 		return { path: "/login", query: { redirect: to.fullPath } };
 	}
 
