@@ -1,4 +1,8 @@
 @import "tailwindcss";
+
+/* Scan application components when Playwright CT mounts them dynamically. */
+@source "../../";
+
 @import "@lewishowles/components/styles";
 
 @import "./font.css";

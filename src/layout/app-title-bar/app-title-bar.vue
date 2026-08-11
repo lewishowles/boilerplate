@@ -1,6 +1,8 @@
 <template>
-	<header class="app-title-bar border-border bg-surface sticky top-0 z-20 min-h-18 border-b">
-		<div class="flex items-center justify-between gap-3">
+	<header
+		class="app-title-bar border-border bg-surface sticky top-0 z-20 border-b py-2 lg:min-h-18"
+	>
+		<div class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3">
 			<div class="flex items-center gap-3">
 				<router-link v-slot="{ href, navigate }" :to="{ name: 'page-one' }" custom>
 					<link-tag
@@ -25,15 +27,9 @@
 				<mobile-menu />
 			</div>
 
-			<div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
-				<form-field v-bind="{ displayLabel: false }" class="animate-fade-in-left delay">
-					Search
+			<app-search />
 
-					<template #prefix>
-						<icon-search />
-					</template>
-				</form-field>
-
+			<div class="col-start-4 flex shrink-0 items-center justify-end gap-2">
 				<ui-button
 					class="button--muted animate-fade-in-left delay"
 					v-bind="{ iconStart: 'icon-bell', iconOnly: true }"
