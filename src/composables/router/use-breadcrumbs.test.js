@@ -240,25 +240,27 @@ describe("useBreadcrumbs", () => {
 
 	describe("Route records", () => {
 		test("Uses an explicit destination for a parent breadcrumb", () => {
-			route.name = "page-three";
-			route.params = { recordId: "record-123" };
+			route.name = "sample-page-two";
+			route.params = { samplePageId: "sample-123" };
 			route.matched = [
 				{
-					name: "section-one-layout",
-					path: "/records",
-					meta: { breadcrumb: { label: "Page two", to: { name: "page-two" } } },
+					name: "sample-page-one",
+					path: "/sample-pages",
+					meta: {
+						breadcrumb: { label: "Sample page one", to: { name: "sample-page-one" } },
+					},
 				},
 				{
-					name: "page-three",
-					path: "/records/:recordId",
-					meta: { breadcrumb: { label: "Record" } },
+					name: "sample-page-two",
+					path: "/sample-pages/:samplePageId",
+					meta: { breadcrumb: { label: "Sample page two" } },
 				},
 			];
 
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].to).toEqual({
-				name: "page-two",
+				name: "sample-page-one",
 			});
 		});
 

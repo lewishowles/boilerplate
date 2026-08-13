@@ -10,7 +10,6 @@ import { defineConfig } from "@playwright/experimental-ct-vue";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Components from "unplugin-vue-components/vite";
-import VueRouter from "vue-router/vite";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 
@@ -33,7 +32,6 @@ export default defineConfig({
 		trace: process.env.CI ? "on-first-retry" : "off",
 		ctViteConfig: {
 			plugins: [
-				VueRouter({ dts: false }),
 				Components({
 					dts: false,
 					dirs: [join(configDir, "../src/components"), join(configDir, "../src/layout")],

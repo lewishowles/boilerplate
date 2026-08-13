@@ -3,7 +3,22 @@ import { createMount } from "@lewishowles/testing/playwright";
 
 import AppTitleBar from "./app-title-bar.vue";
 
-const mountAppTitleBar = createMount(AppTitleBar);
+// Routes used to verify search without reading application page files.
+const sampleRoutes = [
+	{ name: "home", path: "/" },
+	{
+		meta: { page_title: "Sample page one", requiresAuth: true },
+		name: "sample-page-one",
+		path: "/sample-page-one",
+	},
+	{
+		meta: { page_title: "Sample page two", requiresAuth: true },
+		name: "sample-page-two",
+		path: "/sample-page-two",
+	},
+];
+
+const mountAppTitleBar = createMount(AppTitleBar, { hooksConfig: { routes: sampleRoutes } });
 
 test.describe("app-title-bar", () => {
 	test("renders the title bar landmark", async ({ mount, page }) => {
@@ -19,11 +34,11 @@ test.describe("app-title-bar", () => {
 		const searchInput = page.getByRole("combobox");
 
 		await expect(searchInput).toBeVisible();
-		await searchInput.fill("Page two");
+		await searchInput.fill("Sample page two");
 		const searchDropdown = page.getByTestId("combo-box-dropdown");
 
-		await expect(page.getByRole("option", { name: "Page two" })).toBeVisible();
-		await expect(page.getByRole("option", { name: "Page one" })).toHaveCount(0);
+		await expect(page.getByRole("option", { name: "Sample page two" })).toBeVisible();
+		await expect(page.getByRole("option", { name: "Sample page one" })).toHaveCount(0);
 		await expect(searchDropdown).toHaveClass(/p-2/);
 	});
 

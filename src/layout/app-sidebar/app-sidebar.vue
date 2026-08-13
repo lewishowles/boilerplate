@@ -25,17 +25,15 @@
 			aria-label="Primary navigation"
 		>
 			<sidebar-link-group>
-				<template #label>Section one</template>
+				<template #label>Pages</template>
 
 				<ul class="flex flex-col gap-1">
 					<li>
-						<sidebar-link v-bind="{ icon: IconDashboard, to: { name: 'page-one' } }">
-							Page one
-						</sidebar-link>
+						<sidebar-link v-bind="{ icon: IconDashboard }" to="/">Home</sidebar-link>
 					</li>
 					<li>
-						<sidebar-link v-bind="{ icon: IconDocument, to: { name: 'page-two' } }">
-							Page two
+						<sidebar-link v-bind="{ icon: IconDocument }" to="/sample-pages">
+							Sample pages
 						</sidebar-link>
 					</li>
 				</ul>

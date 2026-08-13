@@ -4,7 +4,7 @@
 	>
 		<div class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3">
 			<div class="flex items-center gap-3">
-				<router-link v-slot="{ href, navigate }" :to="{ name: 'page-one' }" custom>
+				<router-link v-slot="{ href, navigate }" :to="{ name: 'home' }" custom>
 					<link-tag
 						class="button--muted inline-flex items-center justify-center lg:hidden"
 						v-bind="{ href }"

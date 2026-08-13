@@ -41,7 +41,12 @@ describe("page-title", () => {
 
 		test("Does not render a single breadcrumb", () => {
 			mockBreadcrumbs.value = [
-				{ current: true, id: "page", label: "Page one", to: { name: "page-one" } },
+				{
+					current: true,
+					id: "page",
+					label: "Sample page one",
+					to: { name: "sample-page-one" },
+				},
 			];
 
 			const wrapper = mount();
@@ -51,8 +56,18 @@ describe("page-title", () => {
 
 		test("Renders a breadcrumb trail with more than one item", () => {
 			mockBreadcrumbs.value = [
-				{ current: false, id: "section", label: "Section one", to: { name: "section" } },
-				{ current: true, id: "page", label: "Page one", to: { name: "page" } },
+				{
+					current: false,
+					id: "section",
+					label: "Sample section",
+					to: { name: "sample-section" },
+				},
+				{
+					current: true,
+					id: "page",
+					label: "Sample page one",
+					to: { name: "sample-page-one" },
+				},
 			];
 
 			const wrapper = mount();
@@ -62,7 +77,12 @@ describe("page-title", () => {
 
 		test("Allows the breadcrumb content to be overridden", () => {
 			mockBreadcrumbs.value = [
-				{ current: true, id: "page", label: "Page one", to: { name: "page-one" } },
+				{
+					current: true,
+					id: "page",
+					label: "Sample page one",
+					to: { name: "sample-page-one" },
+				},
 			];
 
 			const wrapper = mount({

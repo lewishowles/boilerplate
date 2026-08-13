@@ -4,12 +4,20 @@ import { PiniaColada } from "@pinia/colada";
 import { beforeMount } from "@playwright/experimental-ct-vue/hooks";
 import { createPinia } from "pinia";
 import { createMemoryHistory, createRouter } from "vue-router";
-import { routes } from "vue-router/auto-routes";
 
 import componentLibrary from "@lewishowles/components";
 
-beforeMount(async ({ app }) => {
-	// Use the application's generated routes with an isolated in-memory history for each mount.
+// Empty page used for routes supplied by each component test.
+const TestRoute = { template: "<div />" };
+
+beforeMount(async ({ app, hooksConfig }) => {
+	// Routes supplied by the current component test.
+	const configuredRoutes = hooksConfig?.routes ?? [];
+	// Test routes use one empty component because only their navigation data matters.
+	const testRoutes = configuredRoutes.map((route) => ({ ...route, component: TestRoute }));
+	// The fallback lets components render ordinary path links without application page files.
+	const routes = [...testRoutes, { path: "/:pathMatch(.*)*", component: TestRoute }];
+
 	const router = createRouter({ history: createMemoryHistory(), routes });
 
 	app.use(createPinia());
