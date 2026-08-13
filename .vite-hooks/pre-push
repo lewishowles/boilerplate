@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Runs unit tests before changes leave the repository.
+
+bun run test:unit:run
