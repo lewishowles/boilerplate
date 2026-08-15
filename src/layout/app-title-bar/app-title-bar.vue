@@ -39,6 +39,17 @@
 
 				<ui-button
 					class="button--muted animate-fade-in-left delay"
+					v-bind="{
+						iconStart: colourModeIcon,
+						iconOnly: true,
+					}"
+					@click="toggleColourMode"
+				>
+					{{ colourModeActionLabel }}
+				</ui-button>
+
+				<ui-button
+					class="button--muted animate-fade-in-left delay"
 					v-bind="{ iconStart: 'icon-plus' }"
 				>
 					New something
@@ -49,7 +60,18 @@
 </template>
 
 <script setup>
+import { useColourMode } from "@/composables/layout/use-colour-mode";
 import { useSidebar } from "@/composables/layout/use-sidebar";
+import { computed } from "vue";
 
+const { colourMode, toggleColourMode } = useColourMode();
 const { showSidebar, toggleSidebar } = useSidebar();
+
+// The icon reflecting the currently resolved colour mode.
+const colourModeIcon = computed(() => (colourMode.value === "dark" ? "icon-moon" : "icon-sun"));
+
+// The accessible label describing the mode the toggle will switch to.
+const colourModeActionLabel = computed(() => {
+	return colourMode.value === "dark" ? "Switch to light mode" : "Switch to dark mode";
+});
 </script>
