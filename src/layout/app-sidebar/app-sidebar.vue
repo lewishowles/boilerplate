@@ -29,10 +29,12 @@
 
 				<ul class="flex flex-col gap-1">
 					<li>
-						<sidebar-link v-bind="{ icon: IconDashboard }" to="/">Home</sidebar-link>
+						<sidebar-link icon="icon-dashboard" v-bind="{ to: { name: 'home' } }">
+							Home
+						</sidebar-link>
 					</li>
 					<li>
-						<sidebar-link v-bind="{ icon: IconDocument }" to="/sample-pages">
+						<sidebar-link icon="icon-plus" v-bind="{ to: { name: 'sample-pages' } }">
 							Sample pages
 						</sidebar-link>
 					</li>

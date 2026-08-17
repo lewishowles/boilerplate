@@ -1,39 +1,24 @@
 <template>
-	<a
+	<link-tag
 		v-if="isExternal"
 		v-bind="{ ...$attrs, href: to }"
-		class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex items-center gap-3 rounded-lg px-3 py-2 no-underline"
+		class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
 		target="_blank"
 	>
 		<component :is="icon" class="size-4" />
 
 		<slot />
-	</a>
+	</link-tag>
 
-	<router-link
+	<router-link-tag
 		v-else
-		v-slot="{ isActive, isExactActive, route, href, navigate }"
-		v-bind="$props"
-		custom
+		v-bind="{ ...routerLinkProps, ...$attrs, 'icon-start': icon }"
+		class="hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
+		active-classes="bg-primary-subtle text-primary font-semibold"
+		inactive-classes="text-content"
 	>
-		<a
-			v-bind="{ ...$attrs, href }"
-			class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex items-center gap-3 rounded-lg px-3 py-2 no-underline"
-			:class="{
-				'bg-primary-subtle text-primary font-semibold': isLinkActive(
-					route,
-					isActive,
-					isExactActive,
-				),
-			}"
-			:aria-current="isLinkActive(route, isActive, isExactActive) ? 'page' : undefined"
-			@click="navigate"
-		>
-			<component :is="icon" class="size-4" />
-
-			<slot />
-		</a>
-	</router-link>
+		<slot />
+	</router-link-tag>
 </template>
 
 <script setup>
@@ -56,23 +41,15 @@ defineOptions({
 	inheritAttrs: false,
 });
 
-/**
- * Keep parent-route links active on their descendant routes.
- *
- * @param {object} route
- *     The route resolved for this link.
- * @param {boolean} isActive
- *     Whether the resolved route is active in the current route chain.
- * @param {boolean} isExactActive
- *     Whether the resolved route is the current route.
- */
-function isLinkActive(route, isActive, isExactActive) {
-	// Home must remain exact because the app shell shares the root route.
-	return route.path === "/" ? isExactActive : isActive;
-}
-
 // Determine whether this is an external link.
 const isExternal = computed(() => {
 	return typeof props.to === "string" && props.to.startsWith("http");
+});
+
+// Props to provide to router link, excluding the icon.
+const routerLinkProps = computed(() => {
+	const { icon, ...linkProps } = props;
+
+	return linkProps;
 });
 </script>
