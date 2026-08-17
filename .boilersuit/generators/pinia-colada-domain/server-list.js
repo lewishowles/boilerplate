@@ -1,21 +1,14 @@
-{{ set QUERY_KEY = NAME | constant }}
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
+import { {{ NAME | constant }}_KEYS } from "./keys.js";
 import { computed, unref } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
+import { format{{ NAME | pascal }}Response } from "./helpers.js";
 import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-import { shape{{ COMPOSABLE_NAME }}Response } from "./helpers.js";
-import { {{ QUERY_KEY }}_KEYS } from "./keys.js";
-
 const { get } = {{ API_COMPOSABLE }}();
-
-// The key that defines the {{ NAME | kebab }} list.
-export const {{ QUERY_KEY }}_QUERY_KEY = (parameters = {}) => {{ QUERY_KEY }}_KEYS.list(parameters);
 
 /**
  * Provide access to the {{ NAME | kebab }} list.
@@ -23,16 +16,16 @@ export const {{ QUERY_KEY }}_QUERY_KEY = (parameters = {}) => {{ QUERY_KEY }}_KE
  * @param  {object}  [parameters]
  *     Query parameters for the {{ NAME | kebab }} list.
  */
-export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
-	const current{{ COMPOSABLE_NAME }} = useQueryWrapper({
-		queryOptions: () => {{ DATA_NAME }}QueryOptions(unref(parameters)),
+export function use{{ NAME | pascal }}(parameters = {}) {
+	const current{{ NAME | pascal }} = useQueryWrapper({
+		queryOptions: () => {{ NAME | camel }}QueryOptions(unref(parameters)),
 	});
 
 	// The returned response.
-	const data = current{{ COMPOSABLE_NAME }}.data;
+	const data = current{{ NAME | pascal }}.data;
 
 	// The returned {{ NAME | kebab }} items.
-	const {{ DATA_NAME }} = computed(() => {
+	const {{ NAME | camel }} = computed(() => {
 		const items = getPropertyValue(data.value, "items");
 
 		if (!isNonEmptyArray(items)) {
@@ -46,12 +39,12 @@ export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
 	const totalRows = computed(() => getPropertyValue(data.value, "itemsTotal") ?? 0);
 
 	// Whether any {{ NAME | kebab }} items have been returned.
-	const have{{ COMPOSABLE_NAME }} = computed(() => isNonEmptyArray({{ DATA_NAME }}.value));
+	const have{{ NAME | pascal }} = computed(() => isNonEmptyArray({{ NAME | camel }}.value));
 
 	return {
-		...current{{ COMPOSABLE_NAME }},
-		have{{ COMPOSABLE_NAME }},
-		{{ DATA_NAME }},
+		...current{{ NAME | pascal }},
+		have{{ NAME | pascal }},
+		{{ NAME | camel }},
 		totalRows,
 	};
 }
@@ -62,7 +55,7 @@ export function use{{ COMPOSABLE_NAME }}(parameters = {}) {
  * @param  {object}  parameters
  *     Query parameters for the {{ NAME | kebab }} list.
  */
-async function load{{ COMPOSABLE_NAME }}(parameters) {
+async function load{{ NAME | pascal }}(parameters) {
 	const queryParameters = {
 		...parameters,
 		sort: parameters.sort
@@ -73,11 +66,13 @@ async function load{{ COMPOSABLE_NAME }}(parameters) {
 			: null,
 	};
 
-	return shape{{ COMPOSABLE_NAME }}Response(await get("{{ ENDPOINT }}", queryParameters));
+	const response = await get("{{ ENDPOINT }}", queryParameters);
+
+	return format{{ NAME | pascal }}Response(response);
 }
 
-const {{ DATA_NAME }}QueryOptions = defineQueryOptions((parameters = {}) => ({
-	key: {{ QUERY_KEY }}_QUERY_KEY(parameters),
-	query: () => load{{ COMPOSABLE_NAME }}(parameters),
+const {{ NAME | camel }}QueryOptions = defineQueryOptions((parameters = {}) => ({
+	key: {{ NAME | constant }}_KEYS.list(parameters),
+	query: () => load{{ NAME | pascal }}(parameters),
 	placeholderData: (previousData) => previousData,
 }));

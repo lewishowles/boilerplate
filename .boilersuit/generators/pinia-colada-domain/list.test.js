@@ -1,19 +1,16 @@
-{{ set QUERY_KEY = NAME | constant }}
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 import { describe, expect, test } from "vite-plus/test";
-import { withAppContext } from "@lewishowles/testing/vue";
 import { setupConsole } from "@lewishowles/testing/vitest";
+import { withAppContext } from "@lewishowles/testing/vue";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ QUERY_KEY }}_KEYS, use{{ COMPOSABLE_NAME }}List } from ".";
+import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }}List } from ".";
 
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
  */
-function create{{ COMPOSABLE_NAME }}List() {
-	return withAppContext(() => use{{ COMPOSABLE_NAME }}List());
+function create{{ NAME | pascal }}List() {
+	return withAppContext(() => use{{ NAME | pascal }}List());
 }
 
 describe("{{ NAME | kebab }} list", () => {
@@ -27,19 +24,19 @@ describe("{{ NAME | kebab }} list", () => {
 		],
 	};
 
-	describe("{{ QUERY_KEY }}_KEYS", () => {
+	describe("{{ NAME | constant }}_KEYS", () => {
 		test("Creates stable root and list keys", () => {
-			expect({{ QUERY_KEY }}_KEYS.root).toEqual(["{{ NAME | kebab }}"]);
-			expect({{ QUERY_KEY }}_KEYS.list()).toEqual(["{{ NAME | kebab }}", "list"]);
+			expect({{ NAME | constant }}_KEYS.root).toEqual(["{{ NAME | kebab }}"]);
+			expect({{ NAME | constant }}_KEYS.list()).toEqual(["{{ NAME | kebab }}", "list"]);
 		});
 	});
 
-	describe("use{{ COMPOSABLE_NAME }}List", () => {
+	describe("use{{ NAME | pascal }}List", () => {
 		test("Initialises with no {{ NAME | kebab }}", () => {
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }} } =
-				create{{ COMPOSABLE_NAME }}List();
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }} } =
+				create{{ NAME | pascal }}List();
 
-			expect({{ DATA_NAME }}.value).toEqual([]);
+			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(isInitialLoading.value).toBe(true);
 			expect(isReady.value).toBe(false);
 			expect(isRefreshing.value).toBe(false);
@@ -50,15 +47,15 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Loads and stores {{ NAME | kebab }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }} } =
-				create{{ COMPOSABLE_NAME }}List();
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }} } =
+				create{{ NAME | pascal }}List();
 
 			expect(lastFetched.value).toBe(null);
 
 			await refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}");
-			expect({{ DATA_NAME }}.value).toEqual(validResponse.items);
+			expect({{ NAME | camel }}.value).toEqual(validResponse.items);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);
 			expect(isReady.value).toBe(true);
@@ -68,30 +65,30 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Does not update {{ NAME | kebab }} when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { isReady, lastFetched, refetch, {{ DATA_NAME }} } = create{{ COMPOSABLE_NAME }}List();
+			const { isReady, lastFetched, refetch, {{ NAME | camel }} } = create{{ NAME | pascal }}List();
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 
-			expect({{ DATA_NAME }}.value).toEqual([]);
+			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(isReady.value).toBe(false);
 			expect(lastFetched.value).toBe(null);
 		});
 
-		describe("have{{ COMPOSABLE_NAME }}", () => {
+		describe("have{{ NAME | pascal }}", () => {
 			test("Is false when no {{ NAME | kebab }} are loaded", () => {
-				const { have{{ COMPOSABLE_NAME }} } = create{{ COMPOSABLE_NAME }}List();
+				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}List();
 
-				expect(have{{ COMPOSABLE_NAME }}.value).toBe(false);
+				expect(have{{ NAME | pascal }}.value).toBe(false);
 			});
 
 			test("Is true when {{ NAME | kebab }} have been loaded", async () => {
 				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-				const { have{{ COMPOSABLE_NAME }}, refetch } = create{{ COMPOSABLE_NAME }}List();
+				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}List();
 
 				await refetch(true);
 
-				expect(have{{ COMPOSABLE_NAME }}.value).toBe(true);
+				expect(have{{ NAME | pascal }}.value).toBe(true);
 			});
 		});
 	});

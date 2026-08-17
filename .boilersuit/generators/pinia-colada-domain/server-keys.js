@@ -1,5 +1,4 @@
-{{ set QUERY_KEY = NAME | constant }}
-export const {{ QUERY_KEY }}_KEYS = {
+export const {{ NAME | constant }}_KEYS = {
 	root: ["{{ NAME | kebab }}"],
 	list: (parameters = {}) => ["{{ NAME | kebab }}", "list", parameters],
 	byId: ({{ ID_NAME }}) => ["{{ NAME | kebab }}", {{ ID_NAME }}],

@@ -1,13 +1,10 @@
-{{ set QUERY_KEY = NAME | constant }}
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 import { describe, expect, test } from "vite-plus/test";
-import { withAppContext } from "@lewishowles/testing/vue";
 import { setupConsole } from "@lewishowles/testing/vitest";
+import { withAppContext } from "@lewishowles/testing/vue";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ QUERY_KEY }}_KEYS, use{{ COMPOSABLE_NAME }}List } from ".";
+import { {{ NAME | constant }}_KEYS, use{ { NAME | pascal } } List } from ".";
 
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
@@ -15,8 +12,8 @@ import { {{ QUERY_KEY }}_KEYS, use{{ COMPOSABLE_NAME }}List } from ".";
  * @param  {object}  parameters
  *     Query parameters for the {{ NAME | kebab }} list.
  */
-function create{{ COMPOSABLE_NAME }}List(parameters) {
-	return withAppContext(() => use{{ COMPOSABLE_NAME }}List(parameters));
+function create{{ NAME | pascal }}List(parameters) {
+	return withAppContext(() => use{{ NAME | pascal }}List(parameters));
 }
 
 describe("{{ NAME | kebab }} list", () => {
@@ -39,10 +36,10 @@ describe("{{ NAME | kebab }} list", () => {
 		itemsTotal: 42,
 	};
 
-	describe("{{ QUERY_KEY }}_KEYS", () => {
+	describe("{{ NAME | constant }}_KEYS", () => {
 		test("Creates a parameterised list key", () => {
-			expect({{ QUERY_KEY }}_KEYS.root).toEqual(["{{ NAME | kebab }}"]);
-			expect({{ QUERY_KEY }}_KEYS.list(parameters)).toEqual([
+			expect({{ NAME | constant }}_KEYS.root).toEqual(["{{ NAME | kebab }}"]);
+			expect({{ NAME | constant }}_KEYS.list(parameters)).toEqual([
 				"{{ NAME | kebab }}",
 				"list",
 				parameters,
@@ -50,12 +47,12 @@ describe("{{ NAME | kebab }} list", () => {
 		});
 	});
 
-	describe("use{{ COMPOSABLE_NAME }}List", () => {
+	describe("use{{ NAME | pascal }}List", () => {
 		test("Initialises with no {{ NAME | kebab }}", () => {
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }}, totalRows } =
-				create{{ COMPOSABLE_NAME }}List(parameters);
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
+				create{{ NAME | pascal }}List(parameters);
 
-			expect({{ DATA_NAME }}.value).toEqual([]);
+			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(totalRows.value).toBe(0);
 			expect(isInitialLoading.value).toBe(true);
 			expect(isReady.value).toBe(false);
@@ -67,15 +64,15 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Loads and stores {{ NAME | kebab }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ DATA_NAME }}, totalRows } =
-				create{{ COMPOSABLE_NAME }}List(parameters);
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
+				create{{ NAME | pascal }}List(parameters);
 
 			expect(lastFetched.value).toBe(null);
 
 			await refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
-			expect({{ DATA_NAME }}.value).toEqual(validResponse.items);
+			expect({{ NAME | camel }}.value).toEqual(validResponse.items);
 			expect(totalRows.value).toBe(validResponse.itemsTotal);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);
@@ -86,31 +83,31 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Does not update {{ NAME | kebab }} when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { isReady, lastFetched, refetch, {{ DATA_NAME }} } =
-				create{{ COMPOSABLE_NAME }}List(parameters);
+			const { isReady, lastFetched, refetch, {{ NAME | camel }} } =
+				create{{ NAME | pascal }}List(parameters);
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 
-			expect({{ DATA_NAME }}.value).toEqual([]);
+			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(isReady.value).toBe(false);
 			expect(lastFetched.value).toBe(null);
 		});
 
-		describe("have{{ COMPOSABLE_NAME }}", () => {
+		describe("have{{ NAME | pascal }}", () => {
 			test("Is false when no {{ NAME | kebab }} are loaded", () => {
-				const { have{{ COMPOSABLE_NAME }} } = create{{ COMPOSABLE_NAME }}List(parameters);
+				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}List(parameters);
 
-				expect(have{{ COMPOSABLE_NAME }}.value).toBe(false);
+				expect(have{{ NAME | pascal }}.value).toBe(false);
 			});
 
 			test("Is true when {{ NAME | kebab }} have been loaded", async () => {
 				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-				const { have{{ COMPOSABLE_NAME }}, refetch } = create{{ COMPOSABLE_NAME }}List(parameters);
+				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}List(parameters);
 
 				await refetch(true);
 
-				expect(have{{ COMPOSABLE_NAME }}.value).toBe(true);
+				expect(have{{ NAME | pascal }}.value).toBe(true);
 			});
 		});
 	});
