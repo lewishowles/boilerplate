@@ -57,8 +57,7 @@ defineOptions({
 });
 
 /**
- * Keep parent-route links active on their descendant routes while leaf links
- * only match their exact route.
+ * Keep parent-route links active on their descendant routes.
  *
  * @param {object} route
  *     The route resolved for this link.
@@ -68,7 +67,8 @@ defineOptions({
  *     Whether the resolved route is the current route.
  */
 function isLinkActive(route, isActive, isExactActive) {
-	return route.matched.at(-1)?.children?.length ? isActive : isExactActive;
+	// Home must remain exact because the app shell shares the root route.
+	return route.path === "/" ? isExactActive : isActive;
 }
 
 // Determine whether this is an external link.
