@@ -1,5 +1,3 @@
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 <template>
 	<loading-indicator v-if="isInitialLoading" v-bind="{ large: true }">
 		Loading {{ NAME | lower }}…
@@ -8,7 +6,7 @@
 	<template v-else-if="isReady">
 		<data-table
 			name="{{ NAME | kebab }}"
-			v-bind="{ data: {{ DATA_NAME }}, columns }"
+			v-bind="{ data: {{ NAME }}, columns }"
 		>
 			<template #table-title>{{ NAME | lower }}</template>
 			<template #table-introduction>Browse {{ NAME | lower }}</template>
@@ -35,6 +33,7 @@
 
 	<div v-else-if="error" class="space-y-4">
 		<p role="alert">Unable to load {{ NAME | lower }}.</p>
+
 		<ui-button class="button--muted" v-bind="{ reactive: true }" @click="refetch">
 			Try again
 		</ui-button>
@@ -43,10 +42,10 @@
 
 <script setup>
 import { definePage } from "vue-router/experimental";
-import { use{{ COMPOSABLE_NAME }}List } from "@/queries/{{ NAME | kebab }}";
+import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
 
-const { error, isInitialLoading, isReady, lastFetched, refetch, {{ DATA_NAME }} } =
-	use{{ COMPOSABLE_NAME }}List();
+const { error, isInitialLoading, isReady, lastFetched, refetch, {{ NAME }} } =
+	use{{ NAME | pascal }}();
 
 const columns = {
 	name: {
@@ -56,6 +55,5 @@ const columns = {
 
 definePage({
 	name: "{{ NAME | kebab }}",
-	meta: { requiresAuth: true },
 });
 </script>

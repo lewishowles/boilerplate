@@ -1,24 +1,22 @@
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick, ref } from "vue";
 import { withAppContext } from "@lewishowles/testing/vue";
 
-const mockUse{{ COMPOSABLE_NAME }}List = vi.hoisted(() => vi.fn());
+const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());
 
 vi.mock("@/queries/{{ NAME | kebab }}", () => ({
-	use{{ COMPOSABLE_NAME }}List: mockUse{{ COMPOSABLE_NAME }}List,
+	use{{ NAME | pascal }}: mockUse{{ NAME | pascal }},
 }));
 
-import { use{{ COMPOSABLE_NAME }}Table } from ".";
+import { use{{ NAME | pascal }}Table } from ".";
 
 const queryParameters = [];
 
 /**
  * Create the {{ NAME | kebab }} table composable in a Vue app context.
  */
-function create{{ COMPOSABLE_NAME }}Table() {
-	return withAppContext(() => use{{ COMPOSABLE_NAME }}Table());
+function create{{ NAME | pascal }}Table() {
+	return withAppContext(() => use{{ NAME | pascal }}Table());
 }
 
 /**
@@ -33,7 +31,7 @@ function createQueryState() {
 		isRefreshing: ref(false),
 		lastFetched: ref(new Date("2026-01-01T00:00:00.000Z")),
 		refetch: vi.fn(),
-		{{ DATA_NAME }}: ref([
+		{{ NAME }}: ref([
 			{
 				id: "item-123",
 			},
@@ -45,15 +43,15 @@ function createQueryState() {
 describe("{{ NAME | kebab }} table", () => {
 	beforeEach(() => {
 		queryParameters.length = 0;
-		mockUse{{ COMPOSABLE_NAME }}List.mockReset();
-		mockUse{{ COMPOSABLE_NAME }}List.mockImplementation((parameters) => {
+		mockUse{{ NAME | pascal }}.mockReset();
+		mockUse{{ NAME | pascal }}.mockImplementation((parameters) => {
 			queryParameters.push(parameters);
 
 			return createQueryState();
 		});
 	});
 
-	describe("use{{ COMPOSABLE_NAME }}Table", () => {
+	describe("use{{ NAME | pascal }}Table", () => {
 		test("Exposes table state and query items", () => {
 			const {
 				error,
@@ -69,7 +67,7 @@ describe("{{ NAME | kebab }} table", () => {
 				search,
 				sort,
 				totalRows,
-			} = create{{ COMPOSABLE_NAME }}Table();
+			} = create{{ NAME | pascal }}Table();
 
 			expect(error.value).toBe(null);
 			expect(items.value).toEqual([{ id: "item-123" }]);
@@ -87,7 +85,7 @@ describe("{{ NAME | kebab }} table", () => {
 		});
 
 		test("Propagates page and sort into query parameters immediately", () => {
-			const { page, parameters, sort } = create{{ COMPOSABLE_NAME }}Table();
+			const { page, parameters, sort } = create{{ NAME | pascal }}Table();
 
 			page.value = 2;
 			sort.value = { column: "name", direction: "descending" };
@@ -103,7 +101,7 @@ describe("{{ NAME | kebab }} table", () => {
 			vi.useFakeTimers();
 
 			try {
-				const { parameters, search } = create{{ COMPOSABLE_NAME }}Table();
+				const { parameters, search } = create{{ NAME | pascal }}Table();
 
 				search.value = "example";
 
@@ -121,8 +119,8 @@ describe("{{ NAME | kebab }} table", () => {
 		});
 
 		test("Creates independent state for each table instance", () => {
-			const firstTable = create{{ COMPOSABLE_NAME }}Table();
-			const secondTable = create{{ COMPOSABLE_NAME }}Table();
+			const firstTable = create{{ NAME | pascal }}Table();
+			const secondTable = create{{ NAME | pascal }}Table();
 
 			firstTable.page.value = 2;
 			firstTable.sort.value = { column: "name", direction: "descending" };

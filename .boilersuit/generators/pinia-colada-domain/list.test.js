@@ -4,13 +4,13 @@ import { withAppContext } from "@lewishowles/testing/vue";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }}List } from ".";
+import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
  */
-function create{{ NAME | pascal }}List() {
-	return withAppContext(() => use{{ NAME | pascal }}List());
+function create{{ NAME | pascal }}() {
+	return withAppContext(() => use{{ NAME | pascal }}());
 }
 
 describe("{{ NAME | kebab }} list", () => {
@@ -31,10 +31,10 @@ describe("{{ NAME | kebab }} list", () => {
 		});
 	});
 
-	describe("use{{ NAME | pascal }}List", () => {
+	describe("use{{ NAME | pascal }}", () => {
 		test("Initialises with no {{ NAME | kebab }}", () => {
 			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }} } =
-				create{{ NAME | pascal }}List();
+				create{{ NAME | pascal }}();
 
 			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(isInitialLoading.value).toBe(true);
@@ -48,7 +48,7 @@ describe("{{ NAME | kebab }} list", () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
 			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }} } =
-				create{{ NAME | pascal }}List();
+				create{{ NAME | pascal }}();
 
 			expect(lastFetched.value).toBe(null);
 
@@ -65,7 +65,7 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Does not update {{ NAME | kebab }} when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { isReady, lastFetched, refetch, {{ NAME | camel }} } = create{{ NAME | pascal }}List();
+			const { isReady, lastFetched, refetch, {{ NAME | camel }} } = create{{ NAME | pascal }}();
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 
@@ -76,7 +76,7 @@ describe("{{ NAME | kebab }} list", () => {
 
 		describe("have{{ NAME | pascal }}", () => {
 			test("Is false when no {{ NAME | kebab }} are loaded", () => {
-				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}List();
+				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}();
 
 				expect(have{{ NAME | pascal }}.value).toBe(false);
 			});
@@ -84,7 +84,7 @@ describe("{{ NAME | kebab }} list", () => {
 			test("Is true when {{ NAME | kebab }} have been loaded", async () => {
 				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}List();
+				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}();
 
 				await refetch(true);
 

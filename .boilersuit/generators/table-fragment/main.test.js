@@ -1,16 +1,14 @@
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { createMount } from "@lewishowles/testing/vue";
 import { ref } from "vue";
 
-const mockUse{{ COMPOSABLE_NAME }}List = vi.hoisted(() => vi.fn());
+const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());
 
 vi.mock("@/queries/{{ NAME | kebab }}", () => ({
-	use{{ COMPOSABLE_NAME }}List: mockUse{{ COMPOSABLE_NAME }}List,
+	use{{ NAME | pascal }}: mockUse{{ NAME | pascal }},
 }));
 
-import {{ COMPOSABLE_NAME }} from "./{{ NAME | kebab }}.vue";
+import {{ NAME | pascal }} from "./{{ NAME | kebab }}.vue";
 
 const queryState = {
 	error: ref(null),
@@ -18,14 +16,14 @@ const queryState = {
 	isReady: ref(true),
 	lastFetched: ref(new Date("2026-01-01T00:00:00.000Z")),
 	refetch: vi.fn(),
-	{{ DATA_NAME }}: ref([
+	{{ NAME }}: ref([
 		{
 			id: "item-123",
 		},
 	]),
 };
 
-const mount = createMount({{ COMPOSABLE_NAME }}, {
+const mount = createMount({{ NAME }}, {
 	global: {
 		stubs: {
 			DataTable: true,
@@ -39,24 +37,24 @@ const mount = createMount({{ COMPOSABLE_NAME }}, {
 describe("{{ NAME | kebab }}", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockUse{{ COMPOSABLE_NAME }}List.mockReturnValue(queryState);
+		mockUse{{ NAME | pascal }}.mockReturnValue(queryState);
 	});
 
 	test("Loads the {{ NAME | lower }} list query", () => {
 		mount();
 
-		expect(mockUse{{ COMPOSABLE_NAME }}List).toHaveBeenCalledOnce();
+		expect(mockUse{{ NAME | pascal }}).toHaveBeenCalledOnce();
 	});
 
 	test("Exposes the query items to the fragment", () => {
 		const wrapper = mount();
 
-		expect(wrapper.vm.{{ DATA_NAME }}).toEqual([{ id: "item-123" }]);
+		expect(wrapper.vm.{{ NAME }}).toEqual([{ id: "item-123" }]);
 	});
 
 	test("Surfaces a list query error", () => {
 		const error = new Error("Request failed");
-		mockUse{{ COMPOSABLE_NAME }}List.mockReturnValue({
+		mockUse{{ NAME | pascal }}.mockReturnValue({
 			...queryState,
 			error: ref(error),
 			isReady: ref(false),

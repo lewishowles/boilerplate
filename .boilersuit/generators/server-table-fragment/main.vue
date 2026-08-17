@@ -1,5 +1,3 @@
-{{ set COMPOSABLE_NAME = NAME | pascal }}
-{{ set DATA_NAME = NAME | camel }}
 <template>
 	<loading-indicator v-if="isInitialLoading" v-bind="{ large: true }">
 		Loading {{ NAME | lower }}…
@@ -38,6 +36,7 @@
 
 	<div v-else-if="error" class="space-y-4">
 		<p role="alert">Unable to load {{ NAME | lower }}.</p>
+
 		<ui-button class="button--muted" v-bind="{ reactive: true }" @click="refetch">
 			Try again
 		</ui-button>
@@ -47,8 +46,7 @@
 <script setup>
 import { computed } from "vue";
 import { definePage } from "vue-router/experimental";
-
-import { use{{ COMPOSABLE_NAME }}Table } from "@/composables/{{ NAME | kebab }}";
+import { use{{ NAME | pascal }}Table } from "@/composables/{{ NAME | kebab }}";
 
 const {
 	error,
@@ -62,9 +60,9 @@ const {
 	search,
 	sort,
 	totalRows,
-} = use{{ COMPOSABLE_NAME }}Table();
+} = use{{ NAME | pascal }}Table();
 
-// Translate the table composable refs into the data-table state contract.
+// Translate the table composable refs into the data-table state.
 const tableState = computed({
 	get: () => ({
 		filters: {
@@ -76,7 +74,7 @@ const tableState = computed({
 	}),
 	set: (nextState) => {
 		page.value = nextState.page;
-		search.value = nextState.filters?.search ?? "";
+		search.value = nextState.filters?.search ?? null;
 		sort.value = nextState.sort ?? null;
 	},
 });
@@ -90,6 +88,5 @@ const columns = {
 
 definePage({
 	name: "{{ NAME | kebab }}",
-	meta: { requiresAuth: true },
 });
 </script>
