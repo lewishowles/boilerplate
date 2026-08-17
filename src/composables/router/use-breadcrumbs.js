@@ -39,9 +39,14 @@ export function useBreadcrumbs() {
 
 	return computed(() => {
 		const breadcrumbs = route.matched
-			.filter((record) => haveBreadcrumb(record))
-			.map((record) => {
-				const matchedRecords = route.matched.slice(0, route.matched.indexOf(record) + 1);
+			.map((matchedRecord) => {
+				const record = breadcrumbRecordFor(matchedRecord);
+
+				if (!record) {
+					return null;
+				}
+
+				const matchedRecords = route.matched.slice(0, route.matched.indexOf(matchedRecord) + 1);
 				const key = keyForRecord(record);
 
 				return {
@@ -51,7 +56,8 @@ export function useBreadcrumbs() {
 					loading: breadcrumbLabels[key] === null,
 					to: locationForRecord(record, matchedRecords, route.params),
 				};
-			});
+			})
+			.filter(Boolean);
 
 		const currentBreadcrumb = breadcrumbs.at(-1);
 
@@ -64,24 +70,44 @@ export function useBreadcrumbs() {
 }
 
 /**
- * Check whether the route record should appear in breadcrumbs.
+ * Get the page record that should represent a matched route in breadcrumbs.
  *
  * @param  {object}  record
  *     The matched route record.
+ */
+function breadcrumbRecordFor(record) {
+	if (haveBreadcrumb(record)) {
+		return record;
+	}
+
+	const indexRecord = record.children?.find((child) => child.path === "");
+
+	if (indexRecord && haveBreadcrumb(indexRecord)) {
+		return indexRecord;
+	}
+
+	return null;
+}
+
+/**
+ * Check whether the route record should appear in breadcrumbs.
+ *
+ * @param  {object}  record
+ *     The route record.
  */
 function haveBreadcrumb(record) {
 	const key = keyForRecord(record);
 	const label = breadcrumbLabels[key];
 	const breadcrumb = record.meta?.breadcrumb;
 
-	return Boolean(key && (label !== undefined || breadcrumb?.label));
+	return Boolean(key && (label !== undefined || breadcrumb?.label || record.meta?.page_title));
 }
 
 /**
- * Get the display label for a matched route record.
+ * Get the display label for a route record.
  *
  * @param  {object}  record
- *     The matched route record.
+ *     The route record.
  * @param  {string}  key
  *     The breadcrumb key for the route record.
  */
@@ -90,14 +116,14 @@ function labelForRecord(record, key) {
 		return breadcrumbLabels[key];
 	}
 
-	return record.meta.breadcrumb?.label ?? key;
+	return record.meta?.breadcrumb?.label ?? record.meta?.page_title ?? key;
 }
 
 /**
  * Get the key used to match route records to dynamic labels.
  *
  * @param  {object}  record
- *     The matched route record.
+ *     The route record.
  */
 function keyForRecord(record) {
 	return record.meta?.breadcrumbKey ?? record.name ?? record.path;
@@ -107,7 +133,7 @@ function keyForRecord(record) {
  * Get a router location for a breadcrumb record.
  *
  * @param  {object}  record
- *     The matched route record.
+ *     The route record.
  * @param  {object[]}  records
  *     The matched route records.
  * @param  {object}  currentParams
@@ -155,7 +181,7 @@ function parametersForRecords(records, currentParams) {
  * Build a path for an unnamed route record.
  *
  * @param  {object}  record
- *     The matched route record.
+ *     The route record.
  * @param  {object}  params
  *     The route parameters for the record.
  */

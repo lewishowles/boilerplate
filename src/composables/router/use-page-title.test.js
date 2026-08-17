@@ -26,10 +26,10 @@ describe("usePageTitle", () => {
 			const scope = effectScope();
 
 			scope.run(() => {
-				usePageTitle("Sites");
+				usePageTitle("Sample page one");
 			});
 
-			expect(mockTitle.value).toBe("Sites | App");
+			expect(mockTitle.value).toBe("Sample page one | App");
 
 			scope.stop();
 		});
@@ -37,39 +37,39 @@ describe("usePageTitle", () => {
 
 	describe("Dynamic titles", () => {
 		test("Sets the document title from a ref", () => {
-			const title = ref("Sites");
+			const title = ref("Sample page one");
 			const scope = effectScope();
 
 			scope.run(() => {
 				usePageTitle(title);
 			});
 
-			expect(mockTitle.value).toBe("Sites | App");
+			expect(mockTitle.value).toBe("Sample page one | App");
 
 			scope.stop();
 		});
 
 		test("Updates the document title when the ref changes", async () => {
-			const title = ref("Sites");
+			const title = ref("Sample page one");
 			const scope = effectScope();
 
 			scope.run(() => {
 				usePageTitle(title);
 			});
 
-			title.value = "Locations";
+			title.value = "Sample page two";
 
 			await nextTick();
 
-			expect(mockTitle.value).toBe("Locations | App");
+			expect(mockTitle.value).toBe("Sample page two | App");
 
 			scope.stop();
 		});
 
 		test("Falls back to the route meta title when the title resolves to a falsy value", async () => {
-			route.meta = { page_title: "Sites" };
+			route.meta = { page_title: "Sample page one" };
 
-			const title = ref("Locations");
+			const title = ref("Sample page two");
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -80,13 +80,13 @@ describe("usePageTitle", () => {
 
 			await nextTick();
 
-			expect(mockTitle.value).toBe("Sites | App");
+			expect(mockTitle.value).toBe("Sample page one | App");
 
 			scope.stop();
 		});
 
 		test("Falls back to the base title when the title and route meta both resolve to falsy values", async () => {
-			const title = ref("Sites");
+			const title = ref("Sample page one");
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -105,24 +105,24 @@ describe("usePageTitle", () => {
 
 	describe("Cleanup", () => {
 		test("Restores the route meta title when the scope is disposed", () => {
-			route.meta = { page_title: "Sites" };
+			route.meta = { page_title: "Sample page one" };
 
 			const scope = effectScope();
 
 			scope.run(() => {
-				usePageTitle("Locations");
+				usePageTitle("Sample page two");
 			});
 
 			scope.stop();
 
-			expect(mockTitle.value).toBe("Sites | App");
+			expect(mockTitle.value).toBe("Sample page one | App");
 		});
 
 		test("Restores the base title when the scope is disposed and no route meta title is set", () => {
 			const scope = effectScope();
 
 			scope.run(() => {
-				usePageTitle("Sites");
+				usePageTitle("Sample page one");
 			});
 
 			scope.stop();
@@ -140,11 +140,11 @@ describe("usePageTitles", () => {
 
 	describe("Initialisation", () => {
 		test("Applies the route meta title on mount", () => {
-			route.meta = { page_title: "Sites" };
+			route.meta = { page_title: "Sample page one" };
 
 			usePageTitles();
 
-			expect(mockTitle.value).toBe("Sites | App");
+			expect(mockTitle.value).toBe("Sample page one | App");
 		});
 
 		test("Falls back to the base title when no route meta title is set", () => {
@@ -156,19 +156,19 @@ describe("usePageTitles", () => {
 
 	describe("Route changes", () => {
 		test("Updates the document title when the route meta title changes", async () => {
-			route.meta = { page_title: "Sites" };
+			route.meta = { page_title: "Sample page one" };
 
 			usePageTitles();
 
-			route.meta = { page_title: "Locations" };
+			route.meta = { page_title: "Sample page two" };
 
 			await nextTick();
 
-			expect(mockTitle.value).toBe("Locations | App");
+			expect(mockTitle.value).toBe("Sample page two | App");
 		});
 
 		test("Falls back to the base title when the route meta title is removed", async () => {
-			route.meta = { page_title: "Sites" };
+			route.meta = { page_title: "Sample page one" };
 
 			usePageTitles();
 

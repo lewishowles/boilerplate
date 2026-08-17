@@ -10,7 +10,6 @@ import { useBreadcrumb } from "@/composables/router/use-breadcrumbs";
 
 // The current route provides the sample page identity.
 const route = useRoute();
-
 // The current sample page identifier shown in the breadcrumb.
 const samplePageId = computed(() => route.params.samplePageId);
 

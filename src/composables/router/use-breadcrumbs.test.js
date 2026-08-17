@@ -16,9 +16,9 @@ vi.mock("vue-router", () => ({
 describe("useBreadcrumbs", () => {
 	describe("Initialisation", () => {
 		test("Returns no breadcrumbs when no matched records provide labels", () => {
-			route.name = "location";
+			route.name = "sample-page-one";
 			route.params = {};
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.matched = [{ name: "sample-page-one", path: "/sample-pages", meta: {} }];
 
 			const breadcrumbs = useBreadcrumbs();
 
@@ -27,14 +27,14 @@ describe("useBreadcrumbs", () => {
 	});
 
 	describe("Static labels", () => {
-		test("Uses static route meta labels", () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
+		test("Uses static breadcrumb meta labels", () => {
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
 			route.matched = [
 				{
-					name: "location",
-					path: "/locations/:locationId",
-					meta: { breadcrumb: { label: "Location" } },
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: { breadcrumb: { label: "Sample page one" } },
 				},
 			];
 
@@ -43,27 +43,58 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: true,
-					id: "location",
-					label: "Location",
+					id: "sample-page-one",
+					label: "Sample page one",
 					loading: false,
 					to: {
-						name: "location",
-						params: { locationId: "location-123" },
+						name: "sample-page-one",
+						params: { samplePageId: "sample-123" },
+					},
+				},
+			]);
+		});
+
+		test("Uses page titles as static labels", () => {
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: { page_title: "Sample page one" },
+				},
+			];
+
+			const breadcrumbs = useBreadcrumbs();
+
+			expect(breadcrumbs.value).toEqual([
+				{
+					current: true,
+					id: "sample-page-one",
+					label: "Sample page one",
+					loading: false,
+					to: {
+						name: "sample-page-one",
+						params: { samplePageId: "sample-123" },
 					},
 				},
 			]);
 		});
 
 		test("Marks the last rendered breadcrumb as current", () => {
-			route.name = "dashboard";
-			route.params = { siteId: "site-123" };
+			route.name = "sample-page-two";
+			route.params = {};
 			route.matched = [
 				{
-					name: undefined,
-					path: "/site/:siteId",
-					meta: { breadcrumb: { label: "Site" } },
+					name: "sample-page-one",
+					path: "/sample-pages",
+					meta: { page_title: "Sample page one" },
 				},
-				{ name: "dashboard", path: "", meta: {} },
+				{
+					name: "sample-page-two",
+					path: "",
+					meta: {},
+				},
 			];
 
 			const breadcrumbs = useBreadcrumbs();
@@ -71,11 +102,12 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: true,
-					id: "/site/:siteId",
-					label: "Site",
+					id: "sample-page-one",
+					label: "Sample page one",
 					loading: false,
 					to: {
-						path: "/site/site-123",
+						name: "sample-page-one",
+						params: {},
 					},
 				},
 			]);
@@ -84,14 +116,20 @@ describe("useBreadcrumbs", () => {
 
 	describe("Dynamic labels", () => {
 		test("Uses a registered breadcrumb label for the current route", () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
 			const scope = effectScope();
 
 			scope.run(() => {
-				useBreadcrumb("Main gate");
+				useBreadcrumb("Sample page one");
 			});
 
 			const breadcrumbs = useBreadcrumbs();
@@ -99,12 +137,12 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: true,
-					id: "location",
-					label: "Main gate",
+					id: "sample-page-one",
+					label: "Sample page one",
 					loading: false,
 					to: {
-						name: "location",
-						params: { locationId: "location-123" },
+						name: "sample-page-one",
+						params: { samplePageId: "sample-123" },
 					},
 				},
 			]);
@@ -113,11 +151,17 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Updates when a reactive breadcrumb label changes", async () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
-			const label = ref("Main gate");
+			const label = ref("Sample page one");
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -126,19 +170,25 @@ describe("useBreadcrumbs", () => {
 
 			const breadcrumbs = useBreadcrumbs();
 
-			label.value = "North entrance";
+			label.value = "Sample page two";
 
 			await nextTick();
 
-			expect(breadcrumbs.value[0].label).toBe("North entrance");
+			expect(breadcrumbs.value[0].label).toBe("Sample page two");
 
 			scope.stop();
 		});
 
 		test("Updates when labels are registered after breadcrumbs are created", async () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
 			const breadcrumbs = useBreadcrumbs();
 			const scope = effectScope();
@@ -146,7 +196,7 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([]);
 
 			scope.run(() => {
-				useBreadcrumb("Main gate");
+				useBreadcrumb("Sample page one");
 			});
 
 			await nextTick();
@@ -154,12 +204,12 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: true,
-					id: "location",
-					label: "Main gate",
+					id: "sample-page-one",
+					label: "Sample page one",
 					loading: false,
 					to: {
-						name: "location",
-						params: { locationId: "location-123" },
+						name: "sample-page-one",
+						params: { samplePageId: "sample-123" },
 					},
 				},
 			]);
@@ -168,9 +218,15 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Uses the fallback label when the registered label is not yet available", () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
 			const label = ref(null);
 			const scope = effectScope();
@@ -188,9 +244,15 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Shows loading state when a registered label is not available", () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
 			const label = ref(null);
 			const scope = effectScope();
@@ -204,12 +266,12 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: true,
-					id: "location",
-					label: "location",
+					id: "sample-page-one",
+					label: "sample-page-one",
 					loading: true,
 					to: {
-						name: "location",
-						params: { locationId: "location-123" },
+						name: "sample-page-one",
+						params: { samplePageId: "sample-123" },
 					},
 				},
 			]);
@@ -218,14 +280,20 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Removes dynamic labels when the owning scope is disposed", async () => {
-			route.name = "location";
-			route.params = { locationId: "location-123" };
-			route.matched = [{ name: "location", path: "/locations/:locationId", meta: {} }];
+			route.name = "sample-page-one";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: "sample-page-one",
+					path: "/sample-pages/:samplePageId",
+					meta: {},
+				},
+			];
 
 			const scope = effectScope();
 
 			scope.run(() => {
-				useBreadcrumb("Main gate");
+				useBreadcrumb("Sample page one");
 			});
 
 			const breadcrumbs = useBreadcrumbs();
@@ -239,6 +307,55 @@ describe("useBreadcrumbs", () => {
 	});
 
 	describe("Route records", () => {
+		test("Uses an index child for a componentless parent record", () => {
+			route.name = "sample-page-two";
+			route.params = { samplePageId: "sample-123" };
+			route.matched = [
+				{
+					name: undefined,
+					path: "/sample-pages",
+					meta: {},
+					children: [
+						{
+							name: "sample-page-one",
+							path: "",
+							meta: { page_title: "Sample page one" },
+						},
+					],
+				},
+				{
+					name: "sample-page-two",
+					path: ":samplePageId",
+					meta: { page_title: "Sample page two" },
+				},
+			];
+
+			const breadcrumbs = useBreadcrumbs();
+
+			expect(breadcrumbs.value).toEqual([
+				{
+					current: false,
+					id: "sample-page-one",
+					label: "Sample page one",
+					loading: false,
+					to: {
+						name: "sample-page-one",
+						params: {},
+					},
+				},
+				{
+					current: true,
+					id: "sample-page-two",
+					label: "Sample page two",
+					loading: false,
+					to: {
+						name: "sample-page-two",
+						params: { samplePageId: "sample-123" },
+					},
+				},
+			]);
+		});
+
 		test("Uses an explicit destination for a parent breadcrumb", () => {
 			route.name = "sample-page-two";
 			route.params = { samplePageId: "sample-123" };
@@ -247,7 +364,10 @@ describe("useBreadcrumbs", () => {
 					name: "sample-page-one",
 					path: "/sample-pages",
 					meta: {
-						breadcrumb: { label: "Sample page one", to: { name: "sample-page-one" } },
+						breadcrumb: {
+							label: "Sample page one",
+							to: { name: "sample-page-one" },
+						},
 					},
 				},
 				{
@@ -265,21 +385,29 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Uses breadcrumb keys for unnamed parent records", () => {
-			route.name = "location";
+			route.name = "sample-page-two";
 			route.params = {
-				locationId: "location-456",
-				siteId: "site-123",
+				samplePageOneId: "sample-123",
+				samplePageTwoId: "sample-456",
 			};
 			route.matched = [
-				{ name: undefined, path: "/site/:siteId", meta: { breadcrumbKey: "site" } },
-				{ name: "location", path: "locations/:locationId", meta: {} },
+				{
+					name: undefined,
+					path: "/sample-pages/:samplePageOneId",
+					meta: { breadcrumbKey: "sample-page-one" },
+				},
+				{
+					name: "sample-page-two",
+					path: "children/:samplePageTwoId",
+					meta: {},
+				},
 			];
 
 			const scope = effectScope();
 
 			scope.run(() => {
-				useBreadcrumb("Main site", { name: "site" });
-				useBreadcrumb("Main gate", { name: "location" });
+				useBreadcrumb("Sample page one", { name: "sample-page-one" });
+				useBreadcrumb("Sample page two", { name: "sample-page-two" });
 			});
 
 			const breadcrumbs = useBreadcrumbs();
@@ -287,23 +415,23 @@ describe("useBreadcrumbs", () => {
 			expect(breadcrumbs.value).toEqual([
 				{
 					current: false,
-					id: "site",
-					label: "Main site",
+					id: "sample-page-one",
+					label: "Sample page one",
 					loading: false,
 					to: {
-						path: "/site/site-123",
+						path: "/sample-pages/sample-123",
 					},
 				},
 				{
 					current: true,
-					id: "location",
-					label: "Main gate",
+					id: "sample-page-two",
+					label: "Sample page two",
 					loading: false,
 					to: {
-						name: "location",
+						name: "sample-page-two",
 						params: {
-							locationId: "location-456",
-							siteId: "site-123",
+							samplePageOneId: "sample-123",
+							samplePageTwoId: "sample-456",
 						},
 					},
 				},
@@ -313,34 +441,42 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Only passes parameters declared by the breadcrumb route chain", () => {
-			route.name = "location";
+			route.name = "sample-page-two";
 			route.params = {
 				ignoredId: "ignored-789",
-				locationId: "location-456",
-				siteId: "site-123",
+				samplePageOneId: "sample-123",
+				samplePageTwoId: "sample-456",
 			};
 			route.matched = [
-				{ name: undefined, path: "/site/:siteId", meta: { breadcrumbKey: "site" } },
-				{ name: "location", path: "locations/:locationId", meta: {} },
+				{
+					name: undefined,
+					path: "/sample-pages/:samplePageOneId",
+					meta: { breadcrumbKey: "sample-page-one" },
+				},
+				{
+					name: "sample-page-two",
+					path: "children/:samplePageTwoId",
+					meta: {},
+				},
 			];
 
 			const scope = effectScope();
 
 			scope.run(() => {
-				useBreadcrumb("Main site", { name: "site" });
-				useBreadcrumb("Main gate", { name: "location" });
+				useBreadcrumb("Sample page one", { name: "sample-page-one" });
+				useBreadcrumb("Sample page two", { name: "sample-page-two" });
 			});
 
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].to).toEqual({
-				path: "/site/site-123",
+				path: "/sample-pages/sample-123",
 			});
 			expect(breadcrumbs.value[1].to).toEqual({
-				name: "location",
+				name: "sample-page-two",
 				params: {
-					locationId: "location-456",
-					siteId: "site-123",
+					samplePageOneId: "sample-123",
+					samplePageTwoId: "sample-456",
 				},
 			});
 

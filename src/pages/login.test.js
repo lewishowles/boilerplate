@@ -52,14 +52,14 @@ describe("login", () => {
 			expect(mockLogin).toHaveBeenCalledWith(wrapper.vm.formData);
 		});
 
-		test("Redirects to home on success", async () => {
+		test("Redirects to sample pages on success", async () => {
 			mockLogin.mockResolvedValue({});
 
 			const wrapper = mount();
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "home" });
+			expect(mockRouterPush).toHaveBeenCalledWith({ name: "sample-pages" });
 		});
 
 		test("Redirects to the safe internal route on success", async () => {
@@ -79,7 +79,7 @@ describe("login", () => {
 			["an array", ["/account"]],
 			["a non-string value", 42],
 			["a missing value", undefined],
-		])("Falls back to home for %s redirect values", async (_description, redirect) => {
+		])("Falls back to sample pages for %s redirect values", async (_description, redirect) => {
 			mockRoute.query = { redirect };
 			mockLogin.mockResolvedValue({});
 
@@ -87,7 +87,7 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "home" });
+			expect(mockRouterPush).toHaveBeenCalledWith({ name: "sample-pages" });
 		});
 
 		test("Does not throw or redirect when login fails", async () => {

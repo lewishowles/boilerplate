@@ -64,7 +64,7 @@ async function performLogin() {
 
 		const redirect = getSafeRedirect(route.query?.redirect);
 
-		await router.push(redirect ?? { name: "home" });
+		await router.push(redirect ?? { name: "sample-pages" });
 	} catch (error) {
 		console.error("login[performLogin]: Could not log in.", error);
 	}
