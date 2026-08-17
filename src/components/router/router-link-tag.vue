@@ -1,9 +1,5 @@
 <template>
-	<router-link
-		v-slot="{ isActive, isExactActive, route, href, navigate }"
-		v-bind="routerLinkProps"
-		custom
-	>
+	<router-link v-bind="{ to }" v-slot="{ isActive, isExactActive, route, href, navigate }" custom>
 		<link-tag
 			v-bind="{ ...$attrs, href, 'aria-current': isExactActive ? 'page' : undefined }"
 			:class="isLinkActive(route, isActive, isExactActive) ? activeClasses : inactiveClasses"
@@ -23,6 +19,8 @@ defineOptions({
 });
 
 const props = defineProps({
+	...RouterLink.props,
+
 	/**
 	 * Any classes to apply when the link is active.
 	 */
