@@ -13,15 +13,14 @@
 	<router-link-tag
 		v-else
 		v-bind="{ ...routerLinkProps, ...$attrs, 'icon-start': icon }"
-		class="hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
-		active-classes="bg-primary-subtle text-primary font-semibold"
-		inactive-classes="text-content"
+		class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
 	>
 		<slot />
 	</router-link-tag>
 </template>
 
 <script setup>
+// active-classes="bg-action-subtle text-action font-semibold"
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 
@@ -32,7 +31,7 @@ const props = defineProps({
 	 * The icon to use for this menu item.
 	 */
 	icon: {
-		type: Object,
+		type: String,
 		default: null,
 	},
 });

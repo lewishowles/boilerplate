@@ -1,33 +1,46 @@
-import { computed, onScopeDispose, reactive, toValue, watchEffect } from "vue";
+import { computed, reactive, toValue, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 
-// The active dynamic breadcrumb labels, keyed by route name.
-const breadcrumbLabels = reactive({});
+// The active dynamic breadcrumb registrations, keyed by breadcrumb key.
+const breadcrumbRegistrations = reactive({});
 
 /**
- * Register a breadcrumb label for the current route or a named route record.
+ * Register a breadcrumb label for the current route or a specific breadcrumb key.
  *
  * @param  {string|object|Function}  label
  *     The label, ref, computed, or getter to display.
  * @param  {object}  options
  *     Options for the breadcrumb label.
+ * @param  {string|object|Function}  [options.key]
+ *     The breadcrumb key to register against. Defaults to the current route name.
+ * @param  {string}  [options.fallback]
+ *     The label to display when the registered label is not yet available.
  */
 export function useBreadcrumb(label, options = {}) {
 	const route = useRoute();
-	const routeName = computed(() => options.name ?? route.name);
+	const breadcrumbKey = computed(() => toValue(options.key) ?? route.name);
+	const owner = Symbol();
 
-	watchEffect(() => {
-		const currentName = routeName.value;
+	watchEffect((onCleanup) => {
+		const key = breadcrumbKey.value;
 
-		if (!currentName) {
+		if (!key) {
 			return;
 		}
 
-		breadcrumbLabels[currentName] = toValue(label) || options.fallback || null;
-	});
+		const value = toValue(label);
 
-	onScopeDispose(() => {
-		delete breadcrumbLabels[routeName.value];
+		breadcrumbRegistrations[key] = {
+			label: value ?? options.fallback ?? null,
+			loading: value === null || value === undefined,
+			owner,
+		};
+
+		onCleanup(() => {
+			if (breadcrumbRegistrations[key]?.owner === owner) {
+				delete breadcrumbRegistrations[key];
+			}
+		});
 	});
 }
 
@@ -39,22 +52,21 @@ export function useBreadcrumbs() {
 
 	return computed(() => {
 		const breadcrumbs = route.matched
-			.map((matchedRecord) => {
-				const record = breadcrumbRecordFor(matchedRecord);
+			.map((matchedRecord, index) => {
+				const record = getBreadcrumbRecord(matchedRecord, route.matched);
 
 				if (!record) {
 					return null;
 				}
 
-				const matchedRecords = route.matched.slice(0, route.matched.indexOf(matchedRecord) + 1);
-				const key = keyForRecord(record);
+				const key = getRecordKey(record);
 
 				return {
 					current: false,
 					id: key,
-					label: labelForRecord(record, key),
-					loading: breadcrumbLabels[key] === null,
-					to: locationForRecord(record, matchedRecords, route.params),
+					label: getRecordLabel(record, key),
+					loading: breadcrumbRegistrations[key]?.loading ?? false,
+					to: getRecordLocation(record, route.matched.slice(0, index + 1), route.params),
 				};
 			})
 			.filter(Boolean);
@@ -74,19 +86,27 @@ export function useBreadcrumbs() {
  *
  * @param  {object}  record
  *     The matched route record.
+ * @param  {object[]}  matchedRecords
+ *     The current matched route records.
  */
-function breadcrumbRecordFor(record) {
-	if (haveBreadcrumb(record)) {
+function getBreadcrumbRecord(record, matchedRecords) {
+	if (hasBreadcrumb(record)) {
 		return record;
 	}
 
 	const indexRecord = record.children?.find((child) => child.path === "");
 
-	if (indexRecord && haveBreadcrumb(indexRecord)) {
-		return indexRecord;
+	if (!indexRecord || !hasBreadcrumb(indexRecord)) {
+		return null;
 	}
 
-	return null;
+	const indexKey = getRecordKey(indexRecord);
+
+	const indexIsMatched = matchedRecords.some(
+		(matchedRecord) => getRecordKey(matchedRecord) === indexKey,
+	);
+
+	return indexIsMatched ? null : indexRecord;
 }
 
 /**
@@ -95,12 +115,14 @@ function breadcrumbRecordFor(record) {
  * @param  {object}  record
  *     The route record.
  */
-function haveBreadcrumb(record) {
-	const key = keyForRecord(record);
-	const label = breadcrumbLabels[key];
+function hasBreadcrumb(record) {
+	const key = getRecordKey(record);
 	const breadcrumb = record.meta?.breadcrumb;
 
-	return Boolean(key && (label !== undefined || breadcrumb?.label || record.meta?.page_title));
+	return Boolean(
+		key &&
+		(breadcrumbRegistrations[key] !== undefined || breadcrumb?.label || record.meta?.page_title),
+	);
 }
 
 /**
@@ -111,12 +133,13 @@ function haveBreadcrumb(record) {
  * @param  {string}  key
  *     The breadcrumb key for the route record.
  */
-function labelForRecord(record, key) {
-	if (breadcrumbLabels[key] !== null && breadcrumbLabels[key] !== undefined) {
-		return breadcrumbLabels[key];
-	}
-
-	return record.meta?.breadcrumb?.label ?? record.meta?.page_title ?? key;
+function getRecordLabel(record, key) {
+	return (
+		breadcrumbRegistrations[key]?.label ??
+		record.meta?.breadcrumb?.label ??
+		record.meta?.page_title ??
+		key
+	);
 }
 
 /**
@@ -125,7 +148,7 @@ function labelForRecord(record, key) {
  * @param  {object}  record
  *     The route record.
  */
-function keyForRecord(record) {
+function getRecordKey(record) {
 	return record.meta?.breadcrumbKey ?? record.name ?? record.path;
 }
 
@@ -139,8 +162,8 @@ function keyForRecord(record) {
  * @param  {object}  currentParams
  *     The current route parameters.
  */
-function locationForRecord(record, records, currentParams) {
-	const params = parametersForRecords(records, currentParams);
+function getRecordLocation(record, records, currentParams) {
+	const params = getRecordParameters(records, currentParams);
 	const breadcrumbLink = record.meta?.breadcrumb?.to;
 
 	if (breadcrumbLink) {
@@ -155,7 +178,7 @@ function locationForRecord(record, records, currentParams) {
 	}
 
 	return {
-		path: pathForRecord(record, params),
+		path: getRecordPath(record, params),
 	};
 }
 
@@ -167,13 +190,15 @@ function locationForRecord(record, records, currentParams) {
  * @param  {object}  currentParams
  *     The current route parameters.
  */
-function parametersForRecords(records, currentParams) {
+function getRecordParameters(records, currentParams) {
 	const paramNames = records.flatMap((record) =>
 		[...record.path.matchAll(/:([A-Za-z0-9_]+)/g)].map((match) => match[1]),
 	);
 
 	return Object.fromEntries(
-		paramNames.filter((name) => currentParams[name]).map((name) => [name, currentParams[name]]),
+		paramNames
+			.filter((name) => currentParams[name] !== undefined)
+			.map((name) => [name, currentParams[name]]),
 	);
 }
 
@@ -185,7 +210,7 @@ function parametersForRecords(records, currentParams) {
  * @param  {object}  params
  *     The route parameters for the record.
  */
-function pathForRecord(record, params) {
+function getRecordPath(record, params) {
 	return Object.entries(params).reduce(
 		(path, [key, value]) => path.replace(`:${key}`, value),
 		record.path,
