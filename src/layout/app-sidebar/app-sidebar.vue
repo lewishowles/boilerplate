@@ -1,6 +1,6 @@
 <template>
 	<aside
-		class="border-border bg-surface animade-fade-in-right flex shrink-0 flex-col"
+		class="border-border animade-fade-in-right flex shrink-0 flex-col"
 		:class="{
 			'sticky top-0 h-screen w-68 border-e max-lg:hidden': !props.alwaysVisible,
 			'w-full': props.alwaysVisible,
