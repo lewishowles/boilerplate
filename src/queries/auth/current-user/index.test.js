@@ -22,7 +22,13 @@ function createCurrentUser() {
 
 describe("useCurrentUser", () => {
 	const validUser = {
-		display_name: "Sophie Wardhaugh",
+		id: 1,
+		email: "sophie.wardhaugh@example.com",
+		created_at: "2025-01-01T00:00:00.000Z",
+	};
+
+	const userWithPermissions = {
+		...validUser,
 		permissions: ["site:view", "site:update"],
 	};
 
@@ -97,10 +103,20 @@ describe("useCurrentUser", () => {
 				expect(hasPermission("site:view")).toBe(false);
 			});
 
-			test("Returns true when the user has the given permission", async () => {
+			test("Returns false when the loaded user has no permissions", async () => {
 				const { hasPermission, refetch } = createCurrentUser();
 
 				mockGet.mockResolvedValueOnce(validUser);
+
+				await refetch(true);
+
+				expect(hasPermission("site:view")).toBe(false);
+			});
+
+			test("Returns true when the user has the given permission", async () => {
+				const { hasPermission, refetch } = createCurrentUser();
+
+				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
 
@@ -110,7 +126,7 @@ describe("useCurrentUser", () => {
 			test("Returns false when the user does not have the given permission", async () => {
 				const { hasPermission, refetch } = createCurrentUser();
 
-				mockGet.mockResolvedValueOnce(validUser);
+				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
 
@@ -120,7 +136,7 @@ describe("useCurrentUser", () => {
 			test("Returns true when the user has all given permissions", async () => {
 				const { hasPermission, refetch } = createCurrentUser();
 
-				mockGet.mockResolvedValueOnce(validUser);
+				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
 
@@ -130,7 +146,7 @@ describe("useCurrentUser", () => {
 			test("Returns false when the user does not have all given permissions", async () => {
 				const { hasPermission, refetch } = createCurrentUser();
 
-				mockGet.mockResolvedValueOnce(validUser);
+				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
 

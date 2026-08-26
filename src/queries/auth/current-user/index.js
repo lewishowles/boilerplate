@@ -86,8 +86,9 @@ const currentUserQueryOptions = defineQueryOptions({
 async function getCurrentUser() {
 	if (isMockAuth) {
 		return {
-			display_name: "Sophie Wardhaugh",
-			permissions: [],
+			id: 1,
+			email: "sophie.wardhaugh@example.com",
+			created_at: "2025-01-01T00:00:00.000Z",
 		};
 	}
 
