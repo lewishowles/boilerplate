@@ -20,7 +20,7 @@ Choose one API mode when creating a project with `boilersuit new`:
 
 - `fetch` keeps the native fetch client and `VITE_API_BASE_URL`
 - `xano` keeps one Xano API-group client and `VITE_API_BASE_URL`
-- `xano-grouped` uses one Xano instance client with `VITE_API_APP_GROUP` and `VITE_API_AUTH_GROUP`
+- `xano-grouped` uses one Xano instance client with `VITE_API_BASE_URL` (the instance URL), `VITE_API_APP_GROUP`, and `VITE_API_AUTH_GROUP`
 
 Copy the generated `.env.example` to `.env` and fill in the values for the selected mode. `.env` is ignored by Git. In grouped mode, application queries use `useApi()` and authentication queries use `useAuthApi()`.
 
