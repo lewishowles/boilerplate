@@ -119,7 +119,10 @@
 			"include_when": { "API_TYPE": "xano" }
 		},
 		{
-			"paths": ["src/composables/api/xano/xano-api.js"],
+			"paths": [
+				"src/composables/api/xano/xano-api.js",
+				"src/composables/api/xano/xano-api.test.js"
+			],
 			"include_when": { "HAS_XANO": "true" }
 		},
 		{
