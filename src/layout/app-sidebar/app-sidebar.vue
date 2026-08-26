@@ -55,7 +55,6 @@
 					<span class="text-content-strong truncate font-semibold">
 						{{ userName }}
 					</span>
-					<span v-if="userRole" class="text-content-muted text-xs">{{ userRole }}</span>
 				</div>
 			</div>
 
@@ -89,7 +88,6 @@ const { logout } = useAuth();
 const { showSidebar } = useSidebar();
 
 // The user's display details.
-const userName = computed(() => getPathValue(userDetails.value, "display_name"));
-const userRole = computed(() => getPathValue(userDetails.value, "current_profile.role.name"));
+const userName = computed(() => getPathValue(userDetails.value, "email"));
 const userInitial = computed(() => userName.value?.slice(0, 1));
 </script>

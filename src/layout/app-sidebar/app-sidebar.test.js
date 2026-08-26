@@ -30,16 +30,16 @@ describe("app-sidebar", () => {
 	});
 
 	describe("Computed", () => {
-		test("Reads the signed-in user's display name", () => {
+		test("Reads the signed-in user's email address", () => {
 			mockHaveUser.value = true;
-			mockUserDetails.value = { display_name: "Sophie Wardhaugh" };
+			mockUserDetails.value = { email: "sophie.wardhaugh@example.com" };
 
 			const wrapper = mount();
 
-			expect(wrapper.vm.userName).toBe("Sophie Wardhaugh");
+			expect(wrapper.vm.userName).toBe("sophie.wardhaugh@example.com");
 		});
 
-		test("Returns no display name when user details are unavailable", () => {
+		test("Returns no user email when user details are unavailable", () => {
 			const wrapper = mount();
 
 			expect(wrapper.vm.userName).toBeUndefined();
