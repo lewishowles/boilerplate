@@ -11,7 +11,9 @@ vi.mock("@/composables/api/use-auth-api", () => ({
 	}),
 }));
 
-import { useCurrentUser } from ".";
+import { clearCurrentUser, useCurrentUser } from ".";
+
+import { AUTH_KEYS } from "../keys.js";
 
 /**
  * Create the current-user query wrapper in a Vue app context.
@@ -84,6 +86,15 @@ describe("useCurrentUser", () => {
 
 	describe("Methods", () => {
 		describe("clearCurrentUser", () => {
+			test("Clears the current-user query data", () => {
+				const setQueryData = vi.fn();
+				const queryCache = { setQueryData };
+
+				clearCurrentUser(queryCache);
+
+				expect(setQueryData).toHaveBeenCalledWith(AUTH_KEYS.currentUser, null);
+			});
+
 			test("Clears cached user details", async () => {
 				const { clearCurrentUser, refetch, userDetails } = createCurrentUser();
 
