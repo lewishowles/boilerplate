@@ -1,5 +1,5 @@
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
@@ -8,6 +8,9 @@ const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:30
 
 // localStorage key used to persist the auth token.
 const authTokenStorageKey = "authToken";
+
+// API error code returned when the current request is not authorised.
+const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
 
 /**
  * Composable for making API calls with fetch.
@@ -32,17 +35,18 @@ export default function useApi() {
 	 *     Query string parameters or request body.
 	 */
 	async function makeApiCall(method, endpoint, parameters) {
+		let finalEndpoint;
+
 		try {
 			isLoading.value = true;
 
-			const response = await fetch(
-				getFinalUrl(endpoint, method === "get" ? parameters : undefined),
-				{
-					method: method.toUpperCase(),
-					headers: getHeaders(parameters, method),
-					body: getBody(parameters, method),
-				},
-			);
+			finalEndpoint = getFinalUrl(endpoint, method === "get" ? parameters : undefined);
+
+			const response = await fetch(finalEndpoint, {
+				method: method.toUpperCase(),
+				headers: getHeaders(parameters, method),
+				body: getBody(parameters, method),
+			});
 
 			const body = await response.json();
 
@@ -53,6 +57,14 @@ export default function useApi() {
 			isReady.value = true;
 
 			return body;
+		} catch (error) {
+			const body = getErrorBody(error);
+
+			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(body)) {
+				resetAuthSessionSilently();
+			}
+
+			throw body;
 		} finally {
 			isLoading.value = false;
 		}
@@ -121,6 +133,49 @@ export default function useApi() {
 		const url = `${rtrim(baseUrl, "/")}/${standardisedEndpoint}`;
 
 		return [url, query].filter((part) => isNonEmptyString(part)).join("?");
+	}
+
+	/**
+	 * Get the useful API error body, if the request failed with a response wrapper.
+	 *
+	 * @param  {Error|object}  error
+	 *     The error thrown by fetch or another runtime failure.
+	 */
+	function getErrorBody(error) {
+		if (typeof error?.getResponse !== "function") {
+			return error;
+		}
+
+		const response = error.getResponse();
+
+		if (typeof response?.getBody !== "function") {
+			return error;
+		}
+
+		return response.getBody();
+	}
+
+	/**
+	 * Check whether an API failure means the current auth session is invalid.
+	 *
+	 * @param  {object}  body
+	 *     The normalised API error body.
+	 */
+	function isUnauthorisedError(body) {
+		return getPropertyValue(body, "code") === unauthorisedErrorCode;
+	}
+
+	/**
+	 * Reset auth without replacing the original API error.
+	 *
+	 * Imported dynamically to break a real circular dependency: session-reset
+	 * imports the application `useApi` composable, which imports this file.
+	 * A static import here would hit that cycle during module initialisation.
+	 */
+	function resetAuthSessionSilently() {
+		import("@/composables/api/session-reset")
+			.then(({ resetAuthSession }) => resetAuthSession().catch(() => null))
+			.catch(() => null);
 	}
 
 	/**
@@ -223,6 +278,7 @@ export default function useApi() {
 		hasAuthToken,
 		isLoading,
 		isReady,
+		isUnauthorisedError,
 		patch,
 		post,
 		setAuthToken,

@@ -1,8 +1,14 @@
+import { mockLocalStorage } from "@lewishowles/testing/vitest";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import useApi from "./index";
 
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
+const mockResetAuthSession = vi.hoisted(() => vi.fn());
+
+vi.mock("@/composables/api/session-reset", () => ({
+	resetAuthSession: mockResetAuthSession,
+}));
 
 describe("useApi (fetch)", () => {
 	describe("getFinalUrl", () => {
@@ -78,7 +84,10 @@ describe("useApi (fetch)", () => {
 
 	describe("requests", () => {
 		beforeEach(() => {
+			vi.clearAllMocks();
+			mockResetAuthSession.mockResolvedValue(undefined);
 			vi.stubGlobal("fetch", vi.fn());
+			mockLocalStorage();
 			localStorage.getItem.mockReturnValue(null);
 		});
 
@@ -185,6 +194,34 @@ describe("useApi (fetch)", () => {
 
 			expect(isLoading.value).toBe(false);
 			expect(isReady.value).toBe(false);
+		});
+
+		test("Resets the auth session for an unauthorised non-login error", async () => {
+			const responseBody = { code: "ERROR_CODE_UNAUTHORIZED" };
+			const { get } = useApi();
+
+			fetch.mockResolvedValue({
+				ok: false,
+				json: () => Promise.resolve(responseBody),
+			});
+
+			await expect(get("examples")).rejects.toEqual(responseBody);
+			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
+		});
+
+		test("Keeps the auth session for an unauthorised login error", async () => {
+			const responseBody = { code: "ERROR_CODE_UNAUTHORIZED" };
+			const credentials = { email: "ada@example.com", password: "secret" };
+			const { post } = useApi();
+
+			fetch.mockResolvedValue({
+				ok: false,
+				json: () => Promise.resolve(responseBody),
+			});
+
+			await expect(post("auth/login", credentials)).rejects.toEqual(responseBody);
+
+			expect(mockResetAuthSession).not.toHaveBeenCalled();
 		});
 	});
 });
