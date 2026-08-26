@@ -3,8 +3,8 @@ import { isNonEmptyString } from "@lewishowles/helpers/string";
 /**
  * Parse an API error into field-level errors for form-wrapper's
  * `submitErrorsCallback`, or a general `_error` when no field can be
- * identified. Adjust the shape below to match the project's own API error
- * responses.
+ * identified. Returns `null` when the error has no usable message, so a
+ * missing or malformed error body never produces a false field error.
  *
  * @param  {object}  error
  *     The error to parse.
@@ -16,9 +16,7 @@ export function parseApiFieldErrors(error) {
 		return null;
 	}
 
-	// TODO: replace with the field name path used by this project's API, for
-	// example error?.payload?.param.
-	const fieldName = null;
+	const fieldName = error?.code === "ERROR_CODE_INPUT_ERROR" ? error?.payload?.param : null;
 
 	if (isNonEmptyString(fieldName)) {
 		return { [fieldName]: message };

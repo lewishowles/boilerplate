@@ -18,4 +18,34 @@ describe("parseApiFieldErrors", () => {
 
 		expect(response).toEqual({ _error: "Something went wrong" });
 	});
+
+	test("Returns a field error for an input error with a field name", () => {
+		const response = parseApiFieldErrors({
+			code: "ERROR_CODE_INPUT_ERROR",
+			message: "Enter a valid email address",
+			payload: { param: "email" },
+		});
+
+		expect(response).toEqual({ email: "Enter a valid email address" });
+	});
+
+	test("Returns a general error when the field name is unusable", () => {
+		const response = parseApiFieldErrors({
+			code: "ERROR_CODE_INPUT_ERROR",
+			message: "Something went wrong",
+			payload: { param: "" },
+		});
+
+		expect(response).toEqual({ _error: "Something went wrong" });
+	});
+
+	test("Returns a general error when a field name has an unknown error code", () => {
+		const response = parseApiFieldErrors({
+			code: "ERROR_CODE_UNAUTHORIZED",
+			message: "Something went wrong",
+			payload: { param: "email" },
+		});
+
+		expect(response).toEqual({ _error: "Something went wrong" });
+	});
 });
