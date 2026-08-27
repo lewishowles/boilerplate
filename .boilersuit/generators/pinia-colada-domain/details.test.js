@@ -4,7 +4,7 @@ import { setupConsole } from "@lewishowles/testing/vitest";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }}Details } from ".";
+import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
 
 /**
  * Create the {{ SINGULAR_NAME | kebab }} details query wrapper in a Vue app context.
@@ -13,7 +13,7 @@ import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }}Details } fr
  *     The {{ SINGULAR_NAME | kebab }} ID to pass to the query wrapper.
  */
 function create{{ SINGULAR_NAME | pascal }}Details({{ ID_NAME }} = "item-123") {
-	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}Details({{ ID_NAME }}));
+	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}));
 }
 
 describe("{{ SINGULAR_NAME | kebab }} details", () => {
@@ -29,7 +29,7 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 		});
 	});
 
-	describe("use{{ SINGULAR_NAME | pascal }}Details", () => {
+	describe("use{{ SINGULAR_NAME | pascal }}", () => {
 		test("Initialises with no {{ SINGULAR_NAME | kebab }} details", () => {
 			const {
 				have{{ SINGULAR_NAME | pascal }},
