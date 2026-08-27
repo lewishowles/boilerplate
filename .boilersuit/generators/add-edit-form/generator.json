@@ -1,0 +1,62 @@
+{
+	"schema_version": 1,
+	"id": "add-edit-form",
+	"display_name": "Add / edit form",
+	"description": "Creates an add/edit form that consumes a Pinia Colada resource domain.",
+	"default_path": "src/components",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Collection name",
+			"description": "Used for the query barrel import and generated output folder.",
+			"hint": "Use lowercase kebab-case, e.g. flights.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+				"message": "Use lowercase kebab-case for the collection name."
+			}
+		},
+		{
+			"token": "SINGULAR_NAME",
+			"label": "Item name",
+			"description": "Used for the details query, actions, and generated test name.",
+			"hint": "Use lowercase kebab-case, e.g. flight.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+				"message": "Use lowercase kebab-case for the item name."
+			}
+		},
+		{
+			"token": "ID_NAME",
+			"label": "ID parameter name",
+			"description": "The camelCase parameter name used by the details query and update action.",
+			"placeholder": "flightId",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z][a-zA-Z0-9]*$",
+				"message": "Use a camelCase JavaScript variable name."
+			}
+		}
+	],
+	"files": [],
+	"variants": [
+		{
+			"id": "page",
+			"label": "Page form",
+			"description": "Creates a normal add and edit form for a page to own.",
+			"files": [
+				{
+					"template": "form.vue",
+					"output_path": "add-edit-{{ SINGULAR_NAME | kebab }}-form.vue",
+					"required": true
+				},
+				{
+					"template": "form.test.js",
+					"output_path": "add-edit-{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"required": true
+				}
+			]
+		}
+	]
+}
