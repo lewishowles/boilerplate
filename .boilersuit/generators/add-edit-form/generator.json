@@ -57,6 +57,23 @@
 					"required": true
 				}
 			]
+		},
+		{
+			"id": "modal",
+			"label": "Modal form",
+			"description": "Creates a self-contained add and edit form for a parent to mount as a modal.",
+			"files": [
+				{
+					"template": "modal-form.vue",
+					"output_path": "add-edit-{{ SINGULAR_NAME | kebab }}-form.vue",
+					"required": true
+				},
+				{
+					"template": "modal-form.test.js",
+					"output_path": "add-edit-{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"required": true
+				}
+			]
 		}
 	]
 }
