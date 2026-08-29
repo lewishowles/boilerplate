@@ -3,7 +3,7 @@ import { ref, toValue } from "vue";
 import { createMount, withAppContext } from "@lewishowles/testing/vue";
 import { setupConsole } from "@lewishowles/testing/vitest";
 
-import Form from "./form.vue";
+import Form from "./add-edit-{{ SINGULAR_NAME | kebab }}-form.vue";
 
 // Hoisted stand-ins for the query barrel, wired up by the vi.mock call below so
 // each test controls the form's load state and action results.
