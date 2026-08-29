@@ -131,6 +131,16 @@ describe("{{ SINGULAR_NAME | kebab }} form", () => {
 			expect(wrapper.vm.itemNotFound).toBe(false);
 		});
 
+		test("Retries a failed load", async () => {
+			queryState.error.value = new Error("Request failed");
+
+			const wrapper = mountForm({ itemId: "item-123" });
+
+			await wrapper.get("[role=\"alert\"] button").trigger("click");
+
+			expect(queryState.refetch).toHaveBeenCalledOnce();
+		});
+
 		test("Reaches the not-found state", () => {
 			const wrapper = mountForm({ itemId: "item-123" });
 
