@@ -64,11 +64,55 @@ Unit tests run on Vitest (via `vite-plus`) and use `@lewishowles/testing/vue` fo
 
 The router's auth guard (`src/router/middleware/auth.js`) only checks for a truthy `authToken` in `localStorage`; it doesn't validate against a real backend. To browse protected routes locally before a real auth backend exists, run `localStorage.setItem("authToken", "dev")` in devtools and reload.
 
-## Modal support
+## Add-edit form generator
 
-`<modal-controller />` and an unsaved-changes guard (`installUnsavedChangesGuard`) are wired up by default in `src/App.vue` and `src/router/index.js`, so any component can open a modal via `useModalDialog` or use `useForm`'s `unsavedChangesGuard` option with zero extra setup. Both are inert until you actually use them. To remove: delete the `<modal-controller />` line from `src/App.vue`, and the `router.afterEach`/`installUnsavedChangesGuard` calls from `src/router/index.js`.
+`boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the `pinia-colada-domain` composables for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.
 
-There's no modal-form component or generator yet: that's a deliberately deferred design decision, not an oversight.
+If the record id is missing, the form is in add mode and does not fetch. If it is set, the form is in edit mode, loads that record, and handles the initial load, a load error with retry, the ready state, and a missing record separately. A successful submit emits one `success` event carrying `{ result, formData }`.
+
+### Fields
+
+- `NAME` — collection name, lowercase kebab-case. Locates the query barrel (`@/queries/<NAME>`) and the output folder.
+- `SINGULAR_NAME` — item name, lowercase kebab-case. Drives the composable and generated test names.
+- `ID_NAME` — id parameter name, camelCase. Used by the details query and the update action.
+
+### Variants
+
+- `--variant page` (default) — a plain form component for a page to own. Navigation and global success messaging stay with the parent.
+- `--variant modal` — the same lifecycle wrapped in the Components `modal-dialog`. It re-emits `close` when the dialog emits `dialog:close` and after a successful submit, and makes no routing assumptions.
+
+Only the selected variant's files are generated.
+
+### Commands
+
+```bash
+# Preview first (page variant)
+boilersuit generate preview add-edit-form --variant page \
+	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
+
+# Generate
+boilersuit generate add-edit-form --variant page \
+	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
+
+# Modal variant
+boilersuit generate preview add-edit-form --variant modal \
+	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
+```
+
+Rerun generation with `--skip-existing` to protect form files you have already edited. Without it, generation overwrites the destination.
+
+### Fields, validation, and mapping
+
+The generated form leaves fields, validation rules, value coercions, and record-to-form mapping as explicit TODO placeholders. It does not derive any of these from OpenAPI. Submit-time API errors, both field and general, flow through the local `form-wrapper` default adapter, `parseApiFieldErrors`.
+
+For the underlying form pattern, see the Components `form-wrapper` docs and snippet:
+
+```bash
+node node_modules/@lewishowles/components/bin/cli.js info form-wrapper
+node node_modules/@lewishowles/components/bin/cli.js snippet form-wrapper
+```
+
+The known-broken upstream `form-wrapper` example is deliberately not copied into boilerplate; fixing it is a separate follow-up in the Components repository.
 
 ## Linting
 
