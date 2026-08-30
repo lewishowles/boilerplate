@@ -26,7 +26,7 @@ export default defineConfig({
 	},
 	fmt,
 	lint,
-	base: "/",
+	base: "{{ BASE_URL }}",
 	plugins: lazyPlugins(() => [
 		VueRouter({
 			dts: false,
