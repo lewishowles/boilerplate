@@ -99,6 +99,7 @@
 			"include_when": { "HAS_XANO": "true" }
 		}
 	],
+	"exclude_paths": ["scripts/**"],
 	"files": [
 		{
 			"paths": ["src/composables/api/use-api/**"],
