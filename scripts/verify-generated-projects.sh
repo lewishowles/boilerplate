@@ -7,17 +7,20 @@
 #   1. Guard required tools and locate the check-module directory.
 #   2. Resolve the boilerplate source (local checkout, or its origin remote).
 #   3. For each mode (fetch, xano, xano-grouped): generate the project, then run
-#      every scripts/verify-generated-projects/check-*.sh against it.
+#      every scripts/verify-generated-projects/check-*.sh against it. With --build,
+#      also run install-and-build.sh (install, lint, unit tests, build) after the
+#      check modules pass.
 #   4. On success remove the run directory; on any failure keep it for diagnosis.
 #
 # This is the fast static matrix: no dependency installation and no network
-# access beyond the generator itself. The opt-in smoke path is a later addition.
+# access beyond the generator itself. Pass --build to also install dependencies,
+# run lint and one-shot unit tests, then build each generated project.
 
 set -euo pipefail
 
 # Prints the single-line invocation form to stderr.
 usage() {
-	printf 'Usage: %s (takes no arguments)\n' "$0" >&2
+	printf 'Usage: %s [--build]\n' "$0" >&2
 }
 
 # Prints the first log line that looks like a failure, falling back to the first
@@ -87,7 +90,7 @@ generate_project() {
 		--setup "PROJECT_NAME=$project_name" \
 		--setup "BASE_URL=/" \
 		--setup "SITE_TITLE=Generated project check" \
-		--setup "SITE_DESCRIPTION=Throwaway project generated to verify boilerplate output." \
+		--setup "SITE_DESCRIPTION=Boilerplate output check." \
 		--setup "SITE_URL=https://example.com" \
 		--setup "THEME_COLOUR=#ffffff" \
 		--setup "API_TYPE=$mode" \
@@ -134,7 +137,9 @@ run_checks() {
 
 # Generates one API mode and runs all checks against it, capturing generator and
 # check output to logs. Prints a single PASS or FAIL line for the mode; a
-# failing mode returns non-zero without aborting the other modes.
+# failing mode returns non-zero without aborting the other modes. When --build is
+# set, installs dependencies and builds the generated project after its checks
+# pass.
 #
 # @param  {string}  mode
 #     API mode to verify.
@@ -167,16 +172,35 @@ verify_mode() {
 		return 1
 	fi
 
+	if (( build_enabled )); then
+		local build_log_path="$run_directory/$mode-build.log"  # Install and build log for this mode.
+
+		if ! "$install_and_build_path" "$mode" "$project_path" "$build_log_path"; then
+			printf 'FAIL %s  build  %s  %s\n' "$mode" "$(first_error_line "$build_log_path")" "$build_log_path"
+			return 1
+		fi
+	fi
+
 	printf 'PASS %s\n' "$mode"
 }
 
-if (( $# > 0 )); then
+build_enabled=0  # 1 when --build was passed, enabling the install and build step.
+
+if (( $# == 1 )) && [[ "$1" == "--build" ]]; then
+	build_enabled=1
+elif (( $# > 0 )); then
 	usage
 	exit 2
 fi
 
 # Fail early if any required command is missing. tool: the command being checked.
-for tool in git boilersuit rg trash; do
+required_tools=(git boilersuit rg trash)  # Commands the fast matrix needs; --build adds bun.
+
+if (( build_enabled )); then
+	required_tools+=(bun)
+fi
+
+for tool in "${required_tools[@]}"; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
 		printf 'Required command not found: %s\n' "$tool" >&2
 		exit 1
@@ -184,6 +208,7 @@ for tool in git boilersuit rg trash; do
 done
 
 checks_directory="$(dirname "$0")/verify-generated-projects"  # Directory holding the check modules.
+install_and_build_path="$checks_directory/install-and-build.sh"  # Install and build script, run only under --build.
 
 if [[ ! -d "$checks_directory" ]]; then
 	printf 'Check directory not found: %s\n' "$checks_directory" >&2
@@ -205,6 +230,11 @@ for check_module in "${check_modules[@]}"; do
 		exit 1
 	fi
 done
+
+if (( build_enabled )) && [[ ! -x "$install_and_build_path" ]]; then
+	printf 'Install-and-build check is not executable: %s\n' "$install_and_build_path" >&2
+	exit 1
+fi
 
 modes=(fetch xano xano-grouped)  # API modes to generate and check, in run order.
 repo_root="$(git rev-parse --show-toplevel)"  # Boilerplate checkout root.

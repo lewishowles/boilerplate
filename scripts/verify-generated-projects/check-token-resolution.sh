@@ -29,7 +29,7 @@ project_path="$2"  # Root directory of the generated project under test.
 failed_stages=0  # Running count of assertion stages that failed.
 base_url="/"  # BASE_URL value the matrix passed at generation time.
 site_title="Generated project check"  # SITE_TITLE value the matrix passed at generation time.
-site_description="Throwaway project generated to verify boilerplate output."  # SITE_DESCRIPTION value the matrix passed at generation time.
+site_description="Boilerplate output check."  # SITE_DESCRIPTION value the matrix passed at generation time.
 site_url="https://example.com"  # SITE_URL value the matrix passed at generation time.
 theme_colour="#ffffff"  # THEME_COLOUR value the matrix passed at generation time.
 
