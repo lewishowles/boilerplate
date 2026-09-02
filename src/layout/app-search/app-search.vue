@@ -17,7 +17,11 @@
 				<template #label>Search</template>
 
 				<template #default="{ item: searchItem, highlighted }">
-					<span :class="{ 'font-semibold': highlighted }">{{ searchItem.label }}</span>
+					<span class="flex items-center justify-between">
+						{{ searchItem.label }}
+
+						<icon-chevron-right v-if="highlighted" />
+					</span>
 				</template>
 
 				<template #no-results="{ query }">No pages found for "{{ query }}".</template>
