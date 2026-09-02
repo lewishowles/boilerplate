@@ -14,7 +14,6 @@
 
 		<p v-else-if="itemNotFound" role="status">Item not found.</p>
 
-		<!-- form-wrapper's own identity prop is recordId; this form calls it itemId -->
 		<form-wrapper
 			v-else-if="isReady"
 			v-model="formData"

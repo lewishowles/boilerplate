@@ -1,3 +1,5 @@
+import { isObject } from "@lewishowles/helpers/object";
+
 /**
  * Format API responses for {{ NAME | kebab }} queries.
  *
@@ -9,7 +11,7 @@
  *     Formatted response data.
  */
 export function format{{ NAME | pascal }}Response(response) {
-	if (response === null || typeof response !== "object") {
+	if (response === null || !isObject(response)) {
 		return response;
 	}
 
@@ -17,6 +19,5 @@ export function format{{ NAME | pascal }}Response(response) {
 
 	return {
 		...payload,
-		itemsTotal: response.itemsTotal ?? payload.itemsTotal,
 	};
 }

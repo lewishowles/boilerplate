@@ -8,7 +8,6 @@
 
 	<p v-else-if="itemNotFound" role="status">Item not found.</p>
 
-	<!-- form-wrapper's own identity prop is recordId; this form calls it itemId -->
 	<form-wrapper
 		v-else-if="isReady"
 		v-model="formData"
@@ -42,27 +41,16 @@ const props = defineProps({
 	},
 });
 
-/**
- * success is emitted once, after a create or update call resolves, with
- * `{ result, formData }`: the value the action returned and the field values
- * that were submitted. Navigation and success messaging are left to the parent.
- */
-const emit = defineEmits(["success"]);
-
 // Working copy of the field values, bound to the form wrapper's model.
 const formData = ref({});
-
 // Item id as a prop ref handed reactively to the details query.
 const itemId = toRef(props, "itemId");
-
 // Edit mode is any item id the details query would actually fetch for. That
 // query gates on `enabled: Boolean(unref(id))`, so matching it here keeps the
 // two in step (a falsy id such as null, "", or 0 stays in add mode).
 const isEditMode = computed(() => Boolean(itemId.value));
-
 // TODO: Add field coercions, keyed by field name, for the form wrapper.
 const fieldTypes = {};
-
 // TODO: Add validation rules, keyed by field name.
 const rules = {};
 
@@ -87,7 +75,6 @@ const { create{{ SINGULAR_NAME | pascal }}, update{{ SINGULAR_NAME | pascal }} }
 
 // Edit mode is waiting for the first response.
 const isInitialLoading = computed(() => isEditMode.value && queryIsInitialLoading.value);
-
 // The load settled with an error; the user can retry.
 const hasLoadError = computed(() => isEditMode.value && !isInitialLoading.value && Boolean(error.value));
 
@@ -128,8 +115,12 @@ async function submitForm(values) {
 		? await update{{ SINGULAR_NAME | pascal }}({ {{ ID_NAME }}: itemId.value, ...values })
 		: await create{{ SINGULAR_NAME | pascal }}(values);
 
-	emit("success", { result, formData: values });
+	// Create a success message
+	sendMessage({
+		message: "{{ SINGULAR_NAME }} created successfully",
+		type: "success",
+	});
 
-	return result;
+	await router.push({ name: "home" });
 }
 </script>
