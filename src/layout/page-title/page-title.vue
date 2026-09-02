@@ -42,6 +42,8 @@
 			</div>
 		</div>
 	</div>
+
+	<flash-messages />
 </template>
 
 <script setup>
