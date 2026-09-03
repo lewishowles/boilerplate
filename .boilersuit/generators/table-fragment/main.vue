@@ -50,6 +50,7 @@ const { error, isInitialLoading, isReady, lastFetched, refetch, {{ NAME }} } =
 const columns = {
 	name: {
 		label: "Name",
+		primary: true,
 	},
 };
 

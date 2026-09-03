@@ -82,7 +82,7 @@ const tableState = computed({
 const columns = {
 	name: {
 		label: "Name",
-		sortable: false,
+		primary: true,
 	},
 };
 
