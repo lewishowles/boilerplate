@@ -116,4 +116,4 @@ The known-broken upstream `form-wrapper` example is deliberately not copied into
 
 ## Linting
 
-`.oxlintrc.json` extends `@lewishowles/lint-config`'s shared `vue.json` layer. Add project-specific rule overrides, ignore patterns, or overrides blocks directly in `.oxlintrc.json`; see the `@lewishowles/lint-config` README for the merge rules.
+`.oxlintrc.json` extends `@lewishowles/lint-config`'s shared `vue.json` and `comments.json` layers. Add project-specific rule overrides, ignore patterns, or overrides blocks directly in `.oxlintrc.json`; see the `@lewishowles/lint-config` README for the merge rules.

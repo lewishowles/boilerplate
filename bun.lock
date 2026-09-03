@@ -16,7 +16,7 @@
       },
       "devDependencies": {
         "@eslint/js": "10.0.1",
-        "@lewishowles/lint-config": "^0.2.0",
+        "@lewishowles/lint-config": "^0.4.0",
         "@lewishowles/testing": "^1.2.1",
         "@playwright/experimental-ct-vue": "1.62.1",
         "@playwright/test": "1.62.1",
@@ -160,7 +160,7 @@
 
     "@lewishowles/helpers": ["@lewishowles/helpers@1.7.1", "", { "dependencies": { "dayjs": "^1.11.21", "temporal-polyfill": "^1.0.1" }, "peerDependencies": { "vue": "^3.5.39" }, "optionalPeers": ["vue"] }, "sha512-qo1c3EhG0qiNwRdsW+10iGXEy4BtzuhpCbFqJQLtHpKP+hctOPcUXLbD6CdMkUj8eo+7HyE9PZqGXfwbEcyXnQ=="],
 
-    "@lewishowles/lint-config": ["@lewishowles/lint-config@0.2.0", "", { "peerDependencies": { "@stylistic/eslint-plugin": "*", "vite-plus": "*" } }, "sha512-GlB732jUFSdEe7j2pbV9tE/W3cT84uAkTnigqnISEaLkuXykmIVPyD8DUagy0HwtzVYXZl8tdkV8h1age8+Zsg=="],
+    "@lewishowles/lint-config": ["@lewishowles/lint-config@0.4.0", "", { "peerDependencies": { "@stylistic/eslint-plugin": "*", "vite-plus": "0.2.8" } }, "sha512-4Q9eDaximQlPsdUfP0KLSUVeiQt8KP4+lJVVA1IyFd3u9mUD6e41oKW8q8nn04cSEtFFNkvuzPDrN/RRRXRW5g=="],
 
     "@lewishowles/testing": ["@lewishowles/testing@1.2.1", "", { "peerDependencies": { "@pinia/colada": "^1.3.1", "@playwright/test": "^1.0.0", "@vue/test-utils": "^2.4.11", "pinia": "^3.0.4", "vitest": "*", "vue": "^3.5.0" } }, "sha512-wtG0R763aDc+mWP1wLXEMCikhvmj4lqj30gmE5YpcKC72y8r2OFUUvW0YnIHckmR0EZMXFOiD5DPL459qcjRRw=="],
 

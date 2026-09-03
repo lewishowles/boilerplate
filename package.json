@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",
-		"@lewishowles/lint-config": "^0.2.0",
+		"@lewishowles/lint-config": "^0.4.0",
 		"@lewishowles/testing": "^1.2.1",
 		"@playwright/experimental-ct-vue": "1.62.1",
 		"@playwright/test": "1.62.1",

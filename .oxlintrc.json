@@ -1,5 +1,8 @@
 {
-	"extends": ["./node_modules/@lewishowles/lint-config/vue.json"],
+	"extends": [
+		"./node_modules/@lewishowles/lint-config/vue.json",
+		"./node_modules/@lewishowles/lint-config/comments.json"
+	],
 	"categories": {
 		"correctness": "error"
 	},
