@@ -23,10 +23,13 @@ log_path="$3"  # File to append all install and build output to.
 # Run the sequence with every command's output appended to the log. set -e stops
 # the group at the first failure, which exits the script non-zero.
 #
-# VP_GIT_HOOKS=0 stops the generated project's `prepare` script
-# (`vp config --no-agent`) from prompting to install the Git hook dispatcher,
-# which would hang this unattended run. The dispatcher is not needed to lint,
-# test, or build.
+# The generated project's `prepare` script runs `vp config --no-agent`, which
+# asks whether to install the Git hook dispatcher. `vp` shows that prompt before
+# it reads VP_GIT_HOOKS / HUSKY / VITE_GIT_HOOKS, and bun does not pass those
+# variables through to a script it runs during install, so setting them here has
+# no effect. CI=1 with stdin from /dev/null skips the prompt; `vp` then installs
+# the dispatcher into the generated project, which is discarded after the run.
+# The dispatcher plays no part in lint, tests, or the build.
 #
 # Each command is preceded by a `Step:` line so the log shows which sub-step
 # failed without relying on error-text matching.
@@ -34,7 +37,7 @@ log_path="$3"  # File to append all install and build output to.
 	printf 'Build mode: %s\n' "$mode"
 	cd "$project_path"
 	printf 'Step: bun install --frozen-lockfile\n'
-	VP_GIT_HOOKS=0 bun install --frozen-lockfile
+	CI=1 bun install --frozen-lockfile </dev/null
 	printf 'Step: bun run lint\n'
 	bun run lint
 	printf 'Step: bun run test:unit:run\n'
