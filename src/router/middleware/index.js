@@ -5,10 +5,14 @@
  *
  * @param  {...Function}  guards
  *     Middleware functions to run in order.
+ *
+ * @returns  {Function}
+ *     A route handler that runs the middleware guards.
  */
 export default function composeMiddleware(...guards) {
 	return async (to, from) => {
 		for (const guard of guards) {
+			// Result returned by the current middleware guard.
 			const result = await guard(to, from);
 
 			if (result !== undefined) {
