@@ -18,6 +18,7 @@ const sampleRoutes = [
 	},
 ];
 
+// Component-test mount configured with sample routes.
 const mountAppTitleBar = createMount(AppTitleBar, { hooksConfig: { routes: sampleRoutes } });
 
 test.describe("app-title-bar", () => {
@@ -31,10 +32,12 @@ test.describe("app-title-bar", () => {
 		await mountAppTitleBar(mount);
 		await page.setViewportSize({ height: 720, width: 1280 });
 
+		// Search field rendered in the title bar.
 		const searchInput = page.getByRole("combobox");
 
 		await expect(searchInput).toBeVisible();
 		await searchInput.fill("Sample page two");
+		// Dropdown containing matching search results.
 		const searchDropdown = page.getByTestId("combo-box-dropdown");
 
 		await expect(page.getByRole("option", { name: "Sample page two" })).toBeVisible();
@@ -46,6 +49,7 @@ test.describe("app-title-bar", () => {
 		await page.setViewportSize({ height: 844, width: 390 });
 		await mountAppTitleBar(mount);
 
+		// Button that opens the search interface.
 		const searchButton = page.getByRole("button", { name: "Search" });
 
 		await expect(searchButton).toBeVisible();

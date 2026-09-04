@@ -56,17 +56,22 @@
 </template>
 
 <script setup>
+/**
+ * Provides search across the authenticated application pages.
+ */
 import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { createReusableTemplate } from "@vueuse/core";
 import { useRouter } from "vue-router";
 
+// Reusable desktop and mobile search-template components.
 const [DefineSearchTemplate, ReuseSearchTemplate] = createReusableTemplate({
 	props: {
 		mobile: Boolean,
 	},
 });
 
+// Router used to open the selected search result.
 const router = useRouter();
 // The authenticated static pages registered with the router.
 const searchItems = createSearchItems(router);
@@ -79,6 +84,7 @@ const matchingSearchItems = computed(() => {
 		return [];
 	}
 
+	// Lowercase query used for case-insensitive matching.
 	const normalisedQuery = searchQuery.value.toLowerCase();
 
 	return searchItems.filter((searchItem) =>
@@ -122,6 +128,7 @@ async function selectSearchItem(searchItem) {
  *
  * @param  {object}  routerInstance
  *     The application router.
+ *
  * @returns  {object[]}
  *     Searchable page items.
  */

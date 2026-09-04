@@ -2,18 +2,33 @@ import { createMount } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import PageTitle from "./page-title.vue";
 
+// Mocked breadcrumb state.
 const mockBreadcrumbs = vi.hoisted(() => ({ value: [] }));
+// Mocked router link resolver.
 const mockResolve = vi.hoisted(() => vi.fn((to) => ({ href: `/${to.name}` })));
 
 vi.mock("@/composables/router/use-breadcrumbs", () => ({
+	/**
+	 * Returns the mocked breadcrumb state.
+	 *
+	 * @returns  {object}
+	 *     The mocked breadcrumb reference.
+	 */
 	useBreadcrumbs: () => mockBreadcrumbs,
 }));
 
 vi.mock("vue-router", async (importOriginal) => ({
 	...(await importOriginal()),
+	/**
+	 * Returns the mocked router.
+	 *
+	 * @returns  {object}
+	 *     The router with the mocked resolver.
+	 */
 	useRouter: () => ({ resolve: mockResolve }),
 }));
 
+// Mount helper for the page title.
 const mount = createMount(PageTitle);
 
 describe("page-title", () => {
@@ -24,12 +39,14 @@ describe("page-title", () => {
 
 	describe("Render contracts", () => {
 		test("Does not render introduction content by default", () => {
+			// Rendered page title under test.
 			const wrapper = mount();
 
 			expect(wrapper.find("p").exists()).toBe(false);
 		});
 
 		test("Renders introduction content when the introduction slot is filled", () => {
+			// Rendered page title with introduction content.
 			const wrapper = mount({
 				slots: {
 					introduction: "Page introduction",
@@ -49,6 +66,7 @@ describe("page-title", () => {
 				},
 			];
 
+			// Rendered page title with one breadcrumb.
 			const wrapper = mount();
 
 			expect(wrapper.find("breadcrumb-list-stub").exists()).toBe(false);
@@ -70,6 +88,7 @@ describe("page-title", () => {
 				},
 			];
 
+			// Rendered page title with a breadcrumb trail.
 			const wrapper = mount();
 
 			expect(wrapper.find("breadcrumb-list-stub").exists()).toBe(true);
@@ -85,6 +104,7 @@ describe("page-title", () => {
 				},
 			];
 
+			// Rendered page title with custom breadcrumb content.
 			const wrapper = mount({
 				slots: {
 					breadcrumbs: "Custom breadcrumb",

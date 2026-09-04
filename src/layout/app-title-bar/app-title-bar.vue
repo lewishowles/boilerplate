@@ -60,11 +60,16 @@
 </template>
 
 <script setup>
+/**
+ * Displays page controls and application navigation actions.
+ */
 import { useColourMode } from "@/composables/layout/use-colour-mode";
 import { useSidebar } from "@/composables/layout/use-sidebar";
 import { computed } from "vue";
 
+// Current colour mode and its toggle action.
 const { colourMode, toggleColourMode } = useColourMode();
+// Shared sidebar state and its toggle action.
 const { showSidebar, toggleSidebar } = useSidebar();
 
 // The icon reflecting the currently resolved colour mode.

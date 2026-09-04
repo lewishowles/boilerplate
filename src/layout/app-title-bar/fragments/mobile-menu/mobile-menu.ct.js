@@ -3,12 +3,14 @@ import { createMount } from "@lewishowles/testing/playwright";
 
 import MobileMenu from "./mobile-menu.vue";
 
+// Component-test mount for the mobile navigation menu.
 const mountMobileMenu = createMount(MobileMenu);
 
 test.describe("mobile-menu", () => {
 	test("returns focus to the menu trigger when the dialog closes", async ({ mount, page }) => {
 		await mountMobileMenu(mount);
 
+		// Button that opens the mobile navigation menu.
 		const menuTrigger = page.getByRole("button", { name: "Open navigation menu" });
 
 		await menuTrigger.click();

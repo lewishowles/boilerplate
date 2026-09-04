@@ -20,10 +20,13 @@
 </template>
 
 <script setup>
-// active-classes="bg-action-subtle text-action font-semibold"
+/**
+ * Renders a sidebar navigation link with an optional icon.
+ */
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 
+// Link and icon options supplied by the sidebar menu.
 const props = defineProps({
 	...RouterLink.props,
 
@@ -47,6 +50,7 @@ const isExternal = computed(() => {
 
 // Props to provide to router link, excluding the icon.
 const routerLinkProps = computed(() => {
+	// RouterLink options without the sidebar-only icon.
 	const { icon, ...linkProps } = props;
 
 	return linkProps;

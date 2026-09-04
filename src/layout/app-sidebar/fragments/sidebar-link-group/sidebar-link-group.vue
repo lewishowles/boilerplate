@@ -15,6 +15,9 @@
 </template>
 
 <script setup>
+/**
+ * Groups related sidebar links under a labelled section.
+ */
 import { useId } from "vue";
 
 // The internal ID to link the section to its title.

@@ -12,7 +12,19 @@ const mockHaveUser = ref(false);
 const mockUserDetails = ref(null);
 
 vi.mock("@/queries/auth", () => ({
+	/**
+	 * Returns the mocked authentication actions.
+	 *
+	 * @returns  {object}
+	 *     The mocked authentication interface.
+	 */
 	useAuth: () => ({ logout: mockLogout }),
+	/**
+	 * Returns the mocked current-user state.
+	 *
+	 * @returns  {object}
+	 *     The mocked current-user interface.
+	 */
 	useCurrentUser: () => ({
 		haveUser: mockHaveUser,
 		userDetails: mockUserDetails,
@@ -34,12 +46,14 @@ describe("app-sidebar", () => {
 			mockHaveUser.value = true;
 			mockUserDetails.value = { email: "sophie.wardhaugh@example.com" };
 
+			// Rendered sidebar under test.
 			const wrapper = mount();
 
 			expect(wrapper.vm.userName).toBe("sophie.wardhaugh@example.com");
 		});
 
 		test("Returns no user email when user details are unavailable", () => {
+			// Rendered sidebar without user details.
 			const wrapper = mount();
 
 			expect(wrapper.vm.userName).toBeUndefined();

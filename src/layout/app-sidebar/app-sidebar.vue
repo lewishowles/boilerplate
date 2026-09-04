@@ -66,6 +66,9 @@
 </template>
 
 <script setup>
+/**
+ * Displays authenticated navigation and current-user controls.
+ */
 import { computed } from "vue";
 import { getPathValue } from "@lewishowles/helpers/object";
 import { useAuth, useCurrentUser } from "@/queries/auth";
@@ -73,9 +76,11 @@ import { useSidebar } from "@/composables/layout/use-sidebar";
 
 import { IconDashboard, IconDocument } from "@lewishowles/components";
 
+// Sidebar display options supplied by the app shell.
 const props = defineProps({
 	/**
-	 * Whether the sidebar should remain visible when the desktop sidebar is closed.
+	 * Whether the sidebar should remain visible when the desktop sidebar is
+	 * closed.
 	 */
 	alwaysVisible: {
 		type: Boolean,
@@ -83,11 +88,15 @@ const props = defineProps({
 	},
 });
 
+// Current-user details shown in the sidebar.
 const { haveUser, userDetails } = useCurrentUser();
+// Logout action shown in the sidebar menu.
 const { logout } = useAuth();
+// Shared sidebar visibility state.
 const { showSidebar } = useSidebar();
 
 // The user's display details.
 const userName = computed(() => getPathValue(userDetails.value, "email"));
+// First letter shown in the user avatar.
 const userInitial = computed(() => userName.value?.slice(0, 1));
 </script>

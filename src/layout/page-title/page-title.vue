@@ -47,6 +47,9 @@
 </template>
 
 <script setup>
+/**
+ * Displays the current page title and navigation context.
+ */
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useBreadcrumbs } from "@/composables/router/use-breadcrumbs";

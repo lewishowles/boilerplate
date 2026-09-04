@@ -14,6 +14,9 @@
 </template>
 
 <script setup>
+/**
+ * Opens navigation links in a mobile menu dialog.
+ */
 import { useTemplateRef, watch } from "vue";
 import { useRoute } from "vue-router";
 
