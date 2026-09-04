@@ -3,6 +3,7 @@ import { effectScope, nextTick, reactive, ref } from "vue";
 
 import { useBreadcrumb, useBreadcrumbs } from "./use-breadcrumbs";
 
+// Reactive route used by the Vue Router stub.
 const route = reactive({
 	matched: [],
 	name: null,
@@ -13,7 +14,19 @@ vi.mock("vue-router", () => ({
 	useRoute: vi.fn(() => route),
 }));
 
+/**
+ * Register a breadcrumb in an isolated effect scope.
+ *
+ * @param  {string|object}  label
+ *     The breadcrumb label to register.
+ * @param  {object}  options
+ *     Breadcrumb registration options.
+ *
+ * @returns  {object}
+ *     Scope that owns the breadcrumb registration.
+ */
 function registerBreadcrumb(label, options) {
+	// Scope that owns the registered breadcrumb effect.
 	const scope = effectScope();
 
 	scope.run(() => {
@@ -36,6 +49,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value).toEqual([]);
@@ -52,6 +66,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value).toEqual([
@@ -79,6 +94,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].label).toBe("Sample page one");
@@ -100,6 +116,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value.map(({ current, id }) => ({ current, id }))).toEqual([
@@ -123,7 +140,9 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb("Sample page one");
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].label).toBe("Sample page one");
@@ -145,7 +164,9 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb("Dynamic breadcrumb");
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].label).toBe("Dynamic breadcrumb");
@@ -164,8 +185,11 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Reactive breadcrumb label used to test updates.
 			const label = ref("Sample page one");
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb(label);
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			label.value = "Sample page two";
@@ -188,10 +212,12 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value).toEqual([]);
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb("Sample page one");
 
 			await nextTick();
@@ -212,10 +238,12 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb(ref(null), {
 				fallback: "Loading…",
 			});
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].label).toBe("Loading…");
@@ -235,7 +263,9 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb(ref(null));
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].label).toBe("Sample page one");
@@ -255,7 +285,9 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb("Sample page one");
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			scope.stop();
@@ -266,12 +298,14 @@ describe("useBreadcrumbs", () => {
 		});
 
 		test("Removes the previous registration when the route key changes", async () => {
+			// First route record used to test key changes.
 			const samplePageOne = {
 				name: "sample-page-one",
 				path: "/sample-pages/one",
 				meta: {},
 			};
 
+			// Second route record used to test key changes.
 			const samplePageTwo = {
 				name: "sample-page-two",
 				path: "/sample-pages/two",
@@ -282,7 +316,9 @@ describe("useBreadcrumbs", () => {
 			route.params = {};
 			route.matched = [samplePageOne];
 
+			// Scope that owns the registered breadcrumb.
 			const scope = registerBreadcrumb("Sample page");
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			route.name = "sample-page-two";
@@ -327,6 +363,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value.map(({ current, id }) => ({ current, id }))).toEqual([
@@ -364,6 +401,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value.map(({ id }) => id)).toEqual(["sample-page-one"]);
@@ -385,14 +423,17 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Scope that owns the parent breadcrumb.
 			const parentScope = registerBreadcrumb("Sample page one", {
 				key: "sample-page-one",
 			});
 
+			// Scope that owns the child breadcrumb.
 			const childScope = registerBreadcrumb("Sample page two", {
 				key: "sample-page-two",
 			});
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value.map(({ id }) => id)).toEqual(["sample-page-one", "sample-page-two"]);
@@ -424,6 +465,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].to).toEqual({
@@ -452,6 +494,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].to).toEqual({
@@ -479,6 +522,7 @@ describe("useBreadcrumbs", () => {
 				},
 			];
 
+			// Breadcrumbs under test.
 			const breadcrumbs = useBreadcrumbs();
 
 			expect(breadcrumbs.value[0].to).toEqual({

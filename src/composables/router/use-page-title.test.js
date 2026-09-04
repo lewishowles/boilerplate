@@ -3,12 +3,14 @@ import { effectScope, nextTick, reactive, ref } from "vue";
 
 import { usePageTitle, usePageTitles } from "./use-page-title";
 
+// Reactive document title returned by the VueUse stub.
 const mockTitle = ref(null);
 
 vi.mock("@vueuse/core", () => ({
 	useTitle: vi.fn(() => mockTitle),
 }));
 
+// Reactive route used by the Vue Router stub.
 const route = reactive({ meta: {} });
 
 vi.mock("vue-router", () => ({
@@ -23,6 +25,7 @@ describe("usePageTitle", () => {
 
 	describe("Static titles", () => {
 		test("Sets the document title from a plain string", () => {
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -37,7 +40,9 @@ describe("usePageTitle", () => {
 
 	describe("Dynamic titles", () => {
 		test("Sets the document title from a ref", () => {
+			// Reactive title supplied to the composable.
 			const title = ref("Sample page one");
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -50,7 +55,9 @@ describe("usePageTitle", () => {
 		});
 
 		test("Updates the document title when the ref changes", async () => {
+			// Reactive title supplied to the composable.
 			const title = ref("Sample page one");
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -69,7 +76,9 @@ describe("usePageTitle", () => {
 		test("Falls back to the route meta title when the title resolves to a falsy value", async () => {
 			route.meta = { page_title: "Sample page one" };
 
+			// Reactive title supplied to the composable.
 			const title = ref("Sample page two");
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -86,7 +95,9 @@ describe("usePageTitle", () => {
 		});
 
 		test("Falls back to the base title when the title and route meta both resolve to falsy values", async () => {
+			// Reactive title supplied to the composable.
 			const title = ref("Sample page one");
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -107,6 +118,7 @@ describe("usePageTitle", () => {
 		test("Restores the route meta title when the scope is disposed", () => {
 			route.meta = { page_title: "Sample page one" };
 
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {
@@ -119,6 +131,7 @@ describe("usePageTitle", () => {
 		});
 
 		test("Restores the base title when the scope is disposed and no route meta title is set", () => {
+			// Scope used to dispose the title effect.
 			const scope = effectScope();
 
 			scope.run(() => {

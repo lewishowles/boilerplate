@@ -14,9 +14,12 @@ const BASE_TITLE = document.title;
  *     The title, ref, computed, or getter to display.
  */
 export function usePageTitle(title) {
+	// Current route used as the fallback title source.
 	const route = useRoute();
+	// Reactive browser document title.
 	const documentTitle = useTitle();
 
+	// Keep the document title synced to an explicit title or route `page_title`.
 	watchEffect(() => {
 		documentTitle.value = getPageTitle(toValue(title) || route.meta?.page_title);
 	});
@@ -31,9 +34,12 @@ export function usePageTitle(title) {
  * back to the base title. Intended to be called once from the app layout.
  */
 export function usePageTitles() {
+	// Current route used as the document title source.
 	const route = useRoute();
+	// Reactive browser document title.
 	const documentTitle = useTitle();
 
+	// Keep the document title synced to the route `page_title`.
 	watchEffect(() => {
 		documentTitle.value = getPageTitle(route.meta?.page_title);
 	});
@@ -45,6 +51,9 @@ export function usePageTitles() {
  *
  * @param  {string}  title
  *     The title to set.
+ *
+ * @returns  {string}
+ *     Title combined with the base application title.
  */
 function getPageTitle(title) {
 	if (!isNonEmptyString(title)) {
