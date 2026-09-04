@@ -12,9 +12,8 @@
 
 	<router-link-tag
 		v-else
-		v-bind="{ ...routerLinkProps, ...$attrs, 'icon-start': icon }"
+		v-bind="{ ...routerLinkProps, ...$attrs, class: menuItemClasses, 'icon-start': icon }"
 		class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
-		active-classes="bg-primary-subtle text-primary font-semibold"
 	>
 		<slot />
 	</router-link-tag>
@@ -26,6 +25,7 @@
  */
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { useMenuItem } from "@/composables/router/use-menu";
 
 // Link and icon options supplied by the sidebar menu.
 const props = defineProps({
@@ -39,6 +39,9 @@ const props = defineProps({
 		default: null,
 	},
 });
+
+// Current menu state for this sidebar link.
+const { state } = useMenuItem(() => props.to);
 
 defineOptions({
 	inheritAttrs: false,
@@ -55,5 +58,18 @@ const routerLinkProps = computed(() => {
 	const { icon, ...linkProps } = props;
 
 	return linkProps;
+});
+
+// Mutually exclusive classes for the current menu state.
+const menuItemClasses = computed(() => {
+	if (state.value === "active") {
+		return "bg-primary-subtle text-primary font-semibold";
+	}
+
+	if (state.value === "in-section") {
+		return "text-content-strong";
+	}
+
+	return null;
 });
 </script>

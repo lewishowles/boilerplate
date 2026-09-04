@@ -73,6 +73,7 @@ import { computed } from "vue";
 import { getPathValue } from "@lewishowles/helpers/object";
 import { useAuth, useCurrentUser } from "@/queries/auth";
 import { useSidebar } from "@/composables/layout/use-sidebar";
+import { provideMenu } from "@/composables/router/use-menu";
 
 import { IconDashboard, IconDocument } from "@lewishowles/components";
 
@@ -94,6 +95,8 @@ const { haveUser, userDetails } = useCurrentUser();
 const { logout } = useAuth();
 // Shared sidebar visibility state.
 const { showSidebar } = useSidebar();
+
+provideMenu();
 
 // The user's display details.
 const userName = computed(() => getPathValue(userDetails.value, "email"));

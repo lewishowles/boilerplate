@@ -16,7 +16,10 @@
  * Groups related sidebar links under a labelled section.
  */
 import { useId } from "vue";
+import { useMenuGroup } from "@/composables/router/use-menu";
 
 // The internal ID to link the section to its title.
 const id = useId();
+
+useMenuGroup();
 </script>
