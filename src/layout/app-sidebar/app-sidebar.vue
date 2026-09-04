@@ -21,7 +21,7 @@
 		</div>
 
 		<nav
-			class="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-4"
+			class="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-6"
 			aria-label="Primary navigation"
 		>
 			<sidebar-link-group>
