@@ -13,6 +13,7 @@ import Components from "unplugin-vue-components/vite";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 
+// Directory containing this component-test configuration.
 const configDir = dirname(fileURLToPath(import.meta.url));
 
 loadTestEnv(configDir);

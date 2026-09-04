@@ -8,6 +8,7 @@ import { defineConfig } from "@playwright/test";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Directory containing this end-to-end test configuration.
 const configDir = dirname(fileURLToPath(import.meta.url));
 
 loadTestEnv(configDir);
