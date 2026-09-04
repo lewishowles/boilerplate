@@ -20,20 +20,26 @@
 </template>
 
 <script setup>
+/**
+ * Displays the sign-in form and redirects after a successful login.
+ */
 import { definePage } from "vue-router/experimental";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 import { useAuth } from "@/queries/auth";
 import { useRoute, useRouter } from "vue-router";
 
+// Authentication state and sign-in action used by the form.
 const { errorMessage, login } = useAuth();
 // Current route, including any redirect query value.
 const route = useRoute();
+// Router used after a successful sign-in.
 const router = useRouter();
 
 // Our form data.
 const formData = ref({});
 
+// Validation rules for the sign-in fields.
 const rules = {
 	email: [{ rule: "required", message: "Enter your email address" }],
 	password: [{ rule: "required", message: "Enter your password" }],
@@ -44,7 +50,8 @@ const rules = {
  *
  * @param  {unknown}  redirect
  *     The candidate redirect value from the login route query.
- * @returns {string|null}
+ *
+ * @returns  {string|null}
  *     The internal redirect path, or null when the value is unsafe.
  */
 function getSafeRedirect(redirect) {
@@ -56,12 +63,14 @@ function getSafeRedirect(redirect) {
 }
 
 /**
- * Attempt login for the user. If successful, redirect to the intended internal route.
+ * Attempt login for the user. If successful, redirect to the intended internal
+ * route.
  */
 async function performLogin() {
 	try {
 		await login(formData.value);
 
+		// Valid same-origin destination requested before sign-in.
 		const redirect = getSafeRedirect(route.query?.redirect);
 
 		await router.push(redirect ?? { name: "sample-pages" });

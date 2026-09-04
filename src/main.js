@@ -7,7 +7,9 @@ import { createPinia } from "pinia";
 import App from "@/App.vue";
 import router from "@/router";
 
+// Root Vue application instance.
 const app = createApp(App);
+// Pinia store instance shared by the application.
 const pinia = createPinia();
 
 app.use(pinia);

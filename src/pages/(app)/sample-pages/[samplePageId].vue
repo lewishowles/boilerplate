@@ -3,6 +3,9 @@
 </template>
 
 <script setup>
+/**
+ * Displays a sample page by its route identifier.
+ */
 import { computed } from "vue";
 import { definePage } from "vue-router/experimental";
 import { useRoute } from "vue-router";

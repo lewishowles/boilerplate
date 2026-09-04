@@ -3,6 +3,9 @@
 </template>
 
 <script setup>
+/**
+ * Displays the sample-page list.
+ */
 import { definePage } from "vue-router/experimental";
 
 definePage({

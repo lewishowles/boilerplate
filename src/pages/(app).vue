@@ -18,6 +18,9 @@
 </template>
 
 <script setup>
+/**
+ * Renders the authenticated application shell.
+ */
 import { definePage } from "vue-router/experimental";
 import { useSidebar } from "@/composables/layout/use-sidebar";
 

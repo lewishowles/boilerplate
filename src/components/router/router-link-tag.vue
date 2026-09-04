@@ -11,6 +11,9 @@
 </template>
 
 <script setup>
+/**
+ * Renders a router link with configurable active classes.
+ */
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 
@@ -18,6 +21,7 @@ defineOptions({
 	inheritAttrs: false,
 });
 
+// Router-link options and application-specific class options.
 const props = defineProps({
 	...RouterLink.props,
 
@@ -47,6 +51,9 @@ const props = defineProps({
  *     Whether the resolved route is active in the current route chain.
  * @param  {boolean}  isExactActive
  *     Whether the resolved route is the current route.
+ *
+ * @returns  {boolean}
+ *     Whether the link should use its active classes.
  */
 function isLinkActive(route, isActive, isExactActive) {
 	// Home must remain exact because the app shell shares the root route.

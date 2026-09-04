@@ -7,6 +7,9 @@
 </template>
 
 <script setup>
+/**
+ * Displays the page used when no route matches.
+ */
 import { RouterLink } from "vue-router";
 import { definePage } from "vue-router/experimental";
 
