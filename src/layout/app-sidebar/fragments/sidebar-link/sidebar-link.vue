@@ -14,6 +14,7 @@
 		v-else
 		v-bind="{ ...routerLinkProps, ...$attrs, 'icon-start': icon }"
 		class="text-content hocus:bg-surface-sunken hocus:text-content-strong hocus:underline flex w-full items-center gap-3 rounded-lg px-3 py-2 no-underline"
+		active-classes="bg-primary-subtle text-primary font-semibold"
 	>
 		<slot />
 	</router-link-tag>
