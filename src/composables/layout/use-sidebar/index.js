@@ -4,7 +4,10 @@ import { ref } from "vue";
 const showSidebar = ref(true);
 
 /**
- * Manage the state of the app sidebar.
+ * Manages the state of the app sidebar.
+ *
+ * @returns  {object}
+ *     The shared sidebar state and its toggle action.
  */
 export function useSidebar() {
 	/**

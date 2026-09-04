@@ -28,6 +28,7 @@ describe("use-colour-mode", () => {
 
 	describe("Initialisation", () => {
 		test("Follows a light system preference without storing an override", async () => {
+			// Resolved colour mode for the loaded composable.
 			const { colourMode } = await loadColourMode();
 
 			expect(colourMode.value).toBe("light");
@@ -36,6 +37,7 @@ describe("use-colour-mode", () => {
 		});
 
 		test("Follows a dark system preference and applies the dark class", async () => {
+			// Resolved colour mode for the loaded composable.
 			const { colourMode } = await loadColourMode({ darkSystem: true });
 
 			expect(colourMode.value).toBe("dark");
@@ -44,6 +46,7 @@ describe("use-colour-mode", () => {
 		});
 
 		test("Uses a stored override instead of the system preference", async () => {
+			// Resolved colour mode for the loaded composable.
 			const { colourMode } = await loadColourMode({ darkSystem: false, storedMode: "dark" });
 
 			expect(colourMode.value).toBe("dark");
@@ -54,6 +57,7 @@ describe("use-colour-mode", () => {
 
 	describe("Interactions", () => {
 		test("Stores the opposite mode when it differs from the system", async () => {
+			// Colour mode and toggle action for the loaded composable.
 			const { colourMode, toggleColourMode } = await loadColourMode();
 
 			toggleColourMode();
@@ -65,6 +69,7 @@ describe("use-colour-mode", () => {
 		});
 
 		test("Removes an override when the target matches the system", async () => {
+			// Colour mode and toggle action for the loaded composable.
 			const { colourMode, toggleColourMode } = await loadColourMode({
 				storedMode: "dark",
 			});
@@ -78,8 +83,11 @@ describe("use-colour-mode", () => {
 		});
 
 		test("Shares state across separate useColourMode calls", async () => {
+			// First composable instance used to change the shared mode.
 			const first = await loadColourMode();
+			// Composable export used to create another instance.
 			const { useColourMode } = await import(".");
+			// Second composable instance used to read the shared mode.
 			const second = useColourMode();
 
 			first.toggleColourMode();
@@ -92,6 +100,7 @@ describe("use-colour-mode", () => {
 
 	describe("System changes", () => {
 		test("Updates the resolved mode when no override is stored", async () => {
+			// Resolved colour mode for the loaded composable.
 			const { colourMode } = await loadColourMode();
 
 			systemPreference.setMatches(true);
@@ -103,6 +112,7 @@ describe("use-colour-mode", () => {
 		});
 
 		test("Keeps an explicit override when the system preference changes", async () => {
+			// Resolved colour mode for the loaded composable.
 			const { colourMode } = await loadColourMode({ storedMode: "dark" });
 
 			systemPreference.setMatches(true);
@@ -124,18 +134,39 @@ let systemPreference;
  *
  * @param  {boolean}  matches
  *     Whether the simulated system preference currently matches dark mode.
+ *
+ * @returns  {object}
+ *     The controllable media-query mock.
  */
 function createSystemPreference(matches) {
+	// Change listeners registered by the composable.
 	const listeners = new Set();
 
+	// Media query object returned by the browser mock.
 	const mediaQueryList = {
 		matches,
 		media: "(prefers-color-scheme: dark)",
+		/**
+		 * Add a system-preference change listener.
+		 *
+		 * @param  {string}  eventName
+		 *     The browser event to listen for.
+		 * @param  {Function}  listener
+		 *     The handler to call when the preference changes.
+		 */
 		addEventListener(eventName, listener) {
 			if (eventName === "change") {
 				listeners.add(listener);
 			}
 		},
+		/**
+		 * Remove a system-preference change listener.
+		 *
+		 * @param  {string}  eventName
+		 *     The browser event to stop listening for.
+		 * @param  {Function}  listener
+		 *     The handler to remove.
+		 */
 		removeEventListener(eventName, listener) {
 			if (eventName === "change") {
 				listeners.delete(listener);
@@ -145,6 +176,12 @@ function createSystemPreference(matches) {
 
 	return {
 		mediaQueryList,
+		/**
+		 * Set the simulated system colour preference.
+		 *
+		 * @param  {boolean}  nextMatches
+		 *     Whether the simulated preference should be dark.
+		 */
 		setMatches(nextMatches) {
 			mediaQueryList.matches = nextMatches;
 
@@ -159,12 +196,15 @@ function createSystemPreference(matches) {
  * Loads a fresh colour-mode module with the requested system and stored
  * preference.
  *
- * @param  {object}  [options={}]
+ * @param  {object}  [options]
  *     Values used to simulate the system and stored preferences.
  * @param  {boolean}  [options.darkSystem=false]
  *     Whether the simulated system preference is dark.
  * @param  {string}  [options.storedMode]
  *     The stored colour-mode override to load.
+ *
+ * @returns  {Promise<object>}
+ *     The shared colour mode and its toggle action.
  */
 async function loadColourMode({ darkSystem = false, storedMode } = {}) {
 	systemPreference = createSystemPreference(darkSystem);
@@ -174,6 +214,7 @@ async function loadColourMode({ darkSystem = false, storedMode } = {}) {
 		storedValues.set(colourModeStorageKey, storedMode);
 	}
 
+	// Fresh colour-mode module loaded for this test.
 	const module = await import(".");
 
 	await nextTick();

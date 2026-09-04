@@ -16,9 +16,21 @@ const colourModeOverride = useStorage(colourModeStorageKey, "auto", undefined, {
 // value reads as "auto", writes pass through, and null removes the key instead
 // of storing "null".
 const colourModeStorageRef = computed({
+	/**
+	 * Read the stored override as a colour mode.
+	 *
+	 * @returns  {string}
+	 *     The stored override or automatic mode.
+	 */
 	get() {
 		return colourModeOverride.value ?? "auto";
 	},
+	/**
+	 * Store the selected colour mode override.
+	 *
+	 * @param  {string|null}  value
+	 *     The override to store, or null to follow the system preference.
+	 */
 	set(value) {
 		colourModeOverride.value = value;
 	},
@@ -38,6 +50,9 @@ const colourMode = computed(() => colourModeState.value);
 
 /**
  * Returns the shared colour mode and the action that changes it.
+ *
+ * @returns  {object}
+ *     The shared colour mode and its toggle action.
  */
 export function useColourMode() {
 	/**
