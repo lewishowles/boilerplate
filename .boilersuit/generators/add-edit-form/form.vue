@@ -26,7 +26,7 @@
 
 <script setup>
 import { computed, ref, toRef } from "vue";
-
+import { useFlashMessages } from "@lewishowles/components/composables";
 import { use{{ SINGULAR_NAME | pascal }}, use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
 
 const props = defineProps({
@@ -41,6 +41,8 @@ const props = defineProps({
 	},
 });
 
+// Access to flash messaging system.
+const { sendMessage } = useFlashMessages();
 // Working copy of the field values, bound to the form wrapper's model.
 const formData = ref({});
 // Item id as a prop ref handed reactively to the details query.
