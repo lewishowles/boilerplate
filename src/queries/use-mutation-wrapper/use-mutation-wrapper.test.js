@@ -3,13 +3,21 @@ import { withAppContext } from "@lewishowles/testing/vue";
 
 import { useMutationWrapper } from "./use-mutation-wrapper";
 
+// Mocked query-cache invalidation method.
 const mockInvalidateQueries = vi.hoisted(() => vi.fn());
 
 vi.mock("@pinia/colada", async (importOriginal) => {
+	// Original Pinia Colada module, used to retain unaffected exports.
 	const actual = await importOriginal();
 
 	return {
 		...actual,
+		/**
+		 * Return a query cache with the mocked invalidation method.
+		 *
+		 * @returns  {object}
+		 *     The mocked query cache.
+		 */
 		useQueryCache: () => ({
 			invalidateQueries: mockInvalidateQueries,
 		}),
@@ -21,6 +29,9 @@ vi.mock("@pinia/colada", async (importOriginal) => {
  *
  * @param  {object}  options
  *     The mutation wrapper options.
+ *
+ * @returns  {object}
+ *     The configured mutation.
  */
 function createMutation(options) {
 	return withAppContext(() => useMutationWrapper(options));
@@ -33,6 +44,7 @@ describe("useMutationWrapper", () => {
 
 	describe("Initialisation", () => {
 		test("Returns a mutateAsync function", () => {
+			// Mutation returned by the test wrapper.
 			const mutation = createMutation({
 				mutation: vi.fn(),
 			});
@@ -43,6 +55,7 @@ describe("useMutationWrapper", () => {
 
 	describe("Invalidation", () => {
 		test("Invalidates a static query after success", async () => {
+			// Mutation returned by the test wrapper.
 			const mutation = createMutation({
 				invalidates: ["examples"],
 				mutation: vi.fn().mockResolvedValue({ id: "example-1" }),
@@ -54,7 +67,19 @@ describe("useMutationWrapper", () => {
 		});
 
 		test("Invalidates query options derived from mutation variables", async () => {
+			// Mutation returned by the test wrapper.
 			const mutation = createMutation({
+				/**
+				 * Builds the query keys that depend on the mutation result.
+				 *
+				 * @param  {object}  options
+				 *     The invalidation options.
+				 * @param  {string|number}  options.id
+				 *     The mutated record identifier.
+				 *
+				 * @returns  {object[][]}
+				 *     The affected query keys.
+				 */
 				invalidates: ({ id }) => [["examples"], ["examples", id]],
 				mutation: vi.fn().mockResolvedValue({ id: "example-1" }),
 			});
@@ -66,11 +91,14 @@ describe("useMutationWrapper", () => {
 		});
 
 		test("Runs caller onSettled before invalidating queries", async () => {
+			// Recorded callback and invalidation order.
 			const calls = [];
+			// Caller settlement callback recorded for assertion.
 			const onSettled = vi.fn(() => calls.push("settled"));
 
 			mockInvalidateQueries.mockImplementation(() => calls.push("invalidated"));
 
+			// Mutation returned by the test wrapper.
 			const mutation = createMutation({
 				invalidates: ["examples"],
 				mutation: vi.fn().mockResolvedValue({ id: "example-1" }),
@@ -89,6 +117,7 @@ describe("useMutationWrapper", () => {
 		});
 
 		test("Invalidates queries when the mutation fails", async () => {
+			// Mutation returned by the test wrapper.
 			const mutation = createMutation({
 				invalidates: ["examples"],
 				mutation: vi.fn().mockRejectedValue(new Error("Request failed")),

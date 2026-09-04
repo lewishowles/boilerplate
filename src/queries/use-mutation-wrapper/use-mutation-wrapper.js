@@ -18,6 +18,9 @@ import { toValue } from "vue";
  *     The mutation wrapper options.
  * @param  {MutationQueryKeys}  [options.invalidates]
  *     Query keys or a getter returning query keys to invalidate.
+ *
+ * @returns  {object}
+ *     The configured Pinia Colada mutation.
  * @example
  * useMutationWrapper({
  *     invalidates: EXAMPLE_KEYS.root,
@@ -36,12 +39,26 @@ import { toValue } from "vue";
  *     mutation: ({ id, ...fields }) => patch(`examples/${id}`, fields),
  * });
  */
+// oxlint-disable-next-line comments/function-documentation -- lint-config 0.4.0 requires a @param path of [options.invalidates=[]] for the array default; the JSDoc parser cannot register that name so no tag matches it. Recorded as a task discovery.
 export function useMutationWrapper({ invalidates = [], ...mutationOptions }) {
+	// Pinia Colada cache used to invalidate affected queries.
 	const queryCache = useQueryCache();
 
 	return useMutation({
 		...mutationOptions,
 
+		/**
+		 * Run the caller callback, then invalidate affected queries.
+		 *
+		 * @param  {object}  data
+		 *     The mutation result data.
+		 * @param  {object}  error
+		 *     The mutation error, when one occurred.
+		 * @param  {object}  variables
+		 *     The variables passed to the mutation.
+		 * @param  {object}  context
+		 *     The mutation context.
+		 */
 		async onSettled(data, error, variables, context) {
 			if (mutationOptions.onSettled) {
 				await mutationOptions.onSettled(data, error, variables, context);
@@ -63,6 +80,7 @@ export function useMutationWrapper({ invalidates = [], ...mutationOptions }) {
  *     The variables passed to the mutation.
  */
 async function invalidateQueries(queryCache, invalidates, variables) {
+	// Query keys resolved from the invalidation setting.
 	const invalidationKeys = normaliseQueryKeys(resolveInvalidation(invalidates, variables));
 
 	await Promise.all(invalidationKeys.map((key) => queryCache.invalidateQueries({ key })));
@@ -75,7 +93,8 @@ async function invalidateQueries(queryCache, invalidates, variables) {
  *     The invalidation option to resolve.
  * @param  {object}  variables
  *     The variables passed to the mutation.
- * @returns {QueryKey|QueryKey[]}
+ *
+ * @returns  {QueryKey|QueryKey[]}
  */
 function resolveInvalidation(invalidation, variables) {
 	if (isFunction(invalidation)) {
@@ -90,7 +109,8 @@ function resolveInvalidation(invalidation, variables) {
  *
  * @param  {QueryKey|QueryKey[]}  invalidationKeys
  *     The key or keys to normalise.
- * @returns {QueryKey[]}
+ *
+ * @returns  {QueryKey[]}
  */
 function normaliseQueryKeys(invalidationKeys) {
 	if (isArrayOfQueryKeys(invalidationKeys)) {
@@ -105,6 +125,9 @@ function normaliseQueryKeys(invalidationKeys) {
  *
  * @param  {unknown}  value
  *     The value to check.
+ *
+ * @returns  {boolean}
+ *     Whether the value contains only query keys.
  */
 function isArrayOfQueryKeys(value) {
 	return Array.isArray(value) && value.every((entry) => Array.isArray(entry));

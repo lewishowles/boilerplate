@@ -1,8 +1,18 @@
 import { computed, ref, toValue, watch } from "vue";
 import { useQuery, useQueryCache } from "@pinia/colada";
 
-// The default readiness rule for query data.
-const defaultIsReady = (data) => data !== null;
+/**
+ * Check whether query data is available by default.
+ *
+ * @param  {object|null}  data
+ *     The query data to check.
+ *
+ * @returns  {boolean}
+ *     Whether the query data is available.
+ */
+function defaultIsReady(data) {
+	return data !== null;
+}
 
 /**
  * Simplify usage of Pinia Colada by providing common query state.
@@ -11,8 +21,11 @@ const defaultIsReady = (data) => data !== null;
  *     The wrapper options.
  * @param  {object|Function}  options.queryOptions
  *     The Pinia Colada query options or a getter returning them.
- * @param  {Function}  [options.isReady]
+ * @param  {Function}  [options.isReady=defaultIsReady]
  *     The rule that decides whether successful data is usable.
+ *
+ * @returns  {object}
+ *     The query state with common readiness values.
  */
 export function useQueryWrapper({ queryOptions, isReady = defaultIsReady }) {
 	// The currently resolved query options.
@@ -56,6 +69,7 @@ export function useQueryWrapper({ queryOptions, isReady = defaultIsReady }) {
 				return;
 			}
 
+			// Cache entry for the current query key.
 			const entry = queryCache.get(queryKey.value);
 
 			lastFetched.value = new Date(entry?.when || Date.now());
