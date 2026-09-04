@@ -15,8 +15,14 @@ const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
  *     Xano client instance.
  * @param  {string}  [options.groupId]
  *     Fixed API group ID for an instance-based client.
- * @param  {boolean}  [options.requireGroupId]
+ * @param  {boolean}  [options.requireGroupId=false]
  *     Whether the adapter must have a fixed API group ID.
+ *
+ * @throws  {Error}
+ *     When the Xano client or required group ID is missing.
+ *
+ * @returns  {object}
+ *     API methods and reactive request state for the Xano client.
  */
 export default function createXanoApi({ client, groupId, requireGroupId = false } = {}) {
 	if (!client) {
@@ -41,8 +47,15 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     API endpoint path.
 	 * @param  {object}  parameters
 	 *     Query string parameters or request body.
+	 *
+	 * @throws  {object}
+	 *     The normalised Xano error body when the request fails.
+	 *
+	 * @returns  {Promise<object>}
+	 *     The parsed Xano response body.
 	 */
 	async function makeApiCall(method, endpoint, parameters) {
+		// URL used for the in-progress Xano request.
 		let finalEndpoint;
 
 		try {
@@ -50,16 +63,19 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 
 			finalEndpoint = getFinalUrl(endpoint);
 
+			// Xano response returned by the requested client method.
 			const response = isNonEmptyObject(parameters)
 				? await client[method](finalEndpoint, parameters)
 				: await client[method](finalEndpoint);
 
+			// Parsed response body returned to the caller.
 			const body = response.getBody();
 
 			isReady.value = true;
 
 			return body;
 		} catch (error) {
+			// Error body used to decide whether the auth session has expired.
 			const body = getErrorBody(error);
 
 			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(body)) {
@@ -79,6 +95,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     API endpoint path.
 	 * @param  {object}  parameters
 	 *     Query string parameters.
+	 *
+	 * @returns  {Promise<object>}
+	 *     The parsed Xano response body.
 	 */
 	async function get(endpoint, parameters) {
 		return makeApiCall("get", endpoint, parameters);
@@ -91,6 +110,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     API endpoint path.
 	 * @param  {object}  parameters
 	 *     Request body parameters.
+	 *
+	 * @returns  {Promise<object>}
+	 *     The parsed Xano response body.
 	 */
 	async function post(endpoint, parameters) {
 		return makeApiCall("post", endpoint, parameters);
@@ -103,6 +125,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     API endpoint path.
 	 * @param  {object}  parameters
 	 *     Request body parameters.
+	 *
+	 * @returns  {Promise<object>}
+	 *     The parsed Xano response body.
 	 */
 	async function patch(endpoint, parameters) {
 		return makeApiCall("patch", endpoint, parameters);
@@ -113,6 +138,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *
 	 * @param  {string}  endpoint
 	 *     API endpoint path.
+	 *
+	 * @returns  {Promise<object>}
+	 *     The parsed Xano response body.
 	 */
 	async function remove(endpoint) {
 		return makeApiCall("delete", endpoint);
@@ -125,8 +153,15 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *     Endpoint path.
 	 * @param  {object}  parameters
 	 *     Query string parameters.
+	 *
+	 * @throws  {Error}
+	 *     When the endpoint is not a non-empty string.
+	 *
+	 * @returns  {string}
+	 *     The endpoint with its fixed group and query string.
 	 */
 	function getFinalUrl(endpoint, parameters) {
+		// Endpoint without an initial slash.
 		const standardisedEndpoint = ltrim(endpoint, "/");
 
 		if (!isNonEmptyString(standardisedEndpoint)) {
@@ -135,10 +170,12 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 			);
 		}
 
+		// Request path with the fixed group when one is configured.
 		const path = groupId
 			? [`/${groupId}`, standardisedEndpoint].join("/")
 			: `/${standardisedEndpoint}`;
 
+		// Serialised query string for requests with parameters.
 		const query = isNonEmptyObject(parameters) ? new URLSearchParams(parameters).toString() : "";
 
 		return [path, query].filter((part) => isNonEmptyString(part)).join("?");
@@ -149,12 +186,16 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *
 	 * @param  {Error|object}  error
 	 *     The error thrown by Xano or another runtime failure.
+	 *
+	 * @returns  {object}
+	 *     The response body when the error wraps one, otherwise the error.
 	 */
 	function getErrorBody(error) {
 		if (typeof error?.getResponse !== "function") {
 			return error;
 		}
 
+		// Response wrapper provided by the thrown error.
 		const response = error.getResponse();
 
 		if (typeof response?.getBody !== "function") {
@@ -169,6 +210,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *
 	 * @param  {object}  body
 	 *     The normalised API error body.
+	 *
+	 * @returns  {boolean}
+	 *     Whether the error body represents an expired auth session.
 	 */
 	function isUnauthorisedError(body) {
 		return getPropertyValue(body, "code") === unauthorisedErrorCode;
@@ -192,12 +236,27 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 		delete: remove,
 		get,
 		getFinalUrl,
+		/**
+		 * Check whether the Xano client has an auth token.
+		 *
+		 * @returns  {boolean}
+		 *     Whether an auth token is available.
+		 */
 		hasAuthToken: () => client.hasAuthToken(),
 		isLoading,
 		isReady,
 		isUnauthorisedError,
 		patch,
 		post,
+		/**
+		 * Store the auth token through the Xano client.
+		 *
+		 * @param  {string|null}  authToken
+		 *     The token to store, or null to clear it.
+		 *
+		 * @returns  {object}
+		 *     The Xano client, which its `setAuthToken` returns for chaining.
+		 */
 		setAuthToken: (authToken) => client.setAuthToken(authToken),
 	};
 }

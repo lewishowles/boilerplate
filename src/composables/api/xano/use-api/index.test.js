@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import useApi from "./index";
 
+// Mock used to observe Xano GET requests.
 const mockGet = vi.hoisted(() => vi.fn());
 
 vi.mock("@/composables/api/xano/xano-client", () => ({
@@ -16,10 +17,20 @@ describe("useApi (Xano)", () => {
 	});
 
 	test("Delegates requests to the configured Xano API-group client", async () => {
+		// Response body returned by the Xano client stub.
 		const body = { examples: [] };
 
-		mockGet.mockResolvedValue({ getBody: () => body });
+		mockGet.mockResolvedValue({
+			/**
+			 * Provide the Xano response stub.
+			 *
+			 * @returns  {object}
+			 *     The stubbed Xano response body.
+			 */
+			getBody: () => body,
+		});
 
+		// Xano GET method under test.
 		const { get } = useApi();
 
 		await expect(get("/examples")).resolves.toEqual(body);
@@ -28,18 +39,21 @@ describe("useApi (Xano)", () => {
 
 	describe("getFinalUrl", () => {
 		test("Strips a leading slash from the endpoint", () => {
+			// URL builder under test.
 			const { getFinalUrl } = useApi();
 
 			expect(getFinalUrl("/examples")).toBe("/examples");
 		});
 
 		test("Appends serialised query parameters when provided", () => {
+			// URL builder under test.
 			const { getFinalUrl } = useApi();
 
 			expect(getFinalUrl("examples", { page: 2 })).toBe("/examples?page=2");
 		});
 
 		test("Throws when the endpoint is not a non-empty string", () => {
+			// URL builder under test.
 			const { getFinalUrl } = useApi();
 
 			expect(() => getFinalUrl("")).toThrow();
@@ -48,18 +62,21 @@ describe("useApi (Xano)", () => {
 
 	describe("isUnauthorisedError", () => {
 		test("Returns true when the error body's code matches the unauthorised code", () => {
+			// Auth-error checker under test.
 			const { isUnauthorisedError } = useApi();
 
 			expect(isUnauthorisedError({ code: "ERROR_CODE_UNAUTHORIZED" })).toBe(true);
 		});
 
 		test("Returns false when the error body's code does not match", () => {
+			// Auth-error checker under test.
 			const { isUnauthorisedError } = useApi();
 
 			expect(isUnauthorisedError({ code: "ERROR_CODE_NOT_FOUND" })).toBe(false);
 		});
 
 		test("Returns false when the error body has no code", () => {
+			// Auth-error checker under test.
 			const { isUnauthorisedError } = useApi();
 
 			expect(isUnauthorisedError({})).toBe(false);

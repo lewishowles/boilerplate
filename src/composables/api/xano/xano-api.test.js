@@ -2,9 +2,13 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import createXanoApi from "./xano-api";
 
+// Mock used to observe Xano GET requests.
 const mockGet = vi.hoisted(() => vi.fn());
+// Mock used to observe Xano auth-token reads.
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
+// Mock used to observe automatic auth-session resets.
 const mockResetAuthSession = vi.hoisted(() => vi.fn());
+// Mock used to observe Xano auth-token writes.
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
 vi.mock("@/composables/api/session-reset", () => ({
@@ -18,10 +22,20 @@ describe("createXanoApi", () => {
 	});
 
 	test("Returns the response body from a successful request", async () => {
+		// Successful Xano response body.
 		const body = { widgets: [] };
 
-		mockGet.mockResolvedValue({ getBody: () => body });
+		mockGet.mockResolvedValue({
+			/**
+			 * Provide the Xano response stub.
+			 *
+			 * @returns  {object}
+			 *     The stubbed Xano response body.
+			 */
+			getBody: () => body,
+		});
 
+		// Xano API adapter under test.
 		const api = createXanoApi({ client: { get: mockGet } });
 
 		await expect(api.get("widgets")).resolves.toEqual(body);
@@ -29,12 +43,28 @@ describe("createXanoApi", () => {
 	});
 
 	test("Unwraps the response body from a Xano request error", async () => {
+		// Failed Xano response body.
 		const body = { message: "Request failed" };
 
 		mockGet.mockRejectedValue({
-			getResponse: () => ({ getBody: () => body }),
+			/**
+			 * Provide the Xano error response stub.
+			 *
+			 * @returns  {object}
+			 *     The stubbed Xano error response.
+			 */
+			getResponse: () => ({
+				/**
+				 * Provide the Xano error body stub.
+				 *
+				 * @returns  {object}
+				 *     The stubbed Xano response body.
+				 */
+				getBody: () => body,
+			}),
 		});
 
+		// Xano API adapter under test.
 		const api = createXanoApi({ client: { get: mockGet } });
 
 		await expect(api.get("widgets")).rejects.toEqual(body);
@@ -44,6 +74,7 @@ describe("createXanoApi", () => {
 	test("Delegates token storage to the shared Xano client", () => {
 		mockHasAuthToken.mockReturnValue(true);
 
+		// Xano API adapter under test.
 		const api = createXanoApi({
 			client: {
 				get: mockGet,
@@ -60,10 +91,12 @@ describe("createXanoApi", () => {
 	});
 
 	test("Resets the auth session for an unauthorised non-login error", async () => {
+		// Unauthorised Xano response body.
 		const body = { code: "ERROR_CODE_UNAUTHORIZED" };
 
 		mockGet.mockRejectedValue(body);
 
+		// Xano API adapter under test.
 		const api = createXanoApi({ client: { get: mockGet } });
 
 		await expect(api.get("widgets")).rejects.toEqual(body);
@@ -71,10 +104,12 @@ describe("createXanoApi", () => {
 	});
 
 	test("Keeps the auth session for an unauthorised login error", async () => {
+		// Unauthorised Xano response body.
 		const body = { code: "ERROR_CODE_UNAUTHORIZED" };
 
 		mockGet.mockRejectedValue(body);
 
+		// Xano API adapter under test.
 		const api = createXanoApi({ client: { get: mockGet } });
 
 		await expect(api.get("auth/login")).rejects.toEqual(body);
