@@ -14,12 +14,14 @@ describe("parseApiFieldErrors", () => {
 	});
 
 	test("Returns a general error for a message with no identifiable field", () => {
+		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors({ message: "Something went wrong" });
 
 		expect(response).toEqual({ _error: "Something went wrong" });
 	});
 
 	test("Returns a field error for an input error with a field name", () => {
+		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors({
 			code: "ERROR_CODE_INPUT_ERROR",
 			message: "Enter a valid email address",
@@ -30,6 +32,7 @@ describe("parseApiFieldErrors", () => {
 	});
 
 	test("Returns a general error when the field name is unusable", () => {
+		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors({
 			code: "ERROR_CODE_INPUT_ERROR",
 			message: "Something went wrong",
@@ -40,6 +43,7 @@ describe("parseApiFieldErrors", () => {
 	});
 
 	test("Returns a general error when a field name has an unknown error code", () => {
+		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors({
 			code: "ERROR_CODE_UNAUTHORIZED",
 			message: "Something went wrong",

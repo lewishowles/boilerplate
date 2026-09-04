@@ -2,11 +2,20 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import { resetAuthSession } from ".";
 
+// Mock used to observe cached-user clearing.
 const mockClearCurrentUser = vi.hoisted(() => vi.fn());
+// Mock used to observe login navigation.
 const mockPush = vi.hoisted(() => vi.fn());
+// Mock used to observe auth token removal.
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
 vi.mock("@/composables/api", () => ({
+	/**
+	 * Return the API method used by session reset.
+	 *
+	 * @returns  {object}
+	 *     An object containing the auth token setter.
+	 */
 	default: () => ({ setAuthToken: mockSetAuthToken }),
 }));
 
