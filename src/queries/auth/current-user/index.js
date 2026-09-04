@@ -11,15 +11,35 @@ const isMockAuth = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === "tr
 
 /**
  * Provide access to the logged-in user's details.
+ *
+ * @returns  {object}
+ *     Current-user query state and actions.
  */
 export function useCurrentUser() {
+	// Auth-token lookup used to enable the current-user query.
 	const { hasAuthToken } = useAuthApi();
 
+	// Current-user query state and actions.
 	const currentUser = useQueryWrapper({
+		/**
+		 * Build options for the current-user query.
+		 *
+		 * @returns  {object}
+		 *     The current-user query options.
+		 */
 		queryOptions: () => ({
 			...currentUserQueryOptions,
 			enabled: isMockAuth || hasAuthToken(),
 		}),
+		/**
+		 * Check whether current-user data is ready.
+		 *
+		 * @param  {object}  data
+		 *     The current-user query data.
+		 *
+		 * @returns  {boolean}
+		 *     Whether the query data contains user details.
+		 */
 		isReady: (data) => isNonEmptyObject(data),
 	});
 
@@ -29,19 +49,24 @@ export function useCurrentUser() {
 	const haveUser = computed(() => isNonEmptyObject(userDetails.value));
 
 	/**
-	 * Determine whether the current user has all of the given permissions.
-	 * Assumes a flat `permissions` array on the user record; adjust the path
-	 * to match the shape returned by the project's own API.
+	 * Determines whether the current user has all requested permissions. Assumes a
+	 * flat `permissions` array on the user record; adjust the path to match the
+	 * shape returned by the project's own API.
 	 *
 	 * @param  {string|string[]}  permission
 	 *     The permission or permissions required.
+	 *
+	 * @returns  {boolean}
+	 *     Whether the current user has every requested permission.
 	 */
 	function hasPermission(permission) {
 		if (!haveUser.value) {
 			return false;
 		}
 
+		// Requested permissions normalised as an array.
 		const permissions = Array.isArray(permission) ? permission : [permission];
+		// Permissions assigned to the current user.
 		const userPermissions = userDetails.value.permissions ?? [];
 
 		return permissions.every((entry) => userPermissions.includes(entry));
@@ -82,6 +107,9 @@ const currentUserQueryOptions = defineQueryOptions({
 /**
  * Load the current user's details. In dev, returns fixture data instead of
  * calling the API when VITE_MOCK_AUTH=true.
+ *
+ * @returns  {Promise<object>}
+ *     The current user's details.
  */
 async function getCurrentUser() {
 	if (isMockAuth) {
@@ -92,6 +120,7 @@ async function getCurrentUser() {
 		};
 	}
 
+	// Auth API method used to load the current user.
 	const { get } = useAuthApi();
 
 	return get("auth/me");

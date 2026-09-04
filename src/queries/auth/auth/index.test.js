@@ -1,13 +1,24 @@
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { withAppContext } from "@lewishowles/testing/vue";
 
+// Mocked auth API GET method.
 const mockGet = vi.hoisted(() => vi.fn());
+// Mocked auth-token lookup method.
 const mockHasAuthToken = vi.hoisted(() => vi.fn(() => false));
+// Mocked auth API POST method.
 const mockPost = vi.hoisted(() => vi.fn());
+// Mocked auth-session reset action.
 const mockResetAuthSession = vi.hoisted(() => vi.fn());
+// Mocked auth-token storage action.
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
 
 vi.mock("@/composables/api/use-auth-api", () => ({
+	/**
+	 * Return mocked auth API methods.
+	 *
+	 * @returns  {object}
+	 *     The mocked auth API interface.
+	 */
 	default: () => ({
 		get: mockGet,
 		hasAuthToken: mockHasAuthToken,
@@ -24,6 +35,9 @@ import { useAuth } from ".";
 
 /**
  * Create the auth wrapper in a Vue app context.
+ *
+ * @returns  {object}
+ *     The auth composable state and actions.
  */
 function createAuth() {
 	return withAppContext(() => useAuth());
@@ -35,6 +49,7 @@ describe("useAuth", () => {
 	});
 
 	test("Initialises auth state", () => {
+		// Auth state returned by the composable.
 		const { errorMessage, hasAuthToken, isLoading, isReady, login } = createAuth();
 
 		expect(errorMessage.value).toBe(null);
@@ -46,7 +61,9 @@ describe("useAuth", () => {
 
 	describe("login", () => {
 		test("Logs in, stores the auth token, and refreshes user details", async () => {
+			// Login action returned by the composable.
 			const { login } = createAuth();
+			// Credentials submitted to the login endpoint.
 			const credentials = { email: "test@example.com", password: "password" };
 
 			mockPost.mockResolvedValueOnce({ authToken: "auth-token" });
@@ -60,6 +77,7 @@ describe("useAuth", () => {
 		});
 
 		test("Does not store a token or refresh user details when login fails", async () => {
+			// Login action returned by the composable.
 			const { login } = createAuth();
 
 			mockPost.mockRejectedValueOnce(new Error("Login failed"));
@@ -73,6 +91,7 @@ describe("useAuth", () => {
 		});
 
 		test("Sets a generic error message when login fails without a known error code", async () => {
+			// Auth error state and login action from the composable.
 			const { errorMessage, login } = createAuth();
 
 			mockPost.mockRejectedValueOnce(new Error("Login failed"));
@@ -83,6 +102,7 @@ describe("useAuth", () => {
 		});
 
 		test("Sets an incorrect-credentials error message when login is unauthorised", async () => {
+			// Auth error state and login action from the composable.
 			const { errorMessage, login } = createAuth();
 
 			mockPost.mockRejectedValueOnce({ code: "ERROR_CODE_UNAUTHORIZED" });
@@ -100,6 +120,7 @@ describe("useAuth", () => {
 
 	describe("logout", () => {
 		test("Resets the auth session", async () => {
+			// Logout action returned by the composable.
 			const { logout } = createAuth();
 
 			await logout();

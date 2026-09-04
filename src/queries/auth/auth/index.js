@@ -13,8 +13,12 @@ import { AUTH_KEYS } from "../keys.js";
  *
  * @param  {object}  credentials
  *     Login form data.
+ *
+ * @returns  {Promise<object>}
+ *     The login response body.
  */
 async function loginUser(credentials) {
+	// Auth API method used to submit the credentials.
 	const { post } = useAuthApi();
 
 	return post("auth/login", credentials);
@@ -28,14 +32,26 @@ const loginMutation = defineMutationOptions({
 
 /**
  * User authentication.
+ *
+ * @returns  {object}
+ *     Auth state and actions for the current user.
  */
 export function useAuth() {
+	// Auth token methods used by the auth state.
 	const { hasAuthToken, setAuthToken } = useAuthApi();
+	// Query refresh action used after a successful login.
 	const { refetch: refetchCurrentUser } = useCurrentUser();
 
+	// Login request state and mutation action.
 	const loginUserMutation = useMutation({
 		...loginMutation,
 
+		/**
+		 * Store the auth token and refresh the current user.
+		 *
+		 * @param  {object}  body
+		 *     The successful login response.
+		 */
 		async onSuccess(body) {
 			setAuthToken(body.authToken);
 
@@ -77,17 +93,21 @@ export function useAuth() {
 }
 
 /**
- * Determine the message to display to the user for a failed login. Extend
- * this per project once the API's own error codes are known.
+ * Determine the message to display to the user for a failed login. Extend this
+ * per project once the API's own error codes are known.
  *
  * @param  {object}  error
  *     The error details returned from the login endpoint.
+ *
+ * @returns  {string|null}
+ *     The error message to display, or null when no error exists.
  */
 function getErrorMessage(error) {
 	if (!error) {
 		return null;
 	}
 
+	// API error code used to select the message.
 	const code = getPathValue(error, "code");
 
 	if (code === "ERROR_CODE_UNAUTHORIZED") {
