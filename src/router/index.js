@@ -1,6 +1,7 @@
 import { installUnsavedChangesGuard, useModalDialog } from "@lewishowles/components/composables";
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
+import clearStaleFlashMessages from "./clear-stale-flash-messages.js";
 import authMiddleware from "./middleware/auth.js";
 import composeMiddleware from "./middleware/index.js";
 
@@ -41,6 +42,8 @@ router.beforeEach(composeMiddleware(authMiddleware));
 router.afterEach(() => {
 	useModalDialog()._clearModals();
 });
+
+router.afterEach(clearStaleFlashMessages);
 
 // Safe to wire unconditionally — a no-op until a form opts into useForm's
 // unsavedChangesGuard option.
