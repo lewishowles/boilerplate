@@ -19,7 +19,7 @@
 		"prepare": "vp config --no-agent"
 	},
 	"dependencies": {
-		"@lewishowles/components": "^3.3.2",
+		"@lewishowles/components": "^3.4.3",
 		"@lewishowles/helpers": "^1.7.1",
 		"@pinia/colada": "^1.4.4",
 		"@vueuse/core": "^14.4.0",
@@ -33,7 +33,7 @@
 		"@lewishowles/lint-config": "^0.4.0",
 		"@lewishowles/testing": "^1.2.1",
 		"@playwright/experimental-ct-vue": "1.62.1",
-		"@playwright/test": "1.62.1",
+		"@playwright/test": "1.63.0",
 		"@stylistic/eslint-plugin": "5.10.0",
 		"@tailwindcss/forms": "^0.5.11",
 		"@tailwindcss/typography": "^0.5.20",
@@ -42,17 +42,17 @@
 		"@vitest/eslint-plugin": "1.6.27",
 		"@vitest/ui": "4.1.11",
 		"@vue/test-utils": "2.5.0",
-		"eslint-plugin-vue": "10.10.0",
+		"eslint-plugin-vue": "10.11.0",
 		"globals": "17.12.0",
-		"happy-dom": "20.13.2",
+		"happy-dom": "20.14.3",
 		"tailwindcss-hocus": "^1.0.0",
 		"unplugin-vue-components": "32.1.0",
-		"vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
+		"vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
 		"vite-plugin-vue-devtools": "8.2.1",
-		"vite-plus": "0.3.0",
+		"vite-plus": "0.3.1",
 		"vitest": "4.1.11"
 	},
-	"packageManager": "bun@1.4.0",
+	"packageManager": "bun@1.4.2",
 	"trustedDependencies": [
 		"@tailwindcss/oxide",
 		"esbuild"

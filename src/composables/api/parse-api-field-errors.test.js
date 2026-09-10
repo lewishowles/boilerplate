@@ -9,8 +9,23 @@ describe("parseApiFieldErrors", () => {
 		["object (empty)", {}],
 		["null", null],
 		["undefined", undefined],
-	])("Rejects invalid error: %s", ([, error]) => {
-		expect(parseApiFieldErrors(error)).toBeNull();
+	])("Falls back to a general apology for an error we cannot use: %s", ([, error]) => {
+		expect(parseApiFieldErrors(error)).toEqual({
+			_error:
+				"Sorry, we couldn't complete that. Please try again later, or contact support if it keeps happening.",
+		});
+	});
+
+	// The exact body Xano returns on a 403, which is the response that produced
+	// an uncaught rejection before this fallback existed.
+	test("Falls back to a general apology for an error with a code but no message", () => {
+		// Parsed error returned by the helper.
+		const response = parseApiFieldErrors({ code: "ERROR_CODE_ACCESS_DENIED", message: "" });
+
+		expect(response).toEqual({
+			_error:
+				"Sorry, we couldn't complete that. Please try again later, or contact support if it keeps happening.",
+		});
 	});
 
 	test("Returns a general error for a message with no identifiable field", () => {
