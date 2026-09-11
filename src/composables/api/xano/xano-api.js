@@ -3,6 +3,8 @@ import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { isNonEmptyString, ltrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
+import translateSortParameters from "./translate-sort-parameters";
+
 // API error code returned when the current request is not authorised.
 const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
 
@@ -63,9 +65,14 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 
 			finalEndpoint = getFinalUrl(endpoint);
 
+			// Get our request parameters. We only translate sort parameters on
+			// GET where
+			// it's needed.
+			const requestParameters = method === "get" ? translateSortParameters(parameters) : parameters;
+
 			// Xano response returned by the requested client method.
-			const response = isNonEmptyObject(parameters)
-				? await client[method](finalEndpoint, parameters)
+			const response = isNonEmptyObject(requestParameters)
+				? await client[method](finalEndpoint, requestParameters)
 				: await client[method](finalEndpoint);
 
 			// Parsed response body returned to the caller.
@@ -151,16 +158,14 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *
 	 * @param  {string}  endpoint
 	 *     Endpoint path.
-	 * @param  {object}  parameters
-	 *     Query string parameters.
 	 *
 	 * @throws  {Error}
 	 *     When the endpoint is not a non-empty string.
 	 *
 	 * @returns  {string}
-	 *     The endpoint with its fixed group and query string.
+	 *     The endpoint with its fixed group.
 	 */
-	function getFinalUrl(endpoint, parameters) {
+	function getFinalUrl(endpoint) {
 		// Endpoint without an initial slash.
 		const standardisedEndpoint = ltrim(endpoint, "/");
 
@@ -175,14 +180,12 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 			? [`/${groupId}`, standardisedEndpoint].join("/")
 			: `/${standardisedEndpoint}`;
 
-		// Serialised query string for requests with parameters.
-		const query = isNonEmptyObject(parameters) ? new URLSearchParams(parameters).toString() : "";
-
-		return [path, query].filter((part) => isNonEmptyString(part)).join("?");
+		return path;
 	}
 
 	/**
-	 * Get the useful API error body, if the request failed with a Xano response.
+	 * Get the useful API error body, if the request failed with a Xano
+	 * response.
 	 *
 	 * @param  {Error|object}  error
 	 *     The error thrown by Xano or another runtime failure.
