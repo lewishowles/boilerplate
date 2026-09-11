@@ -37,6 +37,7 @@ describe("useCurrentUser", () => {
 	// User record used by current-user query tests.
 	const validUser = {
 		id: 1,
+		display_name: "Sophie Wardhaugh",
 		email: "sophie.wardhaugh@example.com",
 		created_at: "2025-01-01T00:00:00.000Z",
 	};
@@ -81,7 +82,7 @@ describe("useCurrentUser", () => {
 
 			await refetch(true);
 
-			expect(mockGet).toHaveBeenCalledWith("auth/me");
+			expect(mockGet).toHaveBeenCalledWith("auth/me/detailed");
 			expect(userDetails.value).toEqual(validUser);
 			expect(haveUser.value).toBe(true);
 			expect(isReady.value).toBe(true);

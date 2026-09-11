@@ -99,7 +99,7 @@ const { showSidebar } = useSidebar();
 provideMenu();
 
 // The user's display details.
-const userName = computed(() => getPathValue(userDetails.value, "email"));
+const userName = computed(() => getPathValue(userDetails.value, "display_name"));
 // First letter shown in the user avatar.
 const userInitial = computed(() => userName.value?.slice(0, 1));
 </script>

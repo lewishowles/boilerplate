@@ -73,7 +73,7 @@ describe("useAuth", () => {
 
 			expect(mockPost).toHaveBeenCalledWith("auth/login", credentials);
 			expect(mockSetAuthToken).toHaveBeenCalledWith("auth-token");
-			expect(mockGet).toHaveBeenCalledWith("auth/me");
+			expect(mockGet).toHaveBeenCalledWith("auth/me/detailed");
 		});
 
 		test("Does not store a token or refresh user details when login fails", async () => {

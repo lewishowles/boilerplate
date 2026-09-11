@@ -116,7 +116,7 @@ describe("use-group-api", () => {
 		expect(applicationApi.isLoading.value).toBe(true);
 		expect(authenticationApi.isLoading.value).toBe(false);
 
-		await authenticationApi.get("auth/me");
+		await authenticationApi.get("auth/me/detailed");
 
 		expect(authenticationApi.isReady.value).toBe(true);
 		expect(applicationApi.isReady.value).toBe(false);

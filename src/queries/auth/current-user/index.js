@@ -49,9 +49,9 @@ export function useCurrentUser() {
 	const haveUser = computed(() => isNonEmptyObject(userDetails.value));
 
 	/**
-	 * Determines whether the current user has all requested permissions. Assumes a
-	 * flat `permissions` array on the user record; adjust the path to match the
-	 * shape returned by the project's own API.
+	 * Determines whether the current user has all requested permissions.
+	 * Assumes a flat `permissions` array on the user record; adjust the path to
+	 * match the shape returned by the project's own API.
 	 *
 	 * @param  {string|string[]}  permission
 	 *     The permission or permissions required.
@@ -115,6 +115,7 @@ async function getCurrentUser() {
 	if (isMockAuth) {
 		return {
 			id: 1,
+			display_name: "Sophie Wardhaugh",
 			email: "sophie.wardhaugh@example.com",
 			created_at: "2025-01-01T00:00:00.000Z",
 		};
@@ -123,5 +124,5 @@ async function getCurrentUser() {
 	// Auth API method used to load the current user.
 	const { get } = useAuthApi();
 
-	return get("auth/me");
+	return get("auth/me/detailed");
 }
