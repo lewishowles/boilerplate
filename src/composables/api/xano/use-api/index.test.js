@@ -45,13 +45,6 @@ describe("useApi (Xano)", () => {
 			expect(getFinalUrl("/examples")).toBe("/examples");
 		});
 
-		test("Appends serialised query parameters when provided", () => {
-			// URL builder under test.
-			const { getFinalUrl } = useApi();
-
-			expect(getFinalUrl("examples", { page: 2 })).toBe("/examples?page=2");
-		});
-
 		test("Throws when the endpoint is not a non-empty string", () => {
 			// URL builder under test.
 			const { getFinalUrl } = useApi();

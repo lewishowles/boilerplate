@@ -78,6 +78,7 @@ describe("useCurrentUser", () => {
 			// Current-user query state and refetch action.
 			const { haveUser, isReady, refetch, userDetails } = createCurrentUser();
 
+			mockHasAuthToken.mockReturnValue(true);
 			mockGet.mockResolvedValueOnce(validUser);
 
 			await refetch(true);
@@ -92,6 +93,7 @@ describe("useCurrentUser", () => {
 			// Current-user query state and refetch action.
 			const { haveUser, refetch, userDetails } = createCurrentUser();
 
+			mockHasAuthToken.mockReturnValue(true);
 			mockGet.mockRejectedValueOnce(new Error("Request failed"));
 
 			await expect(refetch(true)).rejects.toThrow();
@@ -118,6 +120,7 @@ describe("useCurrentUser", () => {
 				// Current-user query state and actions.
 				const { clearCurrentUser, refetch, userDetails } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(validUser);
 
 				await refetch(true);
@@ -139,6 +142,7 @@ describe("useCurrentUser", () => {
 				// Permission check and refetch action from the composable.
 				const { hasPermission, refetch } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(validUser);
 
 				await refetch(true);
@@ -150,6 +154,7 @@ describe("useCurrentUser", () => {
 				// Permission check and refetch action from the composable.
 				const { hasPermission, refetch } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
@@ -161,6 +166,7 @@ describe("useCurrentUser", () => {
 				// Permission check and refetch action from the composable.
 				const { hasPermission, refetch } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
@@ -172,6 +178,7 @@ describe("useCurrentUser", () => {
 				// Permission check and refetch action from the composable.
 				const { hasPermission, refetch } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);
@@ -183,6 +190,7 @@ describe("useCurrentUser", () => {
 				// Permission check and refetch action from the composable.
 				const { hasPermission, refetch } = createCurrentUser();
 
+				mockHasAuthToken.mockReturnValue(true);
 				mockGet.mockResolvedValueOnce(userWithPermissions);
 
 				await refetch(true);

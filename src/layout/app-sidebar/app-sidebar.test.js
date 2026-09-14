@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { createMount } from "@lewishowles/testing/vue";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 import AppSidebar from "./app-sidebar.vue";
 
@@ -31,6 +31,37 @@ vi.mock("@/queries/auth", () => ({
 	}),
 }));
 
+// The page the sidebar menu treats as currently open.
+const mockRoute = vi.hoisted(() => ({ path: "/" }));
+// The current page, made reactive so the menu responds like a real route.
+const reactiveRoute = reactive(mockRoute);
+// Turns a named menu link into a path, the way the router would.
+const mockResolve = vi.hoisted(() => vi.fn((to) => ({ path: `/${to.name}` })));
+
+vi.mock("vue-router", async (importOriginal) => {
+	// The real router module, kept for everything the sidebar does not need
+	// replaced.
+	const actual = await importOriginal();
+
+	return {
+		...actual,
+		/**
+		 * Returns the mocked current page.
+		 *
+		 * @returns  {object}
+		 *     The mocked route.
+		 */
+		useRoute: () => reactiveRoute,
+		/**
+		 * Returns a router that can only resolve menu links.
+		 *
+		 * @returns  {object}
+		 *     The mocked router.
+		 */
+		useRouter: () => ({ resolve: mockResolve }),
+	};
+});
+
 // Mount the sidebar with the authentication query replaced by test state.
 const mount = createMount(AppSidebar);
 
@@ -42,17 +73,17 @@ describe("app-sidebar", () => {
 	});
 
 	describe("Computed", () => {
-		test("Reads the signed-in user's email address", () => {
+		test("Reads the signed-in user's display name", () => {
 			mockHaveUser.value = true;
-			mockUserDetails.value = { email: "sophie.wardhaugh@example.com" };
+			mockUserDetails.value = { display_name: "Sophie Wardhaugh" };
 
 			// Rendered sidebar under test.
 			const wrapper = mount();
 
-			expect(wrapper.vm.userName).toBe("sophie.wardhaugh@example.com");
+			expect(wrapper.vm.userName).toBe("Sophie Wardhaugh");
 		});
 
-		test("Returns no user email when user details are unavailable", () => {
+		test("Returns no user display name when user details are unavailable", () => {
 			// Rendered sidebar without user details.
 			const wrapper = mount();
 

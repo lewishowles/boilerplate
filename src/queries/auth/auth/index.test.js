@@ -46,6 +46,7 @@ function createAuth() {
 describe("useAuth", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockHasAuthToken.mockReturnValue(false);
 	});
 
 	test("Initialises auth state", () => {
@@ -66,6 +67,7 @@ describe("useAuth", () => {
 			// Credentials submitted to the login endpoint.
 			const credentials = { email: "test@example.com", password: "password" };
 
+			mockHasAuthToken.mockReturnValue(true);
 			mockPost.mockResolvedValueOnce({ authToken: "auth-token" });
 			mockGet.mockResolvedValueOnce({ display_name: "Sophie Wardhaugh" });
 
