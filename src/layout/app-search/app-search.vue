@@ -114,9 +114,11 @@ const matchingSearchItems = computed(() => {
 	// Lowercase query used for case-insensitive matching.
 	const normalisedQuery = searchQuery.value.toLowerCase();
 
-	return searchItems.filter((searchItem) =>
-		searchItem.label.toLowerCase().includes(normalisedQuery),
-	);
+	return searchItems
+		.filter((searchItem) => searchItem.label.toLowerCase().includes(normalisedQuery))
+		.sort((firstSearchItem, secondSearchItem) =>
+			compareSearchItems(firstSearchItem, secondSearchItem, normalisedQuery),
+		);
 });
 
 // Whether the mobile search field is open.
@@ -177,6 +179,38 @@ async function selectSearchItem(searchItem) {
 
 	searchQuery.value = "";
 	showMobileSearch.value = false;
+}
+
+/**
+ * Compare two pages whose titles contain the query, for sorting the closest
+ * match first. The shorter title comes first; when both are the same length,
+ * the title where the query starts earlier comes first. Equally close pages
+ * return zero, so the stable sort keeps them in route order.
+ *
+ * @param  {object}  firstSearchItem
+ *     A matching page, as built by `createSearchItems`.
+ * @param  {object}  secondSearchItem
+ *     The matching page to compare it with.
+ * @param  {string}  normalisedQuery
+ *     The search query in lowercase.
+ *
+ * @returns  {number}
+ *     Negative when the first page is closer, positive when the second is
+ *     closer, or zero when they are equally close.
+ */
+function compareSearchItems(firstSearchItem, secondSearchItem, normalisedQuery) {
+	// The first page's title in lowercase, so the query is found regardless of
+	// case.
+	const firstLabel = firstSearchItem.label.toLowerCase();
+	// The second page's title in lowercase, so the query is found regardless of
+	// case.
+	const secondLabel = secondSearchItem.label.toLowerCase();
+
+	if (firstLabel.length !== secondLabel.length) {
+		return firstLabel.length - secondLabel.length;
+	}
+
+	return firstLabel.indexOf(normalisedQuery) - secondLabel.indexOf(normalisedQuery);
 }
 
 /**
