@@ -19,7 +19,7 @@
 		"prepare": "vp config --no-agent"
 	},
 	"dependencies": {
-		"@lewishowles/components": "^3.4.4",
+		"@lewishowles/components": "^3.4.5",
 		"@lewishowles/helpers": "^1.7.1",
 		"@pinia/colada": "^1.4.4",
 		"@vueuse/core": "^14.4.0",
@@ -44,7 +44,7 @@
 		"@vue/test-utils": "2.5.0",
 		"eslint-plugin-vue": "10.11.0",
 		"globals": "17.12.0",
-		"happy-dom": "20.14.3",
+		"happy-dom": "20.14.5",
 		"tailwindcss-hocus": "^1.0.0",
 		"unplugin-vue-components": "32.1.0",
 		"vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
