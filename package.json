@@ -19,7 +19,7 @@
 		"prepare": "vp config --no-agent"
 	},
 	"dependencies": {
-		"@lewishowles/components": "^3.4.5",
+		"@lewishowles/components": "3.4.6",
 		"@lewishowles/helpers": "^1.7.1",
 		"@pinia/colada": "^1.4.4",
 		"@vueuse/core": "^14.4.0",
