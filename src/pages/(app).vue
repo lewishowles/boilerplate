@@ -10,7 +10,7 @@
 		>
 			<app-title-bar />
 
-			<main id="main" class="app-main bg-surface-subtle pb-4 dark:bg-transparent">
+			<main id="main" class="app-main bg-surface-subtle pb-4">
 				<RouterView />
 			</main>
 		</div>
