@@ -2,6 +2,7 @@ import { createMount } from "@lewishowles/testing/vue";
 import { describe, expect, test } from "vite-plus/test";
 import {{NAME | pascal}} from "./{{NAME | kebab}}.vue";
 
+// Mount the component for these tests.
 const mount = createMount({{NAME | pascal}});
 
 describe("{{NAME | kebab}}", () => {

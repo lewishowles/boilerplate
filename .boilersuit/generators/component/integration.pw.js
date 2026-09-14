@@ -3,6 +3,7 @@ import { createMount } from "@lewishowles/testing/playwright";
 
 import {{NAME | pascal}} from "./{{NAME | kebab}}.vue";
 
+// Mount the component in Playwright for these tests.
 const mount{{NAME | pascal}} = createMount({{NAME | pascal}});
 
 test.describe("{{NAME | kebab}}", () => {
