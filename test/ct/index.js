@@ -16,7 +16,8 @@ beforeMount(async ({ app, hooksConfig }) => {
 	// Test routes use one empty component because only their navigation data
 	// matters.
 	const testRoutes = configuredRoutes.map((route) => ({ ...route, component: TestRoute }));
-	// The fallback lets components render ordinary path links without application
+	// The fallback lets components render ordinary path links without
+	// application
 	// page files.
 	const routes = [...testRoutes, { path: "/:pathMatch(.*)*", component: TestRoute }];
 

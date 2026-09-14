@@ -1,8 +1,8 @@
 <template>
 	<div class="contents">
-		<DefineSearchTemplate v-slot="{ mobile }">
+		<DefineSearchTemplate v-slot="{ isMobile }">
 			<combo-box
-				:ref="mobile ? 'mobile-search' : undefined"
+				:ref="isMobile ? 'mobile-search' : 'desktop-search'"
 				v-model="searchQuery"
 				placeholder="Search pages"
 				v-bind="{
@@ -10,11 +10,19 @@
 					displayLabel: false,
 					dropdownClasses: 'w-full p-2 lg:w-screen lg:max-w-sm',
 					items: matchingSearchItems,
+					inputAttributes: { 'aria-keyshortcuts': isMac ? 'Meta+K' : 'Control+K' },
 					placement: 'bottom',
 				}"
 				@select="selectSearchItem"
 			>
 				<template #label>Search</template>
+
+				<template #suffix>
+					<kbd v-if="!isMobile" aria-hidden="true" class="flex items-center gap-1">
+						<ui-key-cap>{{ isMac ? "⌘" : "Ctrl" }}</ui-key-cap>
+						<ui-key-cap>K</ui-key-cap>
+					</kbd>
+				</template>
 
 				<template #default="{ item: searchItem, highlighted }">
 					<span class="flex items-center justify-between">
@@ -50,7 +58,7 @@
 			id="app-search-mobile-panel"
 			class="col-span-full row-start-2 w-full lg:hidden"
 		>
-			<ReuseSearchTemplate v-bind="{ mobile: true }" class="w-full" />
+			<ReuseSearchTemplate v-bind="{ isMobile: true }" class="w-full" />
 		</div>
 	</div>
 </template>
@@ -59,15 +67,21 @@
 /**
  * Provides search across the authenticated application pages.
  */
+import {
+	breakpointsTailwind,
+	createReusableTemplate,
+	onKeyStroke,
+	useBreakpoints,
+} from "@vueuse/core";
+
 import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
-import { createReusableTemplate } from "@vueuse/core";
 import { useRouter } from "vue-router";
 
 // Reusable desktop and mobile search-template components.
 const [DefineSearchTemplate, ReuseSearchTemplate] = createReusableTemplate({
 	props: {
-		mobile: Boolean,
+		isMobile: Boolean,
 	},
 });
 
@@ -77,6 +91,19 @@ const router = useRouter();
 const searchItems = createSearchItems(router);
 // The current search query.
 const searchQuery = ref("");
+
+// The operating system name reported by the browser.
+const platform =
+	globalThis.navigator?.userAgentData?.platform || globalThis.navigator?.platform || "";
+
+// Whether the search shortcut uses Command instead of Ctrl.
+const isMac = platform.toLowerCase().includes("mac");
+// The Tailwind screen sizes, matching the lg classes that swap the search
+// layouts.
+const breakpoints = useBreakpoints(breakpointsTailwind);
+// Whether the desktop search field is shown instead of the mobile search
+// button.
+const isDesktop = breakpoints.greaterOrEqual("lg");
 
 // The registered pages matching the current search query.
 const matchingSearchItems = computed(() => {
@@ -94,8 +121,38 @@ const matchingSearchItems = computed(() => {
 
 // Whether the mobile search field is open.
 const showMobileSearch = ref(false);
+// The desktop combo-box instance focused by the search shortcut.
+const desktopSearch = useTemplateRef("desktop-search");
 // The mobile combo-box instance used to restore focus after opening.
 const mobileSearch = useTemplateRef("mobile-search");
+
+// Focus page search on Cmd+K (macOS) or Ctrl+K. On smaller screens this opens
+// the mobile search field, or focuses it if it is already open.
+onKeyStroke(
+	(event) => {
+		// Whether the platform shortcut modifier key is held.
+		const modifierPressed = isMac ? event.metaKey : event.ctrlKey;
+
+		return modifierPressed && !event.altKey && !event.shiftKey && event.key?.toLowerCase() === "k";
+	},
+	(event) => {
+		event.preventDefault();
+
+		if (isDesktop.value) {
+			desktopSearch.value?.triggerFocus();
+
+			return;
+		}
+
+		if (!showMobileSearch.value) {
+			toggleMobileSearch();
+
+			return;
+		}
+
+		mobileSearch.value?.triggerFocus();
+	},
+);
 
 /**
  * Open or close the mobile search field and focus it when it opens.

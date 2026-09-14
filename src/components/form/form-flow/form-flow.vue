@@ -25,9 +25,9 @@ defineExpose(
 			/**
 			 * Read a key from the inner component.
 			 *
-			 * The read happens here, on every access, rather than being captur once when
-			 * the proxy is created. That is what lets a computed rea through this ref
-			 * re-evaluate when the child mounts.
+			 * The read happens here, on every access, rather than being captur
+			 * once when the proxy is created. That is what lets a computed rea
+			 * through this ref re-evaluate when the child mounts.
 			 *
 			 * @param  {object}  _
 			 *     The proxy target, which is empty and holds nothing itself.
@@ -42,8 +42,8 @@ defineExpose(
 			/**
 			 * Report whether the inner component has a key.
 			 *
-			 * Without this, `in` checks fall through to the empty proxy target answer
-			 * false for keys the inner component really has.
+			 * Without this, `in` checks fall through to the empty proxy target
+			 * answer false for keys the inner component really has.
 			 *
 			 * @param  {object}  _
 			 *     The proxy target, which is empty and holds nothing itself.

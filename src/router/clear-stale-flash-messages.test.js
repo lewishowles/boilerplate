@@ -10,7 +10,8 @@ const mockFlashMessages = vi.hoisted(() => {
 
 	return {
 		clearMessage: vi.fn((id) => {
-			// Locate the message to remove, if it has not already been dismissed.
+			// Locate the message to remove, if it has not already been
+			// dismissed.
 			const messageIndex = messages.findIndex(({ id: messageId }) => messageId === id);
 
 			if (messageIndex >= 0) {
@@ -51,7 +52,8 @@ function storedMessage(id) {
 describe("clearStaleFlashMessages", () => {
 	beforeEach(() => {
 		mockFlashMessages.messages.length = 0;
-		// Navigate with an empty store so the hook forgets any held message ids.
+		// Navigate with an empty store so the hook forgets any held message
+		// ids.
 		clearStaleFlashMessages({ path: "/page-b" }, { path: "/page-a" });
 
 		mockFlashMessages.clearMessage.mockClear();
@@ -60,7 +62,8 @@ describe("clearStaleFlashMessages", () => {
 	});
 
 	test("Clears the previous message and holds the current navigation message", () => {
-		// Sent on the navigation into page B, so it should survive that navigation
+		// Sent on the navigation into page B, so it should survive that
+		// navigation
 		// and be cleared on the next one.
 		const firstMessage = storedMessage("message-1");
 		// Sent on the navigation into page C, while the first message is still
@@ -83,7 +86,8 @@ describe("clearStaleFlashMessages", () => {
 
 		mockFlashMessages.messages.push(message);
 		clearStaleFlashMessages({ path: "/page-b" }, { path: "/page-a" });
-		// The user dismisses the message themselves, so the hook is left holding
+		// The user dismisses the message themselves, so the hook is left
+		// holding
 		// an id that no longer matches anything in the store.
 		mockFlashMessages.messages.splice(0, 1);
 

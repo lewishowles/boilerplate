@@ -26,7 +26,8 @@ export function useBreadcrumb(label, options = {}) {
 	// Registration owner used to avoid removing a newer value on cleanup.
 	const owner = Symbol();
 
-	// Keep the shared breadcrumb registry entry in sync with the resolved label.
+	// Keep the shared breadcrumb registry entry in sync with the resolved
+	// label.
 	watchEffect((onCleanup) => {
 		// Key used for this breadcrumb registration.
 		const key = breadcrumbKey.value;

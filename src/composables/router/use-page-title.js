@@ -19,7 +19,8 @@ export function usePageTitle(title) {
 	// Reactive browser document title.
 	const documentTitle = useTitle();
 
-	// Keep the document title synced to an explicit title or route `page_title`.
+	// Keep the document title synced to an explicit title or route
+	// `page_title`.
 	watchEffect(() => {
 		documentTitle.value = getPageTitle(toValue(title) || route.meta?.page_title);
 	});
