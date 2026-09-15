@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { createMount } from "@lewishowles/testing/vue";
 import { ref } from "vue";
 
+// The mocked list query function used by each test.
 const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());
 
 vi.mock("@/queries/{{ NAME | kebab }}", () => ({
@@ -10,6 +11,7 @@ vi.mock("@/queries/{{ NAME | kebab }}", () => ({
 
 import {{ NAME | pascal }} from "./{{ NAME | kebab }}.vue";
 
+// The reactive list state returned by the mocked query.
 const queryState = {
 	error: ref(null),
 	isInitialLoading: ref(false),
@@ -23,6 +25,7 @@ const queryState = {
 	]),
 };
 
+// Mount the table fragment with its UI dependencies stubbed.
 const mount = createMount({{ NAME }}, {
 	global: {
 		stubs: {

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick, ref } from "vue";
 import { withAppContext } from "@lewishowles/testing/vue";
 
+// The mocked table query function used by each test.
 const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());
 
 vi.mock("@/queries/{{ NAME | kebab }}", () => ({
@@ -10,10 +11,15 @@ vi.mock("@/queries/{{ NAME | kebab }}", () => ({
 
 import { use{{ NAME | pascal }}Table } from ".";
 
+// Parameters from every mocked query call, so tests can count and inspect them.
+// Emptied before each test.
 const queryParameters = [];
 
 /**
  * Create the {{ NAME | kebab }} table composable in a Vue app context.
+ *
+ * @returns  {object}
+ *     The table state exposed by the composable.
  */
 function create{{ NAME | pascal }}Table() {
 	return withAppContext(() => use{{ NAME | pascal }}Table());
@@ -21,6 +27,9 @@ function create{{ NAME | pascal }}Table() {
 
 /**
  * Create the mocked {{ NAME | kebab }} list query state.
+ *
+ * @returns  {object}
+ *     The reactive state returned by the mocked query.
  */
 function createQueryState() {
 	return {

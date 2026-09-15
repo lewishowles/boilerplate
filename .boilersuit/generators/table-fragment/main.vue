@@ -41,12 +41,17 @@
 </template>
 
 <script setup>
+/**
+ * Render a table page for the {{ NAME | kebab }} records.
+ */
 import { definePage } from "vue-router/experimental";
 import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
 
+// State and actions for the table query.
 const { error, isInitialLoading, isReady, lastFetched, refetch, {{ NAME }} } =
 	use{{ NAME | pascal }}();
 
+// Column definitions for the data table.
 const columns = {
 	name: {
 		label: "Name",
