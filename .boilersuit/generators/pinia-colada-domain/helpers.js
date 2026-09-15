@@ -1,23 +1,21 @@
 import { isObject } from "@lewishowles/helpers/object";
 
 /**
- * Format API responses for {{ NAME | kebab }} queries.
+ * Convert a {{ SINGULAR_NAME | kebab }} from its API shape to the shape the UI uses.
  *
- * Add field mapping here when the API response differs from the query data.
+ * Add field mapping here when the two shapes differ.
  *
- * @param  {unknown}  response
- *     The raw API response.
+ * @param  {unknown}  item
+ *     The raw API item.
  * @returns  {unknown}
- *     Formatted response data.
+ *     The formatted item.
  */
-export function format{{ NAME | pascal }}Response(response) {
-	if (response === null || !isObject(response)) {
-		return response;
+export function format{{ SINGULAR_NAME | pascal }}(item) {
+	if (item === null || !isObject(item)) {
+		return item;
 	}
 
-	const payload = response.data ?? response;
-
 	return {
-		...payload,
+		...item,
 	};
 }

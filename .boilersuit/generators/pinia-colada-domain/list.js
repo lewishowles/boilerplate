@@ -1,7 +1,7 @@
 import { {{ NAME | constant }}_KEYS } from "./keys.js";
 import { computed } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
-import { format{{ NAME | pascal }}Response } from "./helpers.js";
+import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
 import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
@@ -48,7 +48,10 @@ export function use{{ NAME | pascal }}() {
 async function load{{ NAME | pascal }}() {
 	const response = await get("{{ ENDPOINT }}");
 
-	return format{{ NAME | pascal }}Response(response);
+	return {
+		...response,
+		items: (response?.items ?? []).map(format{{ SINGULAR_NAME | pascal }}),
+	};
 }
 
 const {{ NAME | camel }}QueryOptions = defineQueryOptions({

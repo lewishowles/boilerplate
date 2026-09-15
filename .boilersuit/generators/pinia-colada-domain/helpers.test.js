@@ -1,43 +1,25 @@
 import { describe, expect, test } from "vite-plus/test";
-import { format{{ NAME | pascal }}Response } from ".";
+import { format{{ SINGULAR_NAME | pascal }} } from ".";
 
-describe("{{ NAME | kebab }} response formatter", () => {
-	test("Unwraps a response data envelope", () => {
-		const response = {
-			data: {
-				id: "item-123",
-			},
+describe("{{ SINGULAR_NAME | kebab }} item formatter", () => {
+	test("Returns the item's fields unchanged when no mapping is added", () => {
+		const item = {
+			id: "item-123",
 		};
 
-		const formattedResponse = format{{ NAME | pascal }}Response(response);
+		const formattedItem = format{{ SINGULAR_NAME | pascal }}(item);
 
-		expect(formattedResponse).toEqual(response.data);
+		expect(formattedItem).toEqual(item);
 	});
 
-	test("Preserves an envelope-level item total", () => {
-		const response = {
-			data: {
-				items: [{ id: "item-123" }],
-			},
-			itemsTotal: 42,
-		};
+	test("Returns null and non-object items unchanged", () => {
+		const nullItem = null;
+		const textItem = "text";
 
-		const formattedResponse = format{{ NAME | pascal }}Response(response);
+		const formattedNullItem = format{{ SINGULAR_NAME | pascal }}(nullItem);
+		const formattedTextItem = format{{ SINGULAR_NAME | pascal }}(textItem);
 
-		expect(formattedResponse).toEqual({
-			items: response.data.items,
-			itemsTotal: 42,
-		});
-	});
-
-	test("Returns null and non-object responses unchanged", () => {
-		const nullResponse = null;
-		const textResponse = "response";
-
-		const formattedNullResponse = format{{ NAME | pascal }}Response(nullResponse);
-		const formattedTextResponse = format{{ NAME | pascal }}Response(textResponse);
-
-		expect(formattedNullResponse).toBe(null);
-		expect(formattedTextResponse).toBe(textResponse);
+		expect(formattedNullItem).toBe(null);
+		expect(formattedTextItem).toBe(textItem);
 	});
 });

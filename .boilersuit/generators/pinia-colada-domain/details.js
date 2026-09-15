@@ -1,7 +1,7 @@
 import { {{ NAME | constant }}_KEYS } from "./keys.js";
 import { computed, unref } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
-import { format{{ NAME | pascal }}Response } from "./helpers.js";
+import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
 import { isNonEmptyObject } from "@lewishowles/helpers/object";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
@@ -45,7 +45,7 @@ export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 async function get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 	const response = await get(`{{ ENDPOINT }}/${{{ ID_NAME }}}`);
 
-	return format{{ NAME | pascal }}Response(response);
+	return format{{ SINGULAR_NAME | pascal }}(response);
 }
 
 // Query options for a {{ SINGULAR_NAME | kebab }} record.

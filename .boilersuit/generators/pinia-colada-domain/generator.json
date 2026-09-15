@@ -8,7 +8,7 @@
 		{
 			"token": "NAME",
 			"label": "Collection name",
-			"description": "Used for the folder, list query, query key, and response formatter.",
+			"description": "Used for the folder, list query, and query key.",
 			"hint": "Use plural lowercase kebab-case, e.g. flights.",
 			"required": true,
 			"validation": {
@@ -19,7 +19,7 @@
 		{
 			"token": "SINGULAR_NAME",
 			"label": "Item name",
-			"description": "Used for detail queries and create or update actions.",
+			"description": "Used for detail queries, the item formatter, and create or update actions.",
 			"hint": "Use singular lowercase kebab-case, e.g. flight.",
 			"required": true,
 			"validation": {
