@@ -3,7 +3,7 @@
 		class="sidebar-link-group animate-fade-in delay flex flex-col gap-2"
 		v-bind="{ 'aria-labelledby': id }"
 	>
-		<h2 class="text-content-muted px-3 text-xs font-bold tracking-wider uppercase" v-bind="{ id }">
+		<h2 class="text-content-muted px-3 text-sm" v-bind="{ id }">
 			<slot name="label" />
 		</h2>
 
