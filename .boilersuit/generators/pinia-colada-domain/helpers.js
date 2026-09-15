@@ -7,6 +7,7 @@ import { isObject } from "@lewishowles/helpers/object";
  *
  * @param  {unknown}  item
  *     The raw API item.
+ *
  * @returns  {unknown}
  *     The formatted item.
  */

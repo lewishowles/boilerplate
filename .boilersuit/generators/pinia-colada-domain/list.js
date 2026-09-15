@@ -8,12 +8,17 @@ import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
+// API method used to load the list.
 const { get } = {{ API_COMPOSABLE }}();
 
 /**
  * Provide access to the {{ NAME | kebab }} list.
+ *
+ * @returns  {object}
+ *     Query state and the current {{ NAME | kebab }} items.
  */
 export function use{{ NAME | pascal }}() {
+	// Query state for the current list.
 	const current{{ NAME | pascal }} = useQueryWrapper({
 		queryOptions: {{ NAME | camel }}QueryOptions,
 	});
@@ -23,6 +28,7 @@ export function use{{ NAME | pascal }}() {
 
 	// The returned {{ NAME | kebab }} items.
 	const {{ NAME | camel }} = computed(() => {
+		// Items read from the query response.
 		const items = getPropertyValue(data.value, "items");
 
 		if (!isNonEmptyArray(items)) {
@@ -44,8 +50,12 @@ export function use{{ NAME | pascal }}() {
 
 /**
  * Load the {{ NAME | kebab }} list.
+ *
+ * @returns  {Promise<object>}
+ *     The formatted {{ NAME | kebab }} list response.
  */
 async function load{{ NAME | pascal }}() {
+	// API response for the list.
 	const response = await get("{{ ENDPOINT }}");
 
 	return {
@@ -54,6 +64,7 @@ async function load{{ NAME | pascal }}() {
 	};
 }
 
+// Query options for the {{ NAME | kebab }} list.
 const {{ NAME | camel }}QueryOptions = defineQueryOptions({
 	key: {{ NAME | constant }}_KEYS.list(),
 	query: load{{ NAME | pascal }},

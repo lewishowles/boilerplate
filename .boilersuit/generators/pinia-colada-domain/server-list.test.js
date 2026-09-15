@@ -4,13 +4,16 @@ import { withAppContext } from "@lewishowles/testing/vue";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ NAME | constant }}_KEYS, use{ { NAME | pascal } } List } from ".";
+import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
  *
  * @param  {object}  parameters
  *     Query parameters for the {{ NAME | kebab }} list.
+ *
+ * @returns  {object}
+ *     The query state and {{ NAME | kebab }} list data.
  */
 function create{{ NAME | pascal }}(parameters) {
 	return withAppContext(() => use{{ NAME | pascal }}(parameters));
@@ -27,6 +30,7 @@ describe("{{ NAME | kebab }} list", () => {
 		},
 		search: "example",
 	};
+
 	const validResponse = {
 		items: [
 			{

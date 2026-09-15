@@ -11,6 +11,9 @@ import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
  *
  * @param  {string|null}  {{ ID_NAME }}
  *     The {{ SINGULAR_NAME | kebab }} ID to pass to the query wrapper.
+ *
+ * @returns  {object}
+ *     The query state and {{ SINGULAR_NAME | kebab }} record data.
  */
 function create{{ SINGULAR_NAME | pascal }}Details({{ ID_NAME }} = "item-123") {
 	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}));

@@ -8,6 +8,9 @@ import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
+ *
+ * @returns  {object}
+ *     The query state and {{ NAME | kebab }} list data.
  */
 function create{{ NAME | pascal }}() {
 	return withAppContext(() => use{{ NAME | pascal }}());

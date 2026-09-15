@@ -8,6 +8,9 @@ import { use{{ SINGULAR_NAME | pascal }}Actions } from ".";
 
 /**
  * Create {{ SINGULAR_NAME | kebab }} actions in a Vue app context.
+ *
+ * @returns  {object}
+ *     The create and update actions under test.
  */
 function create{{ SINGULAR_NAME | pascal }}Actions() {
 	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}Actions());
