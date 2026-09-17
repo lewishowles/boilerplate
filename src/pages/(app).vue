@@ -1,7 +1,7 @@
 <template>
 	<a href="#main" class="sr-only focus-visible:not-sr-only">Skip to main content</a>
 
-	<div class="text-content grid min-h-screen grid-cols-[auto_minmax(0,1fr)]">
+	<div class="text-content bg-surface-subtle grid min-h-screen grid-cols-[auto_minmax(0,1fr)]">
 		<app-sidebar />
 
 		<div
@@ -10,7 +10,7 @@
 		>
 			<app-title-bar />
 
-			<main id="main" class="app-main bg-surface-subtle pb-4">
+			<main id="main" class="app-main bg-surface-subtle">
 				<RouterView />
 			</main>
 		</div>

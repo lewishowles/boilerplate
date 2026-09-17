@@ -4,7 +4,7 @@
 			<div class="flex flex-col">
 				<div
 					v-if="$slots.breadcrumbs || breadcrumbItems.length > 1"
-					class="animate-fade-in-up delay text-content-muted mbe-1 text-xs"
+					class="animate-fade-in-up delay text-content-muted mbe-1 text-sm"
 				>
 					<slot name="breadcrumbs" :items="breadcrumbItems">
 						<breadcrumb-list>
