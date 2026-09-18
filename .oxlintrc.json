@@ -27,7 +27,7 @@
 				"playwright/**/*.js",
 				"test/e2e/**/*.js",
 				"test/support/**/*.js",
-				"**/*.ct.js"
+				"**/*.pw.js"
 			],
 			"env": {
 				"node": true
