@@ -2,7 +2,7 @@
 	"schema_version": 1,
 	"id": "component",
 	"display_name": "Component",
-	"description": "Create a Vue component with unit and optional integration tests.",
+	"description": "Create a Vue component with a unit test, and optionally a story and the integration test that mounts it.",
 	"default_path": "src/components",
 	"fields": [
 		{
@@ -25,8 +25,14 @@
 			"required": true
 		},
 		{
+			"template": "story.vue",
+			"output_path": "{{ NAME | kebab }}.story.vue",
+			"label": "Story (mounted by the integration test)",
+			"required": false
+		},
+		{
 			"template": "integration.pw.js",
-			"output_path": "{{ NAME | kebab }}.ct.js",
+			"output_path": "{{ NAME | kebab }}.pw.js",
 			"label": "Integration test",
 			"required": false
 		}

@@ -10,7 +10,6 @@ dist
 build
 
 # Playwright artefacts
-test/ct/.cache
 test-results
 playwright-report
 

@@ -10,13 +10,6 @@
 			"required": true
 		},
 		{
-			"token": "BASE_URL",
-			"label": "Base URL",
-			"description": "The Vite base path for the deployed app.",
-			"default_value": "/",
-			"required": true
-		},
-		{
 			"token": "SITE_TITLE",
 			"label": "Site title",
 			"description": "Used for the HTML title and social sharing metadata.",

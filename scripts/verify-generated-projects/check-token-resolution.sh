@@ -27,7 +27,6 @@ done
 mode="$1"  # Generated API mode this run is checking.
 project_path="$2"  # Root directory of the generated project under test.
 failed_stages=0  # Running count of assertion stages that failed.
-base_url="/"  # BASE_URL value the matrix passed at generation time.
 site_title="Generated project check"  # SITE_TITLE value the matrix passed at generation time.
 site_description="Boilerplate output check."  # SITE_DESCRIPTION value the matrix passed at generation time.
 site_url="https://example.com"  # SITE_URL value the matrix passed at generation time.
@@ -158,7 +157,6 @@ check_setup_values() {
 	fi
 
 	assert_rendered_value 'README.md' "# $project_name" 'PROJECT_NAME' || return 1
-	assert_rendered_value 'vite.config.js' "base: \"$base_url\"" 'BASE_URL' || return 1
 	assert_rendered_value 'index.html' "<title>$site_title</title>" 'SITE_TITLE' || return 1
 	assert_rendered_value 'index.html' "content=\"$site_description\"" 'SITE_DESCRIPTION' || return 1
 	assert_rendered_value 'index.html' "property=\"og:site_name\" content=\"$site_title\"" 'SITE_TITLE' || return 1

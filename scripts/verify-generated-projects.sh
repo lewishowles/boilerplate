@@ -88,7 +88,6 @@ generate_project() {
 		--boilerplate "$boilerplate_source" \
 		--parent "$mode_parent" \
 		--setup "PROJECT_NAME=$project_name" \
-		--setup "BASE_URL=/" \
 		--setup "SITE_TITLE=Generated project check" \
 		--setup "SITE_DESCRIPTION=Boilerplate output check." \
 		--setup "SITE_URL=https://example.com" \

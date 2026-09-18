@@ -1,26 +1,24 @@
-import { alias } from "../support/aliases.js";
 import {
 	chromiumProject,
 	loadTestEnv,
 	sharedUse,
 	snapshotDir,
 } from "@lewishowles/testing/playwright";
-import { componentsResolver } from "@lewishowles/components/resolver";
-import { defineConfig } from "@playwright/experimental-ct-vue";
+
+import { defineConfig } from "@playwright/test";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import Components from "unplugin-vue-components/vite";
-import tailwindcss from "@tailwindcss/vite";
-import vue from "@vitejs/plugin-vue";
 
 // Directory containing this component-test configuration.
 const configDir = dirname(fileURLToPath(import.meta.url));
+// Gallery page served by the app's Vite development server.
+const galleryUrl = "http://localhost:5173/test/component/gallery/index.html";
 
 loadTestEnv(configDir);
 
 export default defineConfig({
 	testDir: join(configDir, "../src"),
-	testMatch: "**/*.ct.js",
+	testMatch: "**/*.pw.js",
 	snapshotDir: snapshotDir(configDir),
 	reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
 	fullyParallel: Boolean(process.env.CI),
@@ -28,25 +26,15 @@ export default defineConfig({
 	workers: process.env.CI ? 2 : 1,
 	use: {
 		...sharedUse,
-		ctPort: 3100,
-		ctTemplateDir: "ct",
+		baseURL: galleryUrl,
+		reuseContext: true,
+		serviceWorkers: "block",
 		trace: process.env.CI ? "on-first-retry" : "off",
-		ctViteConfig: {
-			plugins: [
-				Components({
-					dts: false,
-					dirs: [join(configDir, "../src/components"), join(configDir, "../src/layout")],
-					resolvers: [componentsResolver()],
-				}),
-				tailwindcss(),
-				vue(),
-			],
-			envDir: join(configDir, ".."),
-			resolve: { alias },
-			optimizeDeps: {
-				exclude: ["@lewishowles/components", "@lewishowles/helpers"],
-			},
-		},
 	},
 	projects: [chromiumProject],
+	webServer: {
+		command: "bun run dev",
+		reuseExistingServer: !process.env.CI,
+		url: galleryUrl,
+	},
 });

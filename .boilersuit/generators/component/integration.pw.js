@@ -1,15 +1,13 @@
-import { expect, test } from "@playwright/experimental-ct-vue";
-import { createMount } from "@lewishowles/testing/playwright";
+import { expect, test } from "@playwright/test";
 
-import {{NAME | pascal}} from "./{{NAME | kebab}}.vue";
-
-// Mount the component in Playwright for these tests.
-const mount{{NAME | pascal}} = createMount({{NAME | pascal}});
+// Story rendered by the {{NAME | kebab}} component tests.
+const storyId = "components/{{NAME | kebab}}/{{NAME | kebab}}";
 
 test.describe("{{NAME | kebab}}", () => {
-	test("a component is rendered", async ({ mount, page }) => {
-		await mount{{NAME | pascal}}(mount);
+	test("a component is rendered", async ({ mount }) => {
+		// The component as rendered by its story.
+		const component = await mount(storyId);
 
-		await expect(page.getByTestId("{{NAME | kebab}}")).toBeVisible();
+		await expect(component.getByTestId("{{NAME | kebab}}")).toBeVisible();
 	});
 });
