@@ -65,14 +65,16 @@ run_group() {
 
 # Fetch mode: the fetch API composable, its test, and the auth API composable.
 check_fetch_composables() {
-	assert_file_present "$project_path" 'src/composables/api/use-api/index.js' &&
-		assert_file_present "$project_path" 'src/composables/api/use-api/index.test.js' &&
+	assert_file_present "$project_path" 'src/composables/api/index.js' &&
+		assert_file_present "$project_path" 'src/composables/api/index.test.js' &&
 		assert_file_present "$project_path" 'src/composables/api/use-auth-api/index.js'
 }
 
-# Fetch mode: no Xano source files and no Xano SDK dependency remain.
+# Fetch mode: no second copy of the API composable under use-api/, no Xano
+# source files, and no Xano SDK dependency remain.
 check_fetch_exclusions() {
-	assert_no_match "$project_path" 'src/composables/api/xano/**' &&
+	assert_no_match "$project_path" 'src/composables/api/use-api/**' &&
+		assert_no_match "$project_path" 'src/composables/api/xano/**' &&
 		assert_dependency_absent "$project_path" '@xano/js-sdk'
 }
 

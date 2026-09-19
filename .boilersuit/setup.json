@@ -95,11 +95,6 @@
 	"exclude_paths": ["scripts/**"],
 	"files": [
 		{
-			"paths": ["src/composables/api/use-api/**"],
-			"include_when": { "API_TYPE": "fetch" },
-			"move_to": "src/composables/api"
-		},
-		{
 			"paths": ["src/composables/api/use-auth-api/**"],
 			"include_when": { "AUTH_API_MODE": "standard" }
 		},
