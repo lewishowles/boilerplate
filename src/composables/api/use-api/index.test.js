@@ -1,10 +1,15 @@
-import { mockLocalStorage } from "@lewishowles/testing/vitest";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
-
-import useApi from "./index";
+import { nextTick } from "vue";
 
 // API base URL used in request URL expectations.
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
+// Key used by the composable to store the auth token.
+const authTokenStorageKey = "authToken";
+// A real Storage that replaces the mocked localStorage from the global test
+// setup. It is installed before useApi is imported, so the saved auth token
+// is read from and written to it.
+const authStorage = new Storage();
+
 // Mock used to observe automatic auth-session resets.
 const mockResetAuthSession = vi.hoisted(() => vi.fn());
 
@@ -12,7 +17,17 @@ vi.mock("@/composables/api/session-reset", () => ({
 	resetAuthSession: mockResetAuthSession,
 }));
 
+vi.stubGlobal("localStorage", authStorage);
+
+// API methods loaded after the storage global is installed.
+const { default: useApi } = await import("./index");
+
 describe("useApi (fetch)", () => {
+	beforeEach(() => {
+		useApi().setAuthToken(null);
+		vi.clearAllMocks();
+	});
+
 	describe("getFinalUrl", () => {
 		test("Strips a leading slash from the endpoint", () => {
 			// URL builder under test.
@@ -60,46 +75,40 @@ describe("useApi (fetch)", () => {
 			// Auth token reader under test.
 			const { hasAuthToken } = useApi();
 
-			localStorage.getItem.mockReturnValue(null);
-
 			expect(hasAuthToken()).toBe(false);
 		});
 
-		test("Returns true when a token is stored", () => {
-			// Auth token reader under test.
-			const { hasAuthToken } = useApi();
-
-			localStorage.getItem.mockReturnValue("token-123");
-
-			expect(hasAuthToken()).toBe(true);
-		});
-
-		test("Stores the auth token", () => {
-			// Auth token writer under test.
-			const { setAuthToken } = useApi();
+		test("Returns true after storing a token", () => {
+			// Auth token reader and writer under test.
+			const { hasAuthToken, setAuthToken } = useApi();
 
 			setAuthToken("token-123");
 
-			expect(localStorage.setItem).toHaveBeenCalledWith("authToken", "token-123");
+			expect(hasAuthToken()).toBe(true);
+			expect(authStorage.getItem(authTokenStorageKey)).toBe("token-123");
 		});
 
-		test("Removes the auth token when set to null", () => {
-			// Auth token writer under test.
-			const { setAuthToken } = useApi();
+		test("Clears the auth token when set to null", async () => {
+			// Auth token reader and writer under test.
+			const { hasAuthToken, setAuthToken } = useApi();
 
+			setAuthToken("token-123");
+			// The happy-dom test environment fires the storage
+			// event for our own write in this window, which makes
+			// VueUse ignore changes until the next tick. Browsers
+			// only fire it in other tabs, so the app is unaffected.
+			await nextTick();
 			setAuthToken(null);
 
-			expect(localStorage.removeItem).toHaveBeenCalledWith("authToken");
+			expect(hasAuthToken()).toBe(false);
+			expect(authStorage.getItem(authTokenStorageKey)).toBeNull();
 		});
 	});
 
 	describe("requests", () => {
 		beforeEach(() => {
-			vi.clearAllMocks();
 			mockResetAuthSession.mockResolvedValue(undefined);
 			vi.stubGlobal("fetch", vi.fn());
-			mockLocalStorage();
-			localStorage.getItem.mockReturnValue(null);
 		});
 
 		afterEach(() => {
@@ -171,9 +180,10 @@ describe("useApi (fetch)", () => {
 		);
 
 		test("Adds bearer and content-type headers when a token and body are present", async () => {
-			localStorage.getItem.mockReturnValue("token-123");
 			// POST method used to add auth headers.
-			const { post } = useApi();
+			const { post, setAuthToken } = useApi();
+
+			setAuthToken("token-123");
 
 			fetch.mockResolvedValue({
 				ok: true,

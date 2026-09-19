@@ -1,6 +1,7 @@
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
+import { useStorage } from "@vueuse/core";
 import { ref } from "vue";
 
 // Base URL prepended to all API calls.
@@ -8,6 +9,9 @@ const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:30
 
 // localStorage key used to persist the auth token.
 const authTokenStorageKey = "authToken";
+// The saved auth token, shared by every useApi() call and kept in sync
+// across browser tabs.
+const authToken = useStorage(authTokenStorageKey, null, undefined, { flush: "sync" });
 
 // API error code returned when the current request is not authorised.
 const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
@@ -233,10 +237,10 @@ export default function useApi() {
 		// Headers added to the API request when needed.
 		const headers = {};
 		// Auth token from a previous login, if any.
-		const authToken = localStorage.getItem(authTokenStorageKey);
+		const storedAuthToken = authToken.value;
 
-		if (isNonEmptyString(authToken)) {
-			headers.Authorization = `Bearer ${authToken}`;
+		if (isNonEmptyString(storedAuthToken)) {
+			headers.Authorization = `Bearer ${storedAuthToken}`;
 		}
 
 		if (method !== "get" && isNonEmptyObject(parameters)) {
@@ -312,20 +316,20 @@ export default function useApi() {
 	 *     Whether an auth token is available.
 	 */
 	function hasAuthToken() {
-		return isNonEmptyString(localStorage.getItem(authTokenStorageKey));
+		return isNonEmptyString(authToken.value);
 	}
 
 	/**
 	 * Store the auth token for authenticated requests.
 	 *
-	 * @param  {string|null}  authToken
+	 * @param  {string|null}  token
 	 *     The token returned from the login endpoint, or null to clear it.
 	 */
-	function setAuthToken(authToken) {
-		if (isNonEmptyString(authToken)) {
-			localStorage.setItem(authTokenStorageKey, authToken);
+	function setAuthToken(token) {
+		if (isNonEmptyString(token)) {
+			authToken.value = token;
 		} else {
-			localStorage.removeItem(authTokenStorageKey);
+			authToken.value = null;
 		}
 	}
 
