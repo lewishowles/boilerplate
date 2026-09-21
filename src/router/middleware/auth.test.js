@@ -4,8 +4,20 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 const mockClearCurrentUser = vi.hoisted(() => vi.fn());
 // Mocked auth-token lookup method.
 const mockHasAuthToken = vi.hoisted(() => vi.fn());
+// Mocked current-user query refresh action.
+const mockRefreshCurrentUser = vi.hoisted(() => vi.fn());
 // Mocked auth-token storage action.
 const mockSetAuthToken = vi.hoisted(() => vi.fn());
+
+// Mocked current-user query entry.
+const mockCurrentUserEntry = vi.hoisted(() => ({
+	state: { data: { display_name: "Sophie Wardhaugh" }, status: "success" },
+}));
+
+// Mocked current-user query options.
+const mockCurrentUserQueryOptions = vi.hoisted(() => ({ key: ["user"] }));
+// Mocked query-cache ensure action.
+const mockEnsureCurrentUser = vi.hoisted(() => vi.fn(() => mockCurrentUserEntry));
 
 vi.mock("@/composables/api", () => ({
 	/**
@@ -22,14 +34,33 @@ vi.mock("@/composables/api", () => ({
 
 vi.mock("@/queries/auth/current-user", () => ({
 	clearCurrentUser: mockClearCurrentUser,
+	currentUserQueryOptions: mockCurrentUserQueryOptions,
+}));
+
+vi.mock("@pinia/colada", () => ({
+	/**
+	 * Return mocked query-cache methods.
+	 *
+	 * @returns  {object}
+	 *     The mocked query-cache interface.
+	 */
+	useQueryCache: () => ({
+		ensure: mockEnsureCurrentUser,
+		refresh: mockRefreshCurrentUser,
+	}),
 }));
 
 import authMiddleware from "./auth.js";
 
 describe("authMiddleware", () => {
 	beforeEach(() => {
-		vi.resetAllMocks();
+		vi.clearAllMocks();
 		mockHasAuthToken.mockReturnValue(false);
+		mockCurrentUserEntry.state = {
+			data: { display_name: "Sophie Wardhaugh" },
+			status: "success",
+		};
+		mockRefreshCurrentUser.mockResolvedValue(mockCurrentUserEntry.state);
 	});
 
 	describe("Protected routes", () => {
@@ -57,6 +88,37 @@ describe("authMiddleware", () => {
 			const result = await authMiddleware(protectedRoute, {});
 
 			expect(result).toBeUndefined();
+			expect(mockEnsureCurrentUser).toHaveBeenCalledWith(mockCurrentUserQueryOptions);
+			expect(mockRefreshCurrentUser).toHaveBeenCalledWith(mockCurrentUserEntry);
+		});
+
+		test("Redirects and clears auth state when the current user is empty", async () => {
+			mockHasAuthToken.mockReturnValue(true);
+			mockCurrentUserEntry.state = { data: null, status: "success" };
+			mockRefreshCurrentUser.mockResolvedValue(mockCurrentUserEntry.state);
+
+			const result = await authMiddleware(protectedRoute, {});
+
+			expect(mockSetAuthToken).toHaveBeenCalledWith(null);
+			expect(mockClearCurrentUser).toHaveBeenCalled();
+			expect(result).toEqual({
+				path: "/login",
+				query: { redirect: "/account?tab=security" },
+			});
+		});
+
+		test("Redirects and clears auth state when loading the current user fails", async () => {
+			mockHasAuthToken.mockReturnValue(true);
+			mockRefreshCurrentUser.mockRejectedValueOnce(new Error("Request failed"));
+
+			const result = await authMiddleware(protectedRoute, {});
+
+			expect(mockSetAuthToken).toHaveBeenCalledWith(null);
+			expect(mockClearCurrentUser).toHaveBeenCalled();
+			expect(result).toEqual({
+				path: "/login",
+				query: { redirect: "/account?tab=security" },
+			});
 		});
 	});
 

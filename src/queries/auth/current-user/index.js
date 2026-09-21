@@ -99,7 +99,7 @@ export function clearCurrentUser(queryCache = useQueryCache()) {
 }
 
 // Query options for the current user.
-const currentUserQueryOptions = defineQueryOptions({
+export const currentUserQueryOptions = defineQueryOptions({
 	key: AUTH_KEYS.currentUser,
 	query: getCurrentUser,
 });
