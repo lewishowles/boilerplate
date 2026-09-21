@@ -24,6 +24,10 @@ Choose one API mode when creating a project with `boilersuit new`:
 
 Copy the generated `.env.example` to `.env` and fill in the values for the selected mode. `.env` is ignored by Git. In grouped mode, application queries use `useApi()` and authentication queries use `useAuthApi()`.
 
+In development builds only, set `VITE_MOCK_AUTH=true` to sign in as the sample user in `src/queries/auth/current-user/index.js` without calling the API.
+
+Set `VITE_MOCK_DATA=true` to show sample data in list pages made by the domain generator. Each list query still calls the API first. If that request fails, the query returns the sample data in `src/queries/<name>/mock.js` instead of an error. With any other value, a failed request shows an error as normal.
+
 Add another grouped API by defining one environment value and a named adapter:
 
 ```js
