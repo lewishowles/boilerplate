@@ -7,21 +7,22 @@ import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
 
 /**
- * Create the {{ SINGULAR_NAME | kebab }} details query wrapper in a Vue app context.
+ * Create the {{ SINGULAR_NAME | kebab }} query wrapper in a Vue app context.
  *
  * @param  {string|null}  {{ ID_NAME }}
  *     The {{ SINGULAR_NAME | kebab }} ID to pass to the query wrapper.
  *
  * @returns  {object}
- *     The query state and {{ SINGULAR_NAME | kebab }} record data.
+ *     The {{ SINGULAR_NAME | kebab }} query state and actions.
  */
-function create{{ SINGULAR_NAME | pascal }}Details({{ ID_NAME }} = "item-123") {
+function create{{ SINGULAR_NAME | pascal }}({{ ID_NAME }} = "item-123") {
 	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}));
 }
 
 describe("{{ SINGULAR_NAME | kebab }} details", () => {
 	setupConsole();
 
+	// Response returned by the details request.
 	const sampleResponse = {
 		id: "item-123",
 	};
@@ -34,15 +35,9 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 
 	describe("use{{ SINGULAR_NAME | pascal }}", () => {
 		test("Initialises with no {{ SINGULAR_NAME | kebab }} details", () => {
-			const {
-				have{{ SINGULAR_NAME | pascal }},
-				isInitialLoading,
-				isReady,
-				isRefreshing,
-				lastFetched,
-				refetch,
-				{{ SINGULAR_NAME | camel }},
-			} = create{{ SINGULAR_NAME | pascal }}Details(null);
+			// Query state returned before a record is loaded.
+			const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } =
+				create{{ SINGULAR_NAME | pascal }}(null);
 
 			expect({{ SINGULAR_NAME | camel }}.value).toBe(null);
 			expect(have{{ SINGULAR_NAME | pascal }}.value).toBe(false);
@@ -56,15 +51,9 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 		test("Loads and stores {{ SINGULAR_NAME | kebab }} details", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(sampleResponse);
 
-			const {
-				have{{ SINGULAR_NAME | pascal }},
-				isInitialLoading,
-				isReady,
-				isRefreshing,
-				lastFetched,
-				refetch,
-				{{ SINGULAR_NAME | camel }},
-			} = create{{ SINGULAR_NAME | pascal }}Details();
+			// Query state returned after the record loads.
+			const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } =
+				create{{ SINGULAR_NAME | pascal }}();
 
 			expect(lastFetched.value).toBe(null);
 
@@ -82,7 +71,8 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 		test("Does not update {{ SINGULAR_NAME | kebab }} details when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { have{{ SINGULAR_NAME | pascal }}, isReady, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } = create{{ SINGULAR_NAME | pascal }}Details();
+			// Query state returned after the request fails.
+			const { have{{ SINGULAR_NAME | pascal }}, isReady, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } = create{{ SINGULAR_NAME | pascal }}();
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 

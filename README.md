@@ -68,9 +68,56 @@ Unit tests run on Vitest (via `vite-plus`) and use `@lewishowles/testing/vue` fo
 
 The router's auth guard (`src/router/middleware/auth.js`) only checks for a truthy `authToken` in `localStorage`; it doesn't validate against a real backend. To browse protected routes locally before a real auth backend exists, run `localStorage.setItem("authToken", "dev")` in devtools and reload.
 
+## Domain generator
+
+`boilersuit generate domain` creates a complete resource domain for one collection: Pinia Colada queries and tests, mock data, list/create/details pages, a starter form, and a focused form test. The server variant also includes a server-table composable and test.
+
+### Fields
+
+- `NAME`: collection name, plural lowercase kebab-case. Drives the query, component, composable, and page folders.
+- `SINGULAR_NAME`: item name, singular lowercase kebab-case. Drives detail queries, actions, routes, and the starter form.
+- `ENDPOINT`: API endpoint without a leading slash, such as `users` or `account/profile`.
+- `ID_NAME`: item ID parameter name, camelCase. Used by detail queries and generated routes.
+- `API_TYPE`: API helper and import mapping. The default is `fetch`; choose `xano` or `xano-grouped` when the project uses one of those API clients.
+
+### Variants
+
+- `--variant client`: loads the collection at once for front-end search, sort, and pagination.
+- `--variant server`: adds server-side search, sort, pagination, and table state. This is the default when `--variant` is omitted.
+
+Choose a variant for each generation. Only the selected variant's files are generated.
+
+### Commands
+
+```bash
+# Inspect the generator fields and variants
+boilersuit generators describe domain
+
+# Preview first (client variant)
+boilersuit generate preview domain --variant client \
+	--field NAME=users \
+	--field SINGULAR_NAME=user \
+	--field ENDPOINT=users \
+	--field ID_NAME=userId
+
+# Generate (server variant)
+boilersuit generate domain --variant server \
+	--field NAME=users \
+	--field SINGULAR_NAME=user \
+	--field ENDPOINT=users \
+	--field ID_NAME=userId \
+	--field API_TYPE=xano-grouped
+```
+
+Rerun generation with `--skip-existing` to protect files you have already edited. Without it, generation overwrites the destination.
+
+### What it generates
+
+Both variants generate the resource's query keys, list query and test, mock data, details query and test, create/update actions and test, response helpers and test, query barrel, list page, create page, details page, starter form, and form test. The server variant also generates the server-table composable and test and wires the list query to server-side table controls.
+
 ## Add-edit form generator
 
-`boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the `pinia-colada-domain` composables for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.
+`boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the generated resource domain for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.
 
 If the record id is missing, the form is in add mode and does not fetch. If it is set, the form is in edit mode, loads that record, and handles the initial load, a load error with retry, the ready state, and a missing record separately. A successful submit emits one `success` event carrying `{ result, formData }`.
 

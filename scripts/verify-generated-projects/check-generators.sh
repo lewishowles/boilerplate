@@ -51,10 +51,7 @@ const requiredIds = [
 	"add-edit-form",
 	"component",
 	"composable",
-	"pinia-colada-domain",
-	"server-table-composable",
-	"server-table-fragment",
-	"table-fragment",
+	"domain",
 ];
 
 if (!Array.isArray(generators)) {
@@ -76,7 +73,7 @@ if [[ -z "$failure_reason" ]]; then
 		--field NAME=verify-items \
 		--field SINGULAR_NAME=verify-item \
 		--field ID_NAME=id \
-		--field ENDPOINT=/api/items)" || doctor_status=$?
+		--field ENDPOINT=api/items)" || doctor_status=$?
 
 	if (( doctor_status != 0 )); then
 		failure_reason='generator doctor command failed'

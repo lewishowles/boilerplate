@@ -9,52 +9,37 @@ import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 /**
  * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
  *
- * @param  {object}  parameters
- *     Query parameters for the {{ NAME | kebab }} list.
- *
  * @returns  {object}
- *     The query state and {{ NAME | kebab }} list data.
+ *     The {{ NAME | kebab }} query state and actions.
  */
-function create{{ NAME | pascal }}(parameters) {
-	return withAppContext(() => use{{ NAME | pascal }}(parameters));
+function create{{ NAME | pascal }}() {
+	return withAppContext(() => use{{ NAME | pascal }}());
 }
 
 describe("{{ NAME | kebab }} list", () => {
 	setupConsole();
 
-	const parameters = {
-		page: 2,
-		sort: {
-			column: "name",
-			direction: "descending",
-		},
-		search: "example",
-	};
-
+	// Response returned by the list request.
 	const validResponse = {
 		items: [
 			{
 				id: "item-123",
 			},
 		],
-		itemsTotal: 42,
 	};
 
 	describe("{{ NAME | constant }}_KEYS", () => {
-		test("Creates a parameterised list key", () => {
+		test("Creates stable root and list keys", () => {
 			expect({{ NAME | constant }}_KEYS.root).toEqual(["{{ NAME | kebab }}"]);
-			expect({{ NAME | constant }}_KEYS.list(parameters)).toEqual([
-				"{{ NAME | kebab }}",
-				"list",
-				parameters,
-			]);
+			expect({{ NAME | constant }}_KEYS.list()).toEqual(["{{ NAME | kebab }}", "list"]);
 		});
 	});
 
 	describe("use{{ NAME | pascal }}", () => {
 		test("Initialises with no {{ NAME | kebab }}", () => {
+			// Query state returned before a response is loaded.
 			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
-				create{{ NAME | pascal }}(parameters);
+				create{{ NAME | pascal }}();
 
 			expect({{ NAME | camel }}.value).toEqual([]);
 			expect(totalRows.value).toBe(0);
@@ -68,16 +53,16 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Loads and stores {{ NAME | kebab }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
-				create{{ NAME | pascal }}(parameters);
+			// Query state returned after the response loads.
+			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }} } =
+				create{{ NAME | pascal }}();
 
 			expect(lastFetched.value).toBe(null);
 
 			await refetch(true);
 
-			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
+			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}");
 			expect({{ NAME | camel }}.value).toEqual(validResponse.items);
-			expect(totalRows.value).toBe(validResponse.itemsTotal);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);
 			expect(isReady.value).toBe(true);
@@ -87,8 +72,8 @@ describe("{{ NAME | kebab }} list", () => {
 		test("Does not update {{ NAME | kebab }} when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
-			const { isReady, lastFetched, refetch, {{ NAME | camel }} } =
-				create{{ NAME | pascal }}(parameters);
+			// Query state returned after the request fails.
+			const { isReady, lastFetched, refetch, {{ NAME | camel }} } = create{{ NAME | pascal }}();
 
 			await expect(refetch(true)).rejects.toThrow("Request failed");
 
@@ -99,7 +84,8 @@ describe("{{ NAME | kebab }} list", () => {
 
 		describe("have{{ NAME | pascal }}", () => {
 			test("Is false when no {{ NAME | kebab }} are loaded", () => {
-				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}(parameters);
+				// Presence state returned before any items are loaded.
+				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}();
 
 				expect(have{{ NAME | pascal }}.value).toBe(false);
 			});
@@ -107,7 +93,8 @@ describe("{{ NAME | kebab }} list", () => {
 			test("Is true when {{ NAME | kebab }} have been loaded", async () => {
 				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
-				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}(parameters);
+				// Presence state and refetch action for the loaded list.
+				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}();
 
 				await refetch(true);
 

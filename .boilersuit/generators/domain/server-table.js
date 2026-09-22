@@ -3,36 +3,35 @@ import { refDebounced } from "@vueuse/core";
 
 import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
 
-// Delay, in milliseconds, before search text updates the server query.
+// Delay search requests until typing pauses.
 const searchDebounceDelay = 300;
 
 /**
- * Provide state for the {{ NAME | kebab }} server table.
- *
- * Each call creates its own controls, so table instances do not share page,
- * sort, or search state.
+ * Provide independent state for the {{ NAME | kebab }} server table.
  *
  * @returns  {object}
- *     Table controls and the state returned by the server query.
+ *     The table state and {{ NAME | kebab }} query actions.
  */
 export function use{{ NAME | pascal }}Table() {
-	// The current page sent to the server query.
+	// Create controls inside the composable so table instances do not share
+	// state.
+	// The current page number for the table.
 	const page = ref(1);
-	// The current sort applied to the server query.
+	// The search text entered into the table.
+	const search = ref("");
+	// The selected table sort.
 	const sort = ref(null);
-	// The search text entered for the table.
-	const search = ref(null);
-	// The debounced search text used by the server query.
+	// The search text after the debounce delay.
 	const debouncedSearch = refDebounced(search, searchDebounceDelay);
 
-	// Query parameters derived from the table controls.
+	// Keep the table inputs together for query keys and refetches.
 	const parameters = computed(() => ({
 		page: page.value,
-		sort: sort.value,
 		search: debouncedSearch.value,
+		sort: sort.value,
 	}));
 
-	// Query state and rows returned for the current table parameters.
+	// Query state and actions for the {{ NAME | kebab }} list.
 	const {
 		error,
 		isInitialLoading,
@@ -41,18 +40,20 @@ export function use{{ NAME | pascal }}Table() {
 		isRefreshing,
 		lastFetched,
 		refetch,
-		{{ NAME }}: items,
+		{{ NAME | camel }},
 		totalRows,
 	} = use{{ NAME | pascal }}(parameters);
 
 	return {
 		error,
+		// Use the table's fetching name so callers do not depend on query
+		// terminology.
 		isFetching: isLoading,
 		isInitialLoading,
 		isReady,
 		isRefreshing,
-		items,
 		lastFetched,
+		{{ NAME | camel }},
 		page,
 		parameters,
 		refetch,

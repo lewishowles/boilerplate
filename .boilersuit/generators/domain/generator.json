@@ -1,0 +1,280 @@
+{
+	"schema_version": 1,
+	"id": "domain",
+	"display_name": "Domain",
+	"description": "Creates a complete resource domain with Pinia Colada queries, pages, a starter form, and optional server-table state.",
+	"default_path": "src",
+	"fields": [
+		{
+			"token": "NAME",
+			"label": "Collection name",
+			"description": "Used for the folder, list query, query key, table, and page names.",
+			"hint": "Use plural lowercase kebab-case, e.g. flights.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z0-9-]+$",
+				"message": "Use plural lowercase kebab-case for the collection name."
+			}
+		},
+		{
+			"token": "SINGULAR_NAME",
+			"label": "Item name",
+			"description": "Used for detail queries, actions, routes, and the starter form.",
+			"hint": "Use singular lowercase kebab-case, e.g. flight.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z0-9-]+$",
+				"message": "Use singular lowercase kebab-case for the item name."
+			}
+		},
+		{
+			"token": "ENDPOINT",
+			"label": "Endpoint",
+			"description": "The API endpoint passed to the request helper.",
+			"hint": "Enter the endpoint without a leading slash, e.g. `users` or `account/profile`.",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-zA-Z0-9_/-]+$",
+				"message": "Use a valid API endpoint path without a leading slash."
+			}
+		},
+		{
+			"token": "ID_NAME",
+			"label": "ID parameter name",
+			"description": "The JavaScript variable name used for the item ID in details queries and routes.",
+			"placeholder": "itemId",
+			"required": true,
+			"validation": {
+				"pattern": "^[a-z][a-zA-Z0-9]*$",
+				"message": "Use a camelCase JavaScript variable name."
+			}
+		},
+		{
+			"token": "API_TYPE",
+			"label": "API type",
+			"description": "Chooses which starter API helper and query generator imports to use.",
+			"type": "select",
+			"default_value": "fetch",
+			"options": [
+				{
+					"label": "Fetch",
+					"value": "fetch",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
+				},
+				{
+					"label": "Xano",
+					"value": "xano",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api/use-api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
+				},
+				{
+					"label": "Xano (with grouped APIs)",
+					"value": "xano-grouped",
+					"tokens": {
+						"API_COMPOSABLE": "useApi",
+						"API_IMPORT": "@/composables/api",
+						"MOCK_API_IMPORT": "@test/unit/support/mock-api",
+						"MOCK_API_NAME": "mockApi"
+					}
+				}
+			],
+			"required": true
+		}
+	],
+	"files": [],
+	"variants": [
+		{
+			"id": "server",
+			"label": "Server domain",
+			"description": "Adds server-side search, sort, pagination, and table state.",
+			"files": [
+				{
+					"output_path": "queries/{{ NAME | kebab }}/keys.js",
+					"template": "server-keys.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/list.js",
+					"template": "server-list.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/mock.js",
+					"template": "mock.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/list.test.js",
+					"template": "server-list.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/details.js",
+					"template": "details.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/details.test.js",
+					"template": "details.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/actions.js",
+					"template": "actions.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/actions.test.js",
+					"template": "actions.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/helpers.js",
+					"template": "helpers.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/helpers.test.js",
+					"template": "helpers.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/index.js",
+					"template": "index.js",
+					"required": true
+				},
+				{
+					"output_path": "composables/{{ NAME | kebab }}/index.js",
+					"template": "server-table.js",
+					"required": true
+				},
+				{
+					"output_path": "composables/{{ NAME | kebab }}/index.test.js",
+					"template": "server-table.test.js",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/(list).vue",
+					"template": "server-list.vue",
+					"required": true
+				},
+				{
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.vue",
+					"template": "form.vue",
+					"required": true
+				},
+				{
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"template": "form.test.js",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/create.vue",
+					"template": "create.vue",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/[{{ ID_NAME }}].vue",
+					"template": "details-page.vue",
+					"required": true
+				}
+			]
+		},
+		{
+			"id": "client",
+			"label": "Client domain",
+			"description": "Loads the collection for client-side table controls.",
+			"files": [
+				{
+					"output_path": "queries/{{ NAME | kebab }}/keys.js",
+					"template": "keys.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/list.js",
+					"template": "list.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/mock.js",
+					"template": "mock.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/list.test.js",
+					"template": "list.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/details.js",
+					"template": "details.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/details.test.js",
+					"template": "details.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/actions.js",
+					"template": "actions.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/actions.test.js",
+					"template": "actions.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/helpers.js",
+					"template": "helpers.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/helpers.test.js",
+					"template": "helpers.test.js",
+					"required": true
+				},
+				{
+					"output_path": "queries/{{ NAME | kebab }}/index.js",
+					"template": "index.js",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/(list).vue",
+					"template": "client-list.vue",
+					"required": true
+				},
+				{
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.vue",
+					"template": "form.vue",
+					"required": true
+				},
+				{
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"template": "form.test.js",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/create.vue",
+					"template": "create.vue",
+					"required": true
+				},
+				{
+					"output_path": "pages/(app)/{{ NAME | kebab }}/[{{ ID_NAME }}].vue",
+					"template": "details-page.vue",
+					"required": true
+				}
+			]
+		}
+	]
+}
