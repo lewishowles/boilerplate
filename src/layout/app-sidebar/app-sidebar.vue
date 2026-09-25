@@ -1,13 +1,13 @@
 <template>
 	<aside
-		class="border-border bg-surface animade-fade-in-right flex shrink-0 flex-col"
+		class="border-border bg-surface animade-fade-in-right flex shrink-0 flex-col text-sm"
 		:class="{
 			'sticky top-0 h-screen w-68 border-e max-lg:hidden': !props.alwaysVisible,
 			'w-full': props.alwaysVisible,
 			hidden: !props.alwaysVisible && !showSidebar,
 		}"
 	>
-		<div class="border-border animate-fade-in delay flex min-h-18 items-center border-b px-5">
+		<div class="border-border animate-fade-in delay flex min-h-16 items-center border-b px-5">
 			<slot name="logo">
 				<div class="flex items-center gap-3 font-bold">
 					<span

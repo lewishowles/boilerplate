@@ -1,6 +1,6 @@
 <template>
 	<header
-		class="app-title-bar border-border bg-surface sticky top-0 z-20 border-b py-2 lg:min-h-18"
+		class="app-title-bar border-border bg-surface sticky top-0 z-20 border-b py-2 text-sm lg:min-h-16"
 	>
 		<div class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3">
 			<div class="flex items-center gap-3">

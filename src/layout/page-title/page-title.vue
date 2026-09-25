@@ -43,7 +43,7 @@
 		</div>
 	</div>
 
-	<flash-messages />
+	<flash-messages class="my-6 lg:my-8" />
 </template>
 
 <script setup>
