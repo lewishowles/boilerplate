@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick } from "vue";
 
+import ApiError from "./api-error";
+
 // API base URL used in request URL expectations.
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
 // Key used by the composable to store the auth token.
@@ -232,7 +234,7 @@ describe("useApi (fetch)", () => {
 			});
 		});
 
-		test("Throws the response body when a request is not successful", async () => {
+		test("Throws an API error with the status and body when a request fails", async () => {
 			// Failed response body returned by the fetch mock.
 			const responseBody = { message: "Request failed" };
 			// API methods and state under test.
@@ -240,6 +242,7 @@ describe("useApi (fetch)", () => {
 
 			fetch.mockResolvedValue({
 				ok: false,
+				status: 422,
 				/**
 				 * Resolve with the stubbed response body.
 				 *
@@ -249,10 +252,25 @@ describe("useApi (fetch)", () => {
 				json: () => Promise.resolve(responseBody),
 			});
 
-			await expect(post("examples", { name: "Ada" })).rejects.toEqual(responseBody);
+			// Error thrown to the request caller.
+			const error = await post("examples", { name: "Ada" }).catch((failure) => failure);
 
+			expect(error).toBeInstanceOf(ApiError);
+			expect(error.status).toBe(422);
+			expect(error.body).toBe(responseBody);
 			expect(isLoading.value).toBe(false);
 			expect(isReady.value).toBe(false);
+		});
+
+		test("Rethrows a network error unchanged", async () => {
+			// Network failure that has no server response.
+			const networkError = new Error("Connection failed");
+			// GET method used for the failing request.
+			const { get } = useApi();
+
+			fetch.mockRejectedValue(networkError);
+
+			await expect(get("examples")).rejects.toBe(networkError);
 		});
 
 		test("Resets the auth session for an unauthorised non-login error", async () => {
@@ -263,6 +281,7 @@ describe("useApi (fetch)", () => {
 
 			fetch.mockResolvedValue({
 				ok: false,
+				status: 401,
 				/**
 				 * Resolve with the stubbed response body.
 				 *
@@ -272,7 +291,11 @@ describe("useApi (fetch)", () => {
 				json: () => Promise.resolve(responseBody),
 			});
 
-			await expect(get("examples")).rejects.toEqual(responseBody);
+			await expect(get("examples")).rejects.toMatchObject({
+				body: responseBody,
+				code: responseBody.code,
+				status: 401,
+			});
 			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 		});
 
@@ -286,6 +309,7 @@ describe("useApi (fetch)", () => {
 
 			fetch.mockResolvedValue({
 				ok: false,
+				status: 401,
 				/**
 				 * Resolve with the stubbed response body.
 				 *
@@ -295,7 +319,11 @@ describe("useApi (fetch)", () => {
 				json: () => Promise.resolve(responseBody),
 			});
 
-			await expect(post("auth/login", credentials)).rejects.toEqual(responseBody);
+			await expect(post("auth/login", credentials)).rejects.toMatchObject({
+				body: responseBody,
+				code: responseBody.code,
+				status: 401,
+			});
 
 			expect(mockResetAuthSession).not.toHaveBeenCalled();
 		});

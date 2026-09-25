@@ -3,6 +3,7 @@ import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { isNonEmptyString, ltrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
+import ApiError from "../api-error";
 import translateSortParameters from "./translate-sort-parameters";
 
 // API error code returned when the current request is not authorised.
@@ -50,8 +51,10 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 * @param  {object}  parameters
 	 *     Query string parameters or request body.
 	 *
-	 * @throws  {object}
-	 *     The normalised Xano error body when the request fails.
+	 * @throws  {ApiError|Error}
+	 *     An ApiError when the server responds with a failure, or the original
+	 *     error when the request fails without a response, such as a network
+	 *     error.
 	 *
 	 * @returns  {Promise<object>}
 	 *     The parsed Xano response body.
@@ -82,14 +85,19 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 
 			return body;
 		} catch (error) {
-			// Error body used to decide whether the auth session has expired.
-			const body = getErrorBody(error);
+			// The error to throw: an ApiError when the server responded,
+			// otherwise the original failure.
+			const apiError = getApiError(error);
 
-			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(body)) {
+			if (
+				finalEndpoint &&
+				!finalEndpoint.endsWith("/auth/login") &&
+				isUnauthorisedError(apiError)
+			) {
 				resetAuthSessionSilently();
 			}
 
-			throw body;
+			throw apiError;
 		} finally {
 			isLoading.value = false;
 		}
@@ -184,16 +192,17 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	}
 
 	/**
-	 * Get the useful API error body, if the request failed with a Xano
-	 * response.
+	 * Turn a Xano failure that carries a server response into an ApiError.
+	 * Other failures, such as network errors, are returned unchanged. Some
+	 * response wrappers have no status getter, so the status may be undefined.
 	 *
 	 * @param  {Error|object}  error
 	 *     The error thrown by Xano or another runtime failure.
 	 *
-	 * @returns  {object}
-	 *     The response body when the error wraps one, otherwise the error.
+	 * @returns  {ApiError|Error}
+	 *     The server response error, or the original failure.
 	 */
-	function getErrorBody(error) {
+	function getApiError(error) {
 		if (typeof error?.getResponse !== "function") {
 			return error;
 		}
@@ -205,20 +214,21 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 			return error;
 		}
 
-		return response.getBody();
+		return new ApiError(response.getStatusCode?.(), response.getBody());
 	}
 
 	/**
 	 * Check whether an API failure means the current auth session is invalid.
 	 *
-	 * @param  {object}  body
-	 *     The normalised API error body.
+	 * @param  {ApiError|Error}  error
+	 *     The error thrown by the request. An ApiError carries the server's
+	 *     error code at the top level.
 	 *
 	 * @returns  {boolean}
-	 *     Whether the error body represents an expired auth session.
+	 *     Whether the server reported that the auth session is no longer valid.
 	 */
-	function isUnauthorisedError(body) {
-		return getPropertyValue(body, "code") === unauthorisedErrorCode;
+	function isUnauthorisedError(error) {
+		return getPropertyValue(error, "code") === unauthorisedErrorCode;
 	}
 
 	/**

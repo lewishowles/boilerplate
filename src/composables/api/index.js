@@ -4,6 +4,8 @@ import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
 import { useStorage } from "@vueuse/core";
 import { ref } from "vue";
 
+import ApiError from "./api-error";
+
 // Base URL prepended to all API calls.
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
 
@@ -41,8 +43,10 @@ export default function useApi() {
 	 * @param  {object}  parameters
 	 *     Query string parameters or request body.
 	 *
-	 * @throws  {object}
-	 *     The normalised API error body when the request fails.
+	 * @throws  {ApiError|Error}
+	 *     An ApiError when the server responds with a failure, or the original
+	 *     error when the request fails without a response, such as a network
+	 *     error.
 	 *
 	 * @returns  {Promise<object>}
 	 *     The parsed API response body.
@@ -67,21 +71,18 @@ export default function useApi() {
 			const body = await response.json();
 
 			if (!response.ok) {
-				throw body;
+				throw new ApiError(response.status, body);
 			}
 
 			isReady.value = true;
 
 			return body;
 		} catch (error) {
-			// Error body used to decide whether the auth session has expired.
-			const body = getErrorBody(error);
-
-			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(body)) {
+			if (finalEndpoint && !finalEndpoint.endsWith("/auth/login") && isUnauthorisedError(error)) {
 				resetAuthSessionSilently();
 			}
 
-			throw body;
+			throw error;
 		} finally {
 			isLoading.value = false;
 		}
@@ -171,41 +172,17 @@ export default function useApi() {
 	}
 
 	/**
-	 * Get the useful API error body, if the request failed with a response
-	 * wrapper.
-	 *
-	 * @param  {Error|object}  error
-	 *     The error thrown by fetch or another runtime failure.
-	 *
-	 * @returns  {object}
-	 *     The response body when the error wraps one, otherwise the error.
-	 */
-	function getErrorBody(error) {
-		if (typeof error?.getResponse !== "function") {
-			return error;
-		}
-
-		// Response wrapper provided by the thrown error.
-		const response = error.getResponse();
-
-		if (typeof response?.getBody !== "function") {
-			return error;
-		}
-
-		return response.getBody();
-	}
-
-	/**
 	 * Check whether an API failure means the current auth session is invalid.
 	 *
-	 * @param  {object}  body
-	 *     The normalised API error body.
+	 * @param  {ApiError|Error}  error
+	 *     The error thrown by the request. An ApiError carries the server's
+	 *     error code at the top level.
 	 *
 	 * @returns  {boolean}
-	 *     Whether the error body represents an expired auth session.
+	 *     Whether the server reported that the auth session is no longer valid.
 	 */
-	function isUnauthorisedError(body) {
-		return getPropertyValue(body, "code") === unauthorisedErrorCode;
+	function isUnauthorisedError(error) {
+		return getPropertyValue(error, "code") === unauthorisedErrorCode;
 	}
 
 	/**

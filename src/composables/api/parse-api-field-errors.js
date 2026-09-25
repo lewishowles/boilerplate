@@ -33,7 +33,7 @@ export function parseApiFieldErrors(error) {
 	}
 
 	// Field name returned for a recognised input error.
-	const fieldName = error?.code === "ERROR_CODE_INPUT_ERROR" ? error?.payload?.param : null;
+	const fieldName = error?.code === "ERROR_CODE_INPUT_ERROR" ? error?.body?.payload?.param : null;
 
 	if (isNonEmptyString(fieldName)) {
 		return { [fieldName]: message };
