@@ -31,6 +31,9 @@ export default defineConfig({
 	plugins: lazyPlugins(() => [
 		VueRouter({
 			dts: false,
+			// Vitest cannot stop the route plugin's own file watcher, so
+			// test runs turn it off to avoid running out of open files.
+			watch: !process.env.VITEST,
 		}),
 		Components({
 			dts: false,

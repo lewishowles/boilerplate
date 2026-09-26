@@ -222,13 +222,18 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 *
 	 * @param  {ApiError|Error}  error
 	 *     The error thrown by the request. An ApiError carries the server's
-	 *     error code at the top level.
+	 *     status and error code at the top level.
 	 *
 	 * @returns  {boolean}
-	 *     Whether the server reported that the auth session is no longer valid.
+	 *     Whether the server reported that the auth session is no longer valid,
+	 *     either with a 401 status or with its unauthorised error code. The
+	 *     status check covers a 401 whose body is not JSON and so has no code.
 	 */
 	function isUnauthorisedError(error) {
-		return getPropertyValue(error, "code") === unauthorisedErrorCode;
+		return (
+			(error instanceof ApiError && error.status === 401) ||
+			getPropertyValue(error, "code") === unauthorisedErrorCode
+		);
 	}
 
 	/**

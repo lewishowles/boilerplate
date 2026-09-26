@@ -169,6 +169,19 @@ describe("createXanoApi", () => {
 		await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 	});
 
+	test.each([
+		{ body: "<html>Unauthorised</html>", description: "HTML" },
+		{ body: "", description: "empty" },
+	])("Resets the auth session for a 401 with an $description body", async ({ body }) => {
+		mockGet.mockRejectedValue(createXanoRequestError(body, 401));
+
+		// Xano API adapter under test.
+		const api = createXanoApi({ client: { get: mockGet } });
+
+		await expect(api.get("widgets")).rejects.toMatchObject({ body, status: 401 });
+		await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
+	});
+
 	test("Keeps the auth session for an unauthorised login error", async () => {
 		// Unauthorised Xano response body.
 		const body = { code: "ERROR_CODE_UNAUTHORIZED" };
@@ -184,6 +197,20 @@ describe("createXanoApi", () => {
 			status: 401,
 		});
 
+		expect(mockResetAuthSession).not.toHaveBeenCalled();
+	});
+
+	test("Keeps the auth session for a login 401 with an HTML body", async () => {
+		// Unauthorised proxy response body.
+		const body = "<html>Unauthorised</html>";
+
+		mockGet.mockRejectedValue(createXanoRequestError(body, 401));
+
+		// Xano API adapter under test.
+		const api = createXanoApi({ client: { get: mockGet } });
+
+		await expect(api.get("auth/login")).rejects.toMatchObject({ body, status: 401 });
+		await vi.dynamicImportSettled();
 		expect(mockResetAuthSession).not.toHaveBeenCalled();
 	});
 });
