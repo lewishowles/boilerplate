@@ -123,16 +123,7 @@ describe("useApi (fetch)", () => {
 			// API methods and state under test.
 			const { get, isLoading, isReady } = useApi();
 
-			fetch.mockResolvedValue({
-				ok: true,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve(responseBody),
-			});
+			fetch.mockResolvedValue(new Response(JSON.stringify(responseBody)));
 
 			// Pending request used to observe loading state.
 			const request = get("examples", { page: 2 });
@@ -160,16 +151,7 @@ describe("useApi (fetch)", () => {
 				// API method selected for the current request case.
 				const { [method]: request } = useApi();
 
-				fetch.mockResolvedValue({
-					ok: true,
-					/**
-					 * Resolve with the stubbed response body.
-					 *
-					 * @returns  {Promise<object>}
-					 *     The stubbed response body.
-					 */
-					json: () => Promise.resolve({}),
-				});
+				fetch.mockResolvedValue(new Response("{}"));
 
 				await request("examples", parameters);
 
@@ -187,16 +169,7 @@ describe("useApi (fetch)", () => {
 
 			setAuthToken("token-123");
 
-			fetch.mockResolvedValue({
-				ok: true,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve({}),
-			});
+			fetch.mockResolvedValue(new Response("{}"));
 
 			await post("examples", { name: "Ada" });
 
@@ -214,16 +187,7 @@ describe("useApi (fetch)", () => {
 			// POST method used for the empty request.
 			const { post } = useApi();
 
-			fetch.mockResolvedValue({
-				ok: true,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve({}),
-			});
+			fetch.mockResolvedValue(new Response("{}"));
 
 			await post("examples", {});
 
@@ -240,26 +204,53 @@ describe("useApi (fetch)", () => {
 			// API methods and state under test.
 			const { post, isLoading, isReady } = useApi();
 
-			fetch.mockResolvedValue({
-				ok: false,
-				status: 422,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve(responseBody),
-			});
+			fetch.mockResolvedValue(new Response(JSON.stringify(responseBody), { status: 422 }));
 
 			// Error thrown to the request caller.
 			const error = await post("examples", { name: "Ada" }).catch((failure) => failure);
 
 			expect(error).toBeInstanceOf(ApiError);
 			expect(error.status).toBe(422);
-			expect(error.body).toBe(responseBody);
+			expect(error.body).toEqual(responseBody);
 			expect(isLoading.value).toBe(false);
 			expect(isReady.value).toBe(false);
+		});
+
+		test("Keeps the status and text of a non-JSON error response", async () => {
+			// Server error body that cannot be parsed as JSON.
+			const responseBody = "<html>Bad gateway</html>";
+			// GET method used for the failed request.
+			const { get } = useApi();
+
+			fetch.mockResolvedValue(new Response(responseBody, { status: 502 }));
+
+			await expect(get("examples")).rejects.toMatchObject({
+				body: responseBody,
+				status: 502,
+			});
+		});
+
+		test("Uses an undefined body for an empty error response", async () => {
+			// GET method used for the failed request.
+			const { get } = useApi();
+
+			fetch.mockResolvedValue(new Response(null, { status: 500 }));
+
+			// Error returned to the caller for the empty response.
+			const error = await get("examples").catch((failure) => failure);
+
+			expect(error).toBeInstanceOf(ApiError);
+			expect(error.status).toBe(500);
+			expect(error.body).toBeUndefined();
+		});
+
+		test("Resolves with undefined for a successful empty response", async () => {
+			// GET method used for the empty response.
+			const { get } = useApi();
+
+			fetch.mockResolvedValue(new Response(null, { status: 204 }));
+
+			await expect(get("examples")).resolves.toBeUndefined();
 		});
 
 		test("Rethrows a network error unchanged", async () => {
@@ -279,21 +270,39 @@ describe("useApi (fetch)", () => {
 			// GET method used to trigger the session reset.
 			const { get } = useApi();
 
-			fetch.mockResolvedValue({
-				ok: false,
-				status: 401,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve(responseBody),
-			});
+			fetch.mockResolvedValue(new Response(JSON.stringify(responseBody), { status: 401 }));
 
 			await expect(get("examples")).rejects.toMatchObject({
 				body: responseBody,
 				code: responseBody.code,
+				status: 401,
+			});
+			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
+		});
+
+		test("Resets the auth session for a JSON 401 without an error code", async () => {
+			// Unauthorised response body without the usual error code.
+			const responseBody = { message: "Session expired" };
+			// GET method used to trigger the session reset.
+			const { get } = useApi();
+
+			fetch.mockResolvedValue(new Response(JSON.stringify(responseBody), { status: 401 }));
+
+			await expect(get("examples")).rejects.toMatchObject({
+				body: responseBody,
+				status: 401,
+			});
+			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
+		});
+
+		test("Resets the auth session for a non-JSON 401 response", async () => {
+			// GET method used to trigger the session reset.
+			const { get } = useApi();
+
+			fetch.mockResolvedValue(new Response("Unauthorised", { status: 401 }));
+
+			await expect(get("examples")).rejects.toMatchObject({
+				body: "Unauthorised",
 				status: 401,
 			});
 			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
@@ -307,17 +316,7 @@ describe("useApi (fetch)", () => {
 			// POST method used for the login request.
 			const { post } = useApi();
 
-			fetch.mockResolvedValue({
-				ok: false,
-				status: 401,
-				/**
-				 * Resolve with the stubbed response body.
-				 *
-				 * @returns  {Promise<object>}
-				 *     The stubbed response body.
-				 */
-				json: () => Promise.resolve(responseBody),
-			});
+			fetch.mockResolvedValue(new Response(JSON.stringify(responseBody), { status: 401 }));
 
 			await expect(post("auth/login", credentials)).rejects.toMatchObject({
 				body: responseBody,

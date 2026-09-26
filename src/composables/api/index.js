@@ -48,8 +48,9 @@ export default function useApi() {
 	 *     error when the request fails without a response, such as a network
 	 *     error.
 	 *
-	 * @returns  {Promise<object>}
-	 *     The parsed API response body.
+	 * @returns  {Promise<object|string|undefined>}
+	 *     The parsed response body, raw text when it is not JSON, or undefined
+	 *     when the body is empty.
 	 */
 	async function makeApiCall(method, endpoint, parameters) {
 		// URL used for the in-progress request.
@@ -67,8 +68,22 @@ export default function useApi() {
 				body: getBody(parameters, method),
 			});
 
-			// Parsed response body returned to the caller.
-			const body = await response.json();
+			// The raw response body. It is read as text so that a body that is
+			// not JSON, such as an HTML error page, does not hide the status.
+			const responseText = await response.text();
+
+			// The body returned to the caller or kept on the API error: parsed
+			// JSON, the raw text when it is not JSON, or undefined when it is
+			// empty.
+			let body;
+
+			if (responseText) {
+				try {
+					body = JSON.parse(responseText);
+				} catch {
+					body = responseText;
+				}
+			}
 
 			if (!response.ok) {
 				throw new ApiError(response.status, body);
@@ -96,8 +111,9 @@ export default function useApi() {
 	 * @param  {object}  parameters
 	 *     Query string parameters.
 	 *
-	 * @returns  {Promise<object>}
-	 *     The parsed API response body.
+	 * @returns  {Promise<object|string|undefined>}
+	 *     The parsed response body, raw text when it is not JSON, or undefined
+	 *     when the body is empty.
 	 */
 	async function get(endpoint, parameters) {
 		return makeApiCall("get", endpoint, parameters);
@@ -111,8 +127,9 @@ export default function useApi() {
 	 * @param  {object}  parameters
 	 *     Request body parameters.
 	 *
-	 * @returns  {Promise<object>}
-	 *     The parsed API response body.
+	 * @returns  {Promise<object|string|undefined>}
+	 *     The parsed response body, raw text when it is not JSON, or undefined
+	 *     when the body is empty.
 	 */
 	async function post(endpoint, parameters) {
 		return makeApiCall("post", endpoint, parameters);
@@ -126,8 +143,9 @@ export default function useApi() {
 	 * @param  {object}  parameters
 	 *     Request body parameters.
 	 *
-	 * @returns  {Promise<object>}
-	 *     The parsed API response body.
+	 * @returns  {Promise<object|string|undefined>}
+	 *     The parsed response body, raw text when it is not JSON, or undefined
+	 *     when the body is empty.
 	 */
 	async function patch(endpoint, parameters) {
 		return makeApiCall("patch", endpoint, parameters);
@@ -179,10 +197,15 @@ export default function useApi() {
 	 *     error code at the top level.
 	 *
 	 * @returns  {boolean}
-	 *     Whether the server reported that the auth session is no longer valid.
+	 *     Whether the server reported that the auth session is no longer valid,
+	 *     either with a 401 status or with its unauthorised error code. The
+	 *     status check covers a 401 whose body is not JSON and so has no code.
 	 */
 	function isUnauthorisedError(error) {
-		return getPropertyValue(error, "code") === unauthorisedErrorCode;
+		return (
+			(error instanceof ApiError && error.status === 401) ||
+			getPropertyValue(error, "code") === unauthorisedErrorCode
+		);
 	}
 
 	/**
@@ -252,8 +275,9 @@ export default function useApi() {
 	 * @param  {string}  endpoint
 	 *     API endpoint path.
 	 *
-	 * @returns  {Promise<object>}
-	 *     The parsed API response body.
+	 * @returns  {Promise<object|string|undefined>}
+	 *     The parsed response body, raw text when it is not JSON, or undefined
+	 *     when the body is empty.
 	 */
 	async function remove(endpoint) {
 		return makeApiCall("delete", endpoint);
