@@ -14,6 +14,8 @@ bun install
 bun run dev
 ```
 
+The icons in `public/` and the social preview image `public/meta-default.webp` are grey placeholders. Replace them with the project's own images before launch, keeping the same file names and sizes.
+
 ## API setup
 
 Choose one API mode when creating a project with `boilersuit new`:
