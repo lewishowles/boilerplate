@@ -1,5 +1,6 @@
-import createXanoApi from "@/composables/api/xano/xano-api";
 import { xano } from "@/composables/api/xano/xano-client";
+
+import createXanoApi from "@/composables/api/xano/xano-api";
 
 /**
  * Composable for making API calls with one configured Xano API group.

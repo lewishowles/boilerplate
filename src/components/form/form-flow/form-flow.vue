@@ -3,11 +3,10 @@
  * A form flow that parses this project's API errors into field errors, and
  * passes through everything the underlying component exposes.
  */
-import { extendComponent } from "@lewishowles/components/utilities";
 import { parseApiFieldErrors } from "@/composables/api/parse-api-field-errors";
-import { useTemplateRef } from "vue";
-
 import { FormFlow } from "@lewishowles/components";
+import { extendComponent } from "@lewishowles/components/utilities";
+import { useTemplateRef } from "vue";
 
 // Initialise our extended component.
 const ExtendedComponent = extendComponent(FormFlow, {

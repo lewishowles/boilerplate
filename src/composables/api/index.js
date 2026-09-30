@@ -8,13 +8,11 @@ import ApiError from "./api-error";
 
 // Base URL prepended to all API calls.
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
-
 // localStorage key used to persist the auth token.
 const authTokenStorageKey = "authToken";
-// The saved auth token, shared by every useApi() call and kept in sync
-// across browser tabs.
+// The saved auth token, shared by every useApi() call and kept in sync across
+// browser tabs.
 const authToken = useStorage(authTokenStorageKey, null, undefined, { flush: "sync" });
-
 // API error code returned when the current request is not authorised.
 const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
 

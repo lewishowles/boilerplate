@@ -11,12 +11,14 @@ describe("ApiError", () => {
 		const error = new ApiError(422, body);
 
 		expect(error).toBeInstanceOf(Error);
+
 		expect(error).toMatchObject({
 			code: body.code,
 			message: body.message,
 			name: "ApiError",
 			status: 422,
 		});
+
 		expect(error.body).toBe(body);
 		expect(body.status).toBe("body value");
 	});

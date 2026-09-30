@@ -1,6 +1,7 @@
-import { useQueryCache } from "@pinia/colada";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
 import { clearCurrentUser, currentUserQueryOptions } from "@/queries/auth/current-user";
+import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { useQueryCache } from "@pinia/colada";
+
 import useApi from "@/composables/api";
 
 /**
@@ -21,7 +22,6 @@ import useApi from "@/composables/api";
 export default async function authMiddleware(to) {
 	// Auth-token methods used by the route guard.
 	const { hasAuthToken, setAuthToken } = useApi();
-
 	// Development-only bypass driven by VITE_MOCK_AUTH.
 	const isMockAuth = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === "true";
 

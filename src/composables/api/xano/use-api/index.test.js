@@ -34,6 +34,7 @@ describe("useApi (Xano)", () => {
 		const { get } = useApi();
 
 		await expect(get("/examples")).resolves.toEqual(body);
+
 		expect(mockGet).toHaveBeenCalledWith("/examples");
 	});
 

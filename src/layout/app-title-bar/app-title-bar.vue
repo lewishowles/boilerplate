@@ -64,7 +64,6 @@ import { computed } from "vue";
 const { colourMode, toggleColourMode } = useColourMode();
 // Shared sidebar state and its toggle action.
 const { showSidebar, toggleSidebar } = useSidebar();
-
 // The icon reflecting the currently resolved colour mode.
 const colourModeIcon = computed(() => (colourMode.value === "dark" ? "icon-moon" : "icon-sun"));
 

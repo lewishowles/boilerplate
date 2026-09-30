@@ -1,7 +1,6 @@
+import { usePageTitle, usePageTitles } from "./use-page-title";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { effectScope, nextTick, reactive, ref } from "vue";
-
-import { usePageTitle, usePageTitles } from "./use-page-title";
 
 // Reactive document title returned by the VueUse stub.
 const mockTitle = ref(null);

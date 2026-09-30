@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { withAppContext } from "@lewishowles/testing/vue";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 // Mocked auth API GET method.
 const mockGet = vi.hoisted(() => vi.fn());

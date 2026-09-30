@@ -23,11 +23,11 @@
 /**
  * Displays the sign-in form and redirects after a successful login.
  */
-import { definePage } from "vue-router/experimental";
+import { useAuth } from "@/queries/auth";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { ref } from "vue";
-import { useAuth } from "@/queries/auth";
 import { useRoute, useRouter } from "vue-router";
+import { definePage } from "vue-router/experimental";
 
 // Authentication state and sign-in action used by the form.
 const { errorMessage, login } = useAuth();
@@ -35,7 +35,6 @@ const { errorMessage, login } = useAuth();
 const route = useRoute();
 // Router used after a successful sign-in.
 const router = useRouter();
-
 // Our form data.
 const formData = ref({});
 

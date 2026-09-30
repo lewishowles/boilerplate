@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { createMount } from "@lewishowles/testing/vue";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { reactive, ref } from "vue";
 
 import AppSidebar from "./app-sidebar.vue";
@@ -69,6 +69,7 @@ describe("app-sidebar", () => {
 	beforeEach(() => {
 		mockHaveUser.value = false;
 		mockUserDetails.value = null;
+
 		vi.clearAllMocks();
 	});
 

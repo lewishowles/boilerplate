@@ -2,10 +2,9 @@
 /**
  * Extends the shared form wrapper with API field-error handling.
  */
-import { extendComponent } from "@lewishowles/components/utilities";
 import { parseApiFieldErrors } from "@/composables/api/parse-api-field-errors";
-
 import { FormWrapper } from "@lewishowles/components";
+import { extendComponent } from "@lewishowles/components/utilities";
 
 // Form wrapper configured to display API field errors.
 const ExtendedComponent = extendComponent(FormWrapper, {

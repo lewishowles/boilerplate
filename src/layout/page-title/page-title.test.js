@@ -1,5 +1,6 @@
 import { createMount } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
+
 import PageTitle from "./page-title.vue";
 
 // Mocked breadcrumb state.
@@ -34,6 +35,7 @@ const mount = createMount(PageTitle);
 describe("page-title", () => {
 	beforeEach(() => {
 		mockBreadcrumbs.value = [];
+
 		vi.clearAllMocks();
 	});
 

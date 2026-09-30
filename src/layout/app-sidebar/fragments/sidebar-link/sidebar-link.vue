@@ -23,9 +23,9 @@
 /**
  * Renders a sidebar navigation link with an optional icon.
  */
+import { useMenuItem } from "@/composables/router/use-menu";
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
-import { useMenuItem } from "@/composables/router/use-menu";
 
 // Link and icon options supplied by the sidebar menu.
 const props = defineProps({

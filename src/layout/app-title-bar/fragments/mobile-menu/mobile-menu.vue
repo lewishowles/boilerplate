@@ -17,10 +17,9 @@
 /**
  * Opens navigation links in a mobile menu dialog.
  */
+import { ModalDialog } from "@lewishowles/components";
 import { useTemplateRef, watch } from "vue";
 import { useRoute } from "vue-router";
-
-import { ModalDialog } from "@lewishowles/components";
 
 // A reference to the mobile navigation menu dialog.
 const mobileMenu = useTemplateRef("mobile-menu");

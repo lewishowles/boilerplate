@@ -1,5 +1,6 @@
 import { createMount } from "@lewishowles/testing/vue";
 import { describe, expect, test } from "vite-plus/test";
+
 import UiKeyCap from "./ui-key-cap.vue";
 
 // Mounts ui-key-cap with the slot content each test passes in.
@@ -17,6 +18,7 @@ describe("ui-key-cap", () => {
 			const keyCap = wrapper.get("kbd");
 
 			expect(keyCap.text()).toBe("Ctrl");
+
 			expect(keyCap.classes()).toEqual(
 				expect.arrayContaining([
 					"border",

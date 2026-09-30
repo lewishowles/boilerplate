@@ -1,8 +1,7 @@
+import { provideMenu, useMenuGroup, useMenuItem } from "./use-menu";
 import { afterEach, describe, expect, test } from "vite-plus/test";
 import { createApp, defineComponent, h, reactive } from "vue";
 import { createMemoryHistory, createRouter } from "vue-router";
-
-import { provideMenu, useMenuGroup, useMenuItem } from "./use-menu";
 
 // Empty route component used by the memory-history router.
 const TestRoute = defineComponent({
@@ -107,6 +106,7 @@ async function mountMenu(links, destination) {
 	});
 
 	application = createApp(TestMenu);
+
 	application.use(router);
 	application.mount(document.createElement("div"));
 
@@ -178,6 +178,7 @@ describe("use-menu", () => {
 			expect(activeGroupState.value).toBe(true);
 
 			application.unmount();
+
 			application = null;
 
 			// Group state when the group has no matching link.

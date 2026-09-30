@@ -34,7 +34,6 @@ describe("composeMiddleware", () => {
 			const guardA = vi.fn(() => ({ name: "login" }));
 			// Second middleware guard.
 			const guardB = vi.fn();
-
 			// Result returned by the middleware handler.
 			const result = await composeMiddleware(guardA, guardB)({}, {});
 
@@ -57,7 +56,6 @@ describe("composeMiddleware", () => {
 			const guardA = vi.fn();
 			// Second middleware guard.
 			const guardB = vi.fn();
-
 			// Result returned by the middleware handler.
 			const result = await composeMiddleware(guardA, guardB)({}, {});
 

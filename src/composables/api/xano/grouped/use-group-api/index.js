@@ -1,5 +1,6 @@
-import createXanoApi from "@/composables/api/xano/xano-api";
 import { xano } from "@/composables/api/xano/grouped/xano-client";
+
+import createXanoApi from "@/composables/api/xano/xano-api";
 
 /**
  * Create a dedicated API adapter for each group in the shared Xano instance.

@@ -15,7 +15,6 @@
  * Renders a router link with configurable active classes.
  */
 import { useRouteReload } from "@/composables/router/use-route-reload";
-
 import { RouterLink } from "vue-router";
 
 defineOptions({

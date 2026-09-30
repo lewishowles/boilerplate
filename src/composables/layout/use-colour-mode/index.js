@@ -1,6 +1,7 @@
-import packageJson from "../../../../package.json" with { type: "json" };
-import { computed } from "vue";
 import { useColorMode, useStorage } from "@vueuse/core";
+import { computed } from "vue";
+
+import packageJson from "#package.json" with { type: "json" };
 
 // Includes the project name so apps on the same origin don't share a
 // preference.

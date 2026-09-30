@@ -8,10 +8,9 @@ const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:30
 // Key used by the composable to store the auth token.
 const authTokenStorageKey = "authToken";
 // A real Storage that replaces the mocked localStorage from the global test
-// setup. It is installed before useApi is imported, so the saved auth token
-// is read from and written to it.
+// setup. It is installed before useApi is imported, so the saved auth token is
+// read from and written to it.
 const authStorage = new Storage();
-
 // Mock used to observe automatic auth-session resets.
 const mockResetAuthSession = vi.hoisted(() => vi.fn());
 
@@ -95,11 +94,13 @@ describe("useApi (fetch)", () => {
 			const { hasAuthToken, setAuthToken } = useApi();
 
 			setAuthToken("token-123");
-			// The happy-dom test environment fires the storage
-			// event for our own write in this window, which makes
-			// VueUse ignore changes until the next tick. Browsers
-			// only fire it in other tabs, so the app is unaffected.
+
+			// The happy-dom test environment fires the storage event for our
+			// own write in this window, which makes VueUse ignore changes until
+			// the next tick. Browsers only fire it in other tabs, so the app is
+			// unaffected.
 			await nextTick();
+
 			setAuthToken(null);
 
 			expect(hasAuthToken()).toBe(false);
@@ -137,6 +138,7 @@ describe("useApi (fetch)", () => {
 				headers: undefined,
 				method: "GET",
 			});
+
 			expect(isLoading.value).toBe(false);
 			expect(isReady.value).toBe(true);
 		});
@@ -277,6 +279,7 @@ describe("useApi (fetch)", () => {
 				code: responseBody.code,
 				status: 401,
 			});
+
 			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 		});
 
@@ -292,6 +295,7 @@ describe("useApi (fetch)", () => {
 				body: responseBody,
 				status: 401,
 			});
+
 			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 		});
 
@@ -305,6 +309,7 @@ describe("useApi (fetch)", () => {
 				body: "Unauthorised",
 				status: 401,
 			});
+
 			await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 		});
 

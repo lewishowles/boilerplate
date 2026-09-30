@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
-
 import { resetAuthSession } from ".";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 // Mock used to observe cached-user clearing.
 const mockClearCurrentUser = vi.hoisted(() => vi.fn());
@@ -39,6 +38,7 @@ describe("resetAuthSession", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockHasAuthToken.mockReturnValue(true);
+
 		mockCurrentRoute.value = { fullPath: "/account?tab=security", name: "account" };
 	});
 

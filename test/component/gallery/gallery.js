@@ -1,10 +1,10 @@
 import "@/assets/css/main.css";
-
+import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { PiniaColada } from "@pinia/colada";
+import { createPinia } from "pinia";
 import { createApp, h, shallowRef } from "vue";
 import { createMemoryHistory, createRouter } from "vue-router";
-import { createPinia } from "pinia";
-import { isNonEmptyString } from "@lewishowles/helpers/string";
+
 import componentLibrary from "@lewishowles/components";
 
 // Element the gallery app mounts into.
@@ -14,9 +14,9 @@ if (!root) {
 	throw new Error("The component gallery needs a #root element.");
 }
 
-// Every story in the source tree, keyed by the id a spec passes to mount(),
-// for example "layout/app-title-bar/app-title-bar". Each value loads that
-// story's module on demand.
+// Every story in the source tree, keyed by the id a spec passes to mount(), for
+// example "layout/app-title-bar/app-title-bar". Each value loads that story's
+// module on demand.
 const stories = Object.fromEntries(
 	Object.entries(import.meta.glob("/src/**/*.story.vue")).map(([path, load]) => [
 		getStoryId(path),
@@ -85,6 +85,7 @@ async function mount({ story: storyId, props: { routes = [], ...storyProps } = {
 	}
 
 	app = createApp(gallery);
+
 	app.use(createPinia());
 	app.use(PiniaColada);
 	app.use(componentLibrary);
@@ -153,8 +154,8 @@ function createGalleryRouter(routes) {
 }
 
 /**
- * Destroy the gallery app so the next mount() starts with fresh Pinia,
- * router and component state.
+ * Destroy the gallery app so the next mount() starts with fresh Pinia, router
+ * and component state.
  */
 function unmount() {
 	app?.unmount();

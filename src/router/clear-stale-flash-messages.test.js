@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
+
 import clearStaleFlashMessages from "./clear-stale-flash-messages.js";
 
 // Stands in for the flash message store, so a test can watch which ids the hook
@@ -52,6 +53,7 @@ function storedMessage(id) {
 describe("clearStaleFlashMessages", () => {
 	beforeEach(() => {
 		mockFlashMessages.messages.length = 0;
+
 		// Navigate with an empty store so the hook forgets any held message
 		// ids.
 		clearStaleFlashMessages({ path: "/page-b" }, { path: "/page-a" });
@@ -63,8 +65,7 @@ describe("clearStaleFlashMessages", () => {
 
 	test("Clears the previous message and holds the current navigation message", () => {
 		// Sent on the navigation into page B, so it should survive that
-		// navigation
-		// and be cleared on the next one.
+		// navigation and be cleared on the next one.
 		const firstMessage = storedMessage("message-1");
 		// Sent on the navigation into page C, while the first message is still
 		// held. It must not be cleared alongside it.
@@ -87,8 +88,7 @@ describe("clearStaleFlashMessages", () => {
 		mockFlashMessages.messages.push(message);
 		clearStaleFlashMessages({ path: "/page-b" }, { path: "/page-a" });
 		// The user dismisses the message themselves, so the hook is left
-		// holding
-		// an id that no longer matches anything in the store.
+		// holding an id that no longer matches anything in the store.
 		mockFlashMessages.messages.splice(0, 1);
 
 		clearStaleFlashMessages({ path: "/page-c" }, { path: "/page-b" });

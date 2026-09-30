@@ -29,6 +29,7 @@ vi.mock("@/composables/api/xano/grouped/xano-client", () => ({
 describe("use-group-api", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+
 		mockGet.mockResolvedValue({
 			/**
 			 * Provide the Xano response stub.
@@ -98,6 +99,7 @@ describe("use-group-api", () => {
 		const authenticationApi = useGroupApi("api:authentication");
 
 		mockGet.mockImplementationOnce(() => applicationRequest);
+
 		mockGet.mockResolvedValueOnce({
 			/**
 			 * Provide the Xano response stub.
@@ -130,6 +132,7 @@ describe("use-group-api", () => {
 			 */
 			getBody: () => ({}),
 		});
+
 		await pendingApplicationRequest;
 	});
 

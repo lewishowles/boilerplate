@@ -1,11 +1,11 @@
 import "./assets/css/main.css";
-
 import { PiniaColada } from "@pinia/colada";
-import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { createApp } from "vue";
+
+import router from "@/router";
 
 import App from "@/App.vue";
-import router from "@/router";
 
 // Root Vue application instance.
 const app = createApp(App);

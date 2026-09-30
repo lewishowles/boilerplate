@@ -1,6 +1,7 @@
 import { createMount } from "@lewishowles/testing/vue";
-import { nextTick, reactive } from "vue";
 import { afterEach, describe, expect, test, vi } from "vite-plus/test";
+import { nextTick, reactive } from "vue";
+
 import MobileMenu from "./mobile-menu.vue";
 
 // Mocked current route.

@@ -1,10 +1,10 @@
-import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
+import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { isNonEmptyString, ltrim } from "@lewishowles/helpers/string";
 import { ref } from "vue";
 
-import ApiError from "../api-error";
 import translateSortParameters from "./translate-sort-parameters";
+import ApiError from "@/composables/api/api-error";
 
 // API error code returned when the current request is not authorised.
 const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
@@ -69,8 +69,7 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 			finalEndpoint = getFinalUrl(endpoint);
 
 			// Get our request parameters. We only translate sort parameters on
-			// GET where
-			// it's needed.
+			// GET where it's needed.
 			const requestParameters = method === "get" ? translateSortParameters(parameters) : parameters;
 
 			// Xano response returned by the requested client method.
@@ -240,9 +239,9 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	 * Reset auth without replacing the original API error.
 	 *
 	 * Imported dynamically to break a real circular dependency: session-reset
-	 * imports the application `useApi` composable, which imports the group
-	 * API composable, which imports this file. A static import here would
-	 * hit that cycle during module initialisation.
+	 * imports the application `useApi` composable, which imports the group API
+	 * composable, which imports this file. A static import here would hit that
+	 * cycle during module initialisation.
 	 */
 	function resetAuthSessionSilently() {
 		import("@/composables/api/session-reset")

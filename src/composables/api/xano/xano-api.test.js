@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
-import ApiError from "../api-error";
 import createXanoApi from "./xano-api";
+import ApiError from "@/composables/api/api-error";
 
 // Mock used to observe Xano GET requests.
 const mockGet = vi.hoisted(() => vi.fn());
@@ -85,6 +85,7 @@ describe("createXanoApi", () => {
 		const api = createXanoApi({ client: { get: mockGet } });
 
 		await expect(api.get("widgets")).resolves.toEqual(body);
+
 		expect(api.isReady.value).toBe(true);
 	});
 
@@ -96,7 +97,6 @@ describe("createXanoApi", () => {
 
 		// Xano API adapter under test.
 		const api = createXanoApi({ client: { get: mockGet } });
-
 		// Error thrown to the request caller.
 		const error = await api.get("widgets").catch((failure) => failure);
 
@@ -166,6 +166,7 @@ describe("createXanoApi", () => {
 			code: body.code,
 			status: 401,
 		});
+
 		await vi.waitFor(() => expect(mockResetAuthSession).toHaveBeenCalledTimes(1));
 	});
 
@@ -211,6 +212,7 @@ describe("createXanoApi", () => {
 
 		await expect(api.get("auth/login")).rejects.toMatchObject({ body, status: 401 });
 		await vi.dynamicImportSettled();
+
 		expect(mockResetAuthSession).not.toHaveBeenCalled();
 	});
 });

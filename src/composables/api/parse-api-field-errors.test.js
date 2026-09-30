@@ -1,7 +1,7 @@
+import { parseApiFieldErrors } from "./parse-api-field-errors";
 import { describe, expect, test } from "vite-plus/test";
 
 import ApiError from "./api-error";
-import { parseApiFieldErrors } from "./parse-api-field-errors";
 
 describe("parseApiFieldErrors", () => {
 	test.for([

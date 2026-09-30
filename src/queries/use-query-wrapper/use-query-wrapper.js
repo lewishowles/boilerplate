@@ -1,5 +1,5 @@
-import { computed, ref, toValue, watch } from "vue";
 import { useQuery, useQueryCache } from "@pinia/colada";
+import { computed, ref, toValue, watch } from "vue";
 
 /**
  * Check whether query data is available by default.

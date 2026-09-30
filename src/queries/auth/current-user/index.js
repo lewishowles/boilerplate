@@ -1,10 +1,10 @@
-import { computed } from "vue";
-import { defineQueryOptions, useQueryCache } from "@pinia/colada";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { AUTH_KEYS } from "@/queries/auth/keys.js";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
-import useAuthApi from "@/composables/api/use-auth-api";
+import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { defineQueryOptions, useQueryCache } from "@pinia/colada";
+import { computed } from "vue";
 
-import { AUTH_KEYS } from "../keys.js";
+import useAuthApi from "@/composables/api/use-auth-api";
 
 // Development-only bypass driven by VITE_MOCK_AUTH.
 const isMockAuth = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === "true";

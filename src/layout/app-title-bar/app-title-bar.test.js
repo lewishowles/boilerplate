@@ -1,9 +1,9 @@
+import { useSidebar } from "@/composables/layout/use-sidebar";
 import { createMount } from "@lewishowles/testing/vue";
 import { afterEach, describe, expect, test, vi } from "vite-plus/test";
 import { ref } from "vue";
 
 import AppTitleBar from "./app-title-bar.vue";
-import { useSidebar } from "@/composables/layout/use-sidebar";
 
 // Mocked current colour mode.
 const mockColourMode = ref("light");
@@ -41,6 +41,7 @@ describe("app-title-bar", () => {
 
 		test("Shows the dark-mode icon", () => {
 			mockColourMode.value = "dark";
+
 			// Rendered title bar in dark mode.
 			const wrapper = mount();
 			// Colour-mode control in the rendered title bar.
@@ -53,6 +54,7 @@ describe("app-title-bar", () => {
 	afterEach(() => {
 		showSidebar.value = true;
 		mockColourMode.value = "light";
+
 		mockToggleColourMode.mockReset();
 	});
 
@@ -60,7 +62,6 @@ describe("app-title-bar", () => {
 		test("Toggles the sidebar when the desktop toggle is clicked", async () => {
 			// Rendered title bar under test.
 			const wrapper = mount();
-
 			// The desktop sidebar control remains the only pressed button.
 			const toggleButton = wrapper.find("ui-button-stub[pressed]");
 

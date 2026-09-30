@@ -69,13 +69,12 @@
 /**
  * Displays authenticated navigation and current-user controls.
  */
-import { computed } from "vue";
-import { getPathValue } from "@lewishowles/helpers/object";
-import { useAuth, useCurrentUser } from "@/queries/auth";
 import { useSidebar } from "@/composables/layout/use-sidebar";
 import { provideMenu } from "@/composables/router/use-menu";
-
+import { useAuth, useCurrentUser } from "@/queries/auth";
 import { IconDashboard, IconDocument } from "@lewishowles/components";
+import { getPathValue } from "@lewishowles/helpers/object";
+import { computed } from "vue";
 
 // Sidebar display options supplied by the app shell.
 const props = defineProps({

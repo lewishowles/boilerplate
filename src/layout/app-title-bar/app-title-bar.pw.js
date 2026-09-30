@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 // Story rendered by the app-title-bar component tests.
 const storyId = "layout/app-title-bar/app-title-bar";
 
-// Routes given to the gallery router. The title bar links to the first two
-// and offers the titled pages as search results.
+// Routes given to the gallery router. The title bar links to the first two and
+// offers the titled pages as search results.
 const sampleRoutes = [
 	{ name: "home", path: "/" },
 	{ name: "sample-pages", path: "/sample-pages" },

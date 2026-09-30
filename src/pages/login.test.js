@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { createMount } from "@lewishowles/testing/vue";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { ref } from "vue";
+
 import Login from "./login.vue";
 
 // Mocked sign-in action.
@@ -61,6 +62,7 @@ const mount = createMount(Login, {
 describe("login", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+
 		mockErrorMessage.value = null;
 		mockRoute.query = {};
 	});
@@ -90,6 +92,7 @@ describe("login", () => {
 
 		test("Redirects to the safe internal route on success", async () => {
 			mockRoute.query = { redirect: "/account?tab=security" };
+
 			mockLogin.mockResolvedValue({});
 
 			// Rendered login page with a safe redirect.
@@ -108,6 +111,7 @@ describe("login", () => {
 			["a missing value", undefined],
 		])("Falls back to sample pages for %s redirect values", async (_description, redirect) => {
 			mockRoute.query = { redirect };
+
 			mockLogin.mockResolvedValue({});
 
 			// Rendered login page with an unsafe redirect.
@@ -125,6 +129,7 @@ describe("login", () => {
 			const wrapper = mount();
 
 			await expect(wrapper.vm.performLogin()).resolves.not.toThrow();
+
 			expect(mockRouterPush).not.toHaveBeenCalled();
 		});
 	});

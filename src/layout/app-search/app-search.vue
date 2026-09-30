@@ -67,15 +67,14 @@
 /**
  * Provides search across the authenticated application pages.
  */
+import { isNonEmptyString } from "@lewishowles/helpers/string";
 import {
 	breakpointsTailwind,
 	createReusableTemplate,
 	onKeyStroke,
 	useBreakpoints,
 } from "@vueuse/core";
-
 import { computed, nextTick, ref, useTemplateRef } from "vue";
-import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { useRouter } from "vue-router";
 
 // Reusable desktop and mobile search-template components.
@@ -164,6 +163,7 @@ async function toggleMobileSearch() {
 
 	if (showMobileSearch.value) {
 		await nextTick();
+
 		mobileSearch.value?.triggerFocus();
 	}
 }

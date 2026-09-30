@@ -6,10 +6,10 @@
 /**
  * Displays a sample page by its route identifier.
  */
-import { computed } from "vue";
-import { definePage } from "vue-router/experimental";
-import { useRoute } from "vue-router";
 import { useBreadcrumb } from "@/composables/router/use-breadcrumbs";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { definePage } from "vue-router/experimental";
 
 // The current route provides the sample page identity.
 const route = useRoute();

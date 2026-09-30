@@ -1,6 +1,7 @@
-import packageJson from "../../../../package.json" with { type: "json" };
-import { nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
+import { nextTick } from "vue";
+
+import packageJson from "#package.json" with { type: "json" };
 
 // Matches the application key used by the composable.
 const colourModeStorageKey = `${packageJson.name}:colour-mode`;

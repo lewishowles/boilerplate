@@ -21,10 +21,10 @@
 /**
  * Renders the authenticated application shell.
  */
+import { useSidebar } from "@/composables/layout/use-sidebar";
 import { nextTick, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { definePage } from "vue-router/experimental";
-import { useSidebar } from "@/composables/layout/use-sidebar";
 
 // The main landmark, which takes focus when the user moves to another page.
 const mainElement = ref();

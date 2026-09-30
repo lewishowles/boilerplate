@@ -50,9 +50,9 @@
 /**
  * Displays the current page title and navigation context.
  */
+import { useBreadcrumbs } from "@/composables/router/use-breadcrumbs";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { useBreadcrumbs } from "@/composables/router/use-breadcrumbs";
 
 // The router resolves each breadcrumb destination to a link URL.
 const router = useRouter();

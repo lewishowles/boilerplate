@@ -56,10 +56,12 @@ describe("authMiddleware", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockHasAuthToken.mockReturnValue(false);
+
 		mockCurrentUserEntry.state = {
 			data: { display_name: "Sophie Wardhaugh" },
 			status: "success",
 		};
+
 		mockRefreshCurrentUser.mockResolvedValue(mockCurrentUserEntry.state);
 	});
 
@@ -94,13 +96,16 @@ describe("authMiddleware", () => {
 
 		test("Redirects and clears auth state when the current user is empty", async () => {
 			mockHasAuthToken.mockReturnValue(true);
+
 			mockCurrentUserEntry.state = { data: null, status: "success" };
+
 			mockRefreshCurrentUser.mockResolvedValue(mockCurrentUserEntry.state);
 
 			const result = await authMiddleware(protectedRoute, {});
 
 			expect(mockSetAuthToken).toHaveBeenCalledWith(null);
 			expect(mockClearCurrentUser).toHaveBeenCalled();
+
 			expect(result).toEqual({
 				path: "/login",
 				query: { redirect: "/account?tab=security" },
@@ -115,6 +120,7 @@ describe("authMiddleware", () => {
 
 			expect(mockSetAuthToken).toHaveBeenCalledWith(null);
 			expect(mockClearCurrentUser).toHaveBeenCalled();
+
 			expect(result).toEqual({
 				path: "/login",
 				query: { redirect: "/account?tab=security" },

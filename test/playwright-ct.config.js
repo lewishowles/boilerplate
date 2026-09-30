@@ -4,7 +4,6 @@ import {
 	sharedUse,
 	snapshotDir,
 } from "@lewishowles/testing/playwright";
-
 import { defineConfig } from "@playwright/test";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

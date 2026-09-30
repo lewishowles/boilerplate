@@ -1,6 +1,5 @@
-import { describe, expect, test, vi } from "vite-plus/test";
-
 import { withAppContext } from "@lewishowles/testing/vue";
+import { describe, expect, test, vi } from "vite-plus/test";
 
 /**
  * Create a promise that can be resolved or rejected by the test.
@@ -145,7 +144,6 @@ describe("useQueryWrapper", () => {
 		test("Leaves empty data and fetch time unset when the query fails", async () => {
 			// Query function that rejects with a request error.
 			const query = vi.fn().mockRejectedValue(new Error("Request failed"));
-
 			// Query state returned by the test wrapper.
 			const { data, isReady, lastFetched, refetch } = createTestQuery({ query });
 
@@ -183,6 +181,7 @@ describe("useQueryWrapper", () => {
 			expect(lastFetched.value).toBe(firstFetchTime);
 
 			secondRequest.resolve(secondResult);
+
 			await refresh;
 
 			expect(data.value).toEqual(secondResult);

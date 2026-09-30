@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 // Story rendered by the mobile-menu component tests.
 const storyId = "layout/app-title-bar/fragments/mobile-menu/mobile-menu";
 
-// Routes given to the gallery router, so the sidebar inside the menu has
-// links to show.
+// Routes given to the gallery router, so the sidebar inside the menu has links
+// to show.
 const sampleRoutes = [
 	{ name: "home", path: "/" },
 	{ name: "sample-pages", path: "/sample-pages" },
@@ -21,9 +21,7 @@ test.describe("mobile-menu", () => {
 
 		await menuTrigger.click();
 		await expect(component.getByRole("dialog", { name: "Navigation" })).toBeVisible();
-
 		await page.keyboard.press("Escape");
-
 		await expect(menuTrigger).toBeFocused();
 	});
 });

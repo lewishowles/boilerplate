@@ -3,9 +3,9 @@ import { isNonEmptyString } from "@lewishowles/helpers/string";
 
 /**
  * The error the API adapters throw when the server responds with a failure.
- * It keeps the HTTP status and the body the server sent, and copies the
- * body's code and message to the top level so the auth check and form error
- * handling can read them.
+ * It keeps the HTTP status and the body the server sent, and copies the body's
+ * code and message to the top level so the auth check and form error handling
+ * can read them.
  */
 export default class ApiError extends Error {
 	/**

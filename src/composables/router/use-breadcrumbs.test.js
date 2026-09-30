@@ -1,7 +1,6 @@
+import { useBreadcrumb, useBreadcrumbs } from "./use-breadcrumbs";
 import { describe, expect, test, vi } from "vite-plus/test";
 import { effectScope, nextTick, reactive, ref } from "vue";
-
-import { useBreadcrumb, useBreadcrumbs } from "./use-breadcrumbs";
 
 // Reactive route used by the Vue Router stub.
 const route = reactive({
@@ -41,6 +40,7 @@ describe("useBreadcrumbs", () => {
 		test("Omits routes without breadcrumb labels", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -58,6 +58,7 @@ describe("useBreadcrumbs", () => {
 		test("Builds a breadcrumb from meta.breadcrumb.label", () => {
 			route.name = "sample-page-one";
 			route.params = { samplePageId: "sample-123" };
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -86,6 +87,7 @@ describe("useBreadcrumbs", () => {
 		test("Falls back to meta.page_title for the label", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -103,6 +105,7 @@ describe("useBreadcrumbs", () => {
 		test("Marks the last rendered breadcrumb as current when later routes are omitted", () => {
 			route.name = "sample-page-two";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -132,6 +135,7 @@ describe("useBreadcrumbs", () => {
 		test("Uses a registered label for the current route", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -153,6 +157,7 @@ describe("useBreadcrumbs", () => {
 		test("Prefers a registered label to static labels", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -177,6 +182,7 @@ describe("useBreadcrumbs", () => {
 		test("Updates when a registered label changes", async () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -204,6 +210,7 @@ describe("useBreadcrumbs", () => {
 		test("Reacts to labels registered after initialisation", async () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -230,6 +237,7 @@ describe("useBreadcrumbs", () => {
 		test("Uses the fallback while a registered label is unavailable", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -255,6 +263,7 @@ describe("useBreadcrumbs", () => {
 		test("Marks an unavailable registered label as loading", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -277,6 +286,7 @@ describe("useBreadcrumbs", () => {
 		test("Removes a registered label when its scope is disposed", async () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -343,6 +353,7 @@ describe("useBreadcrumbs", () => {
 		test("Uses the index child as the parent breadcrumb for sibling routes", () => {
 			route.name = "sample-page-two";
 			route.params = { samplePageId: "sample-123" };
+
 			route.matched = [
 				{
 					name: undefined,
@@ -381,6 +392,7 @@ describe("useBreadcrumbs", () => {
 		test("Does not duplicate an index child when it is already matched", () => {
 			route.name = "sample-page-one";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: undefined,
@@ -410,6 +422,7 @@ describe("useBreadcrumbs", () => {
 		test("Uses breadcrumbKey for unnamed routes", () => {
 			route.name = "sample-page-two";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: undefined,
@@ -447,6 +460,7 @@ describe("useBreadcrumbs", () => {
 		test("Uses meta.breadcrumb.to as the destination", () => {
 			route.name = "sample-page-two";
 			route.params = {};
+
 			route.matched = [
 				{
 					name: "sample-page-one",
@@ -475,9 +489,11 @@ describe("useBreadcrumbs", () => {
 
 		test("Builds a path for unnamed breadcrumb routes", () => {
 			route.name = "sample-page-two";
+
 			route.params = {
 				samplePageOneId: "sample-123",
 			};
+
 			route.matched = [
 				{
 					name: undefined,
@@ -504,11 +520,13 @@ describe("useBreadcrumbs", () => {
 
 		test("Excludes unrelated parameters from breadcrumb links", () => {
 			route.name = "sample-page-two";
+
 			route.params = {
 				ignoredId: "ignored-789",
 				samplePageOneId: "sample-123",
 				samplePageTwoId: "sample-456",
 			};
+
 			route.matched = [
 				{
 					name: "sample-page-one",

@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { withAppContext } from "@lewishowles/testing/vue";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 // Mocked auth API GET method.
 const mockGet = vi.hoisted(() => vi.fn());
@@ -20,8 +20,7 @@ vi.mock("@/composables/api/use-auth-api", () => ({
 }));
 
 import { clearCurrentUser, useCurrentUser } from ".";
-
-import { AUTH_KEYS } from "../keys.js";
+import { AUTH_KEYS } from "@/queries/auth/keys.js";
 
 /**
  * Create the current-user query wrapper in a Vue app context.
@@ -124,6 +123,7 @@ describe("useCurrentUser", () => {
 				mockGet.mockResolvedValueOnce(validUser);
 
 				await refetch(true);
+
 				clearCurrentUser();
 
 				expect(userDetails.value).toBe(null);

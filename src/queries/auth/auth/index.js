@@ -1,12 +1,12 @@
-import { computed } from "vue";
-import { defineMutationOptions, useMutation } from "@pinia/colada";
+import { resetAuthSession } from "@/composables/api/session-reset";
+import { useCurrentUser } from "@/queries/auth/current-user";
+import { AUTH_KEYS } from "@/queries/auth/keys.js";
 import { getPathValue } from "@lewishowles/helpers/object";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
-import { useCurrentUser } from "../current-user";
-import { resetAuthSession } from "@/composables/api/session-reset";
-import useAuthApi from "@/composables/api/use-auth-api";
+import { defineMutationOptions, useMutation } from "@pinia/colada";
+import { computed } from "vue";
 
-import { AUTH_KEYS } from "../keys.js";
+import useAuthApi from "@/composables/api/use-auth-api";
 
 /**
  * Log the user in with the provided credentials.

@@ -17,11 +17,9 @@ test.describe("SPA navigation focus", () => {
 		await page.getByRole("link", { exact: true, name: "Sample pages" }).click();
 		await expect(page).toHaveURL(/\/sample-pages$/);
 		await expect(main).toBeFocused();
-
 		await page.goBack();
 		await expect(page).toHaveURL(/\/sample-pages\/one$/);
 		await expect(main).toBeFocused();
-
 		await page.goForward();
 		await expect(page).toHaveURL(/\/sample-pages$/);
 		await expect(main).toBeFocused();
@@ -36,7 +34,6 @@ test.describe("SPA navigation focus", () => {
 		await page.keyboard.press("Tab");
 		await expect(skipLink).toBeFocused();
 		await page.keyboard.press("Enter");
-
 		await expect(page).toHaveURL(/\/sample-pages#main$/);
 		await expect(page.locator("#main")).toBeFocused();
 	});
@@ -54,7 +51,6 @@ test.describe("SPA navigation focus", () => {
 
 		await expect(mobileMenu).toBeVisible();
 		await mobileMenu.getByRole("link", { exact: true, name: "Sample pages" }).click();
-
 		await expect(page).toHaveURL(/\/sample-pages$/);
 		await expect(page.locator("#main")).toBeFocused();
 		await expect(mobileMenu).toBeHidden();

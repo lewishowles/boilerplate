@@ -1,10 +1,10 @@
 import { isNonEmptyString } from "@lewishowles/helpers/string";
+import { useTitle } from "@vueuse/core";
 import { onScopeDispose, toValue, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { useTitle } from "@vueuse/core";
 
-// Captured at module load time so it always reflects the original value set
-// in index.html.
+// Captured at module load time so it always reflects the original value set in
+// index.html.
 const BASE_TITLE = document.title;
 
 /**

@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
-import { withAppContext } from "@lewishowles/testing/vue";
-
 import { useMutationWrapper } from "./use-mutation-wrapper";
+import { withAppContext } from "@lewishowles/testing/vue";
+import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 // Mocked query-cache invalidation method.
 const mockInvalidateQueries = vi.hoisted(() => vi.fn());
@@ -113,6 +112,7 @@ describe("useMutationWrapper", () => {
 				{ id: "example-1" },
 				expect.objectContaining({ entry: expect.any(Object) }),
 			);
+
 			expect(calls).toEqual(["settled", "invalidated"]);
 		});
 
