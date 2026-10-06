@@ -4,11 +4,11 @@ import { toValue } from "vue";
 
 /**
  * @typedef  {Array<string|number|object>}  QueryKey
- *     A Pinia Colada query key, such as `["examples"]` or `["examples", id]`.
+ * A Pinia Colada query key, such as `["examples"]` or `["examples", id]`.
  * @typedef  {(variables: object) => QueryKey|QueryKey[]}  QueryKeyGetter
- *     Resolve mutation variables into one or more query keys.
+ * Resolve mutation variables into one or more query keys.
  * @typedef  {QueryKey|QueryKey[]|QueryKeyGetter}  MutationQueryKeys
- *     One or more query keys to invalidate after a mutation settles.
+ * One or more query keys to invalidate after a mutation settles.
  */
 
 /**

@@ -169,4 +169,4 @@ The known-broken upstream `form-wrapper` example is deliberately not copied into
 
 ## Linting
 
-`.oxlintrc.json` extends `@lewishowles/lint-config`'s shared `vue.json` and `comments.json` layers. Add project-specific rule overrides, ignore patterns, or overrides blocks directly in `.oxlintrc.json`; see the `@lewishowles/lint-config` README for the merge rules.
+`.oxlintrc.json` extends `@lewishowles/lint-config`'s shared `vue.json` and `comments.json` layers. `vp lint` and `vp check` ignore that list and take their layers from the `lint` block in `vite.config.js`, so when you add or remove a layer, change both. Add project-specific rule overrides, ignore patterns, or overrides blocks directly in `.oxlintrc.json`; see the `@lewishowles/lint-config` README for the merge rules.

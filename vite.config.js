@@ -1,27 +1,16 @@
 import { alias } from "./support/aliases.js";
 import { componentsResolver } from "@lewishowles/components/resolver";
+import { comments, lintConfig, vue as vueLint } from "@lewishowles/lint-config/layers";
 import { defineConfig, lazyPlugins } from "vite-plus";
 
 import fmt from "./.oxfmtrc.json" with { type: "json" };
-import lintConfig from "./.oxlintrc.json" with { type: "json" };
-import baseLintConfig from "@lewishowles/lint-config/base.json" with { type: "json" };
-import commentsLintConfig from "@lewishowles/lint-config/comments.json" with { type: "json" };
+import localLintConfig from "./.oxlintrc.json" with { type: "json" };
 import importsConfig from "@lewishowles/lint-config/imports.json" with { type: "json" };
-import vueLintConfig from "@lewishowles/lint-config/vue.json" with { type: "json" };
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import Components from "unplugin-vue-components/vite";
 import vueDevTools from "vite-plugin-vue-devtools";
 import VueRouter from "vue-router/vite";
-
-// Vite-plus's own config loader requires every `extends` entry, at every
-// nesting level, to be a config object rather than the file-path strings oxlint
-// itself accepts, so resolve the shared layers here rather than relying on
-// .oxlintrc.json's or vue.json's own string-based extends.
-const lint = {
-	...lintConfig,
-	extends: [{ ...vueLintConfig, extends: [baseLintConfig] }, commentsLintConfig],
-};
 
 export default defineConfig({
 	staged: {
@@ -30,7 +19,11 @@ export default defineConfig({
 	// The project's formatter settings, plus the shared rules for sorting and
 	// grouping imports.
 	fmt: { ...fmt, ...importsConfig },
-	lint,
+	// The shared Vue and comment lint rules, plus the project's own settings
+	// from .oxlintrc.json. Vite+ only reads lint settings from here, and
+	// lintConfig ignores the extends list in .oxlintrc.json, so the shared
+	// layers are listed in both places. Keep the two lists in step.
+	lint: lintConfig([vueLint, comments], localLintConfig),
 	base: "/",
 	plugins: lazyPlugins(() => [
 		VueRouter({
