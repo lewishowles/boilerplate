@@ -5,8 +5,6 @@ import packageJson from "#package.json" with { type: "json" };
 
 // Matches the application key used by the composable.
 const colourModeStorageKey = `${packageJson.name}:colour-mode`;
-// Captures values written to the mocked localStorage implementation.
-const storedValues = new Map();
 // Preserve the browser implementation so tests restore global media-query
 // behaviour.
 const originalMatchMedia = window.matchMedia;
@@ -14,11 +12,6 @@ const originalMatchMedia = window.matchMedia;
 describe("use-colour-mode", () => {
 	beforeEach(() => {
 		vi.resetModules();
-		storedValues.clear();
-
-		localStorage.getItem.mockImplementation((key) => storedValues.get(key) ?? null);
-		localStorage.removeItem.mockImplementation((key) => storedValues.delete(key));
-		localStorage.setItem.mockImplementation((key, value) => storedValues.set(key, value));
 
 		document.documentElement.className = "";
 	});
@@ -33,7 +26,7 @@ describe("use-colour-mode", () => {
 			const { colourMode } = await loadColourMode();
 
 			expect(colourMode.value).toBe("light");
-			expect(storedValues.has(colourModeStorageKey)).toBe(false);
+			expect(localStorage.getItem(colourModeStorageKey)).toBeNull();
 			expect(document.documentElement.classList.contains("dark")).toBe(false);
 		});
 
@@ -42,7 +35,7 @@ describe("use-colour-mode", () => {
 			const { colourMode } = await loadColourMode({ darkSystem: true });
 
 			expect(colourMode.value).toBe("dark");
-			expect(storedValues.has(colourModeStorageKey)).toBe(false);
+			expect(localStorage.getItem(colourModeStorageKey)).toBeNull();
 			expect(document.documentElement.classList.contains("dark")).toBe(true);
 		});
 
@@ -51,7 +44,7 @@ describe("use-colour-mode", () => {
 			const { colourMode } = await loadColourMode({ darkSystem: false, storedMode: "dark" });
 
 			expect(colourMode.value).toBe("dark");
-			expect(storedValues.get(colourModeStorageKey)).toBe("dark");
+			expect(localStorage.getItem(colourModeStorageKey)).toBe("dark");
 			expect(document.documentElement.classList.contains("dark")).toBe(true);
 		});
 	});
@@ -66,7 +59,7 @@ describe("use-colour-mode", () => {
 			await nextTick();
 
 			expect(colourMode.value).toBe("dark");
-			expect(storedValues.get(colourModeStorageKey)).toBe("dark");
+			expect(localStorage.getItem(colourModeStorageKey)).toBe("dark");
 		});
 
 		test("Removes an override when the target matches the system", async () => {
@@ -80,7 +73,7 @@ describe("use-colour-mode", () => {
 			await nextTick();
 
 			expect(colourMode.value).toBe("light");
-			expect(storedValues.has(colourModeStorageKey)).toBe(false);
+			expect(localStorage.getItem(colourModeStorageKey)).toBeNull();
 		});
 
 		test("Shares state across separate useColourMode calls", async () => {
@@ -121,7 +114,7 @@ describe("use-colour-mode", () => {
 			await nextTick();
 
 			expect(colourMode.value).toBe("dark");
-			expect(storedValues.get(colourModeStorageKey)).toBe("dark");
+			expect(localStorage.getItem(colourModeStorageKey)).toBe("dark");
 		});
 	});
 });
@@ -212,7 +205,7 @@ async function loadColourMode({ darkSystem = false, storedMode } = {}) {
 	window.matchMedia = vi.fn(() => systemPreference.mediaQueryList);
 
 	if (storedMode) {
-		storedValues.set(colourModeStorageKey, storedMode);
+		localStorage.setItem(colourModeStorageKey, storedMode);
 	}
 
 	// Fresh colour-mode module loaded for this test.

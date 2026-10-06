@@ -1,16 +1,10 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick } from "vue";
 
-import ApiError from "./api-error";
-
 // API base URL used in request URL expectations.
 const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
 // Key used by the composable to store the auth token.
 const authTokenStorageKey = "authToken";
-// A real Storage that replaces the mocked localStorage from the global test
-// setup. It is installed before useApi is imported, so the saved auth token is
-// read from and written to it.
-const authStorage = new Storage();
 // Mock used to observe automatic auth-session resets.
 const mockResetAuthSession = vi.hoisted(() => vi.fn());
 
@@ -18,14 +12,20 @@ vi.mock("@/composables/api/session-reset", () => ({
 	resetAuthSession: mockResetAuthSession,
 }));
 
-vi.stubGlobal("localStorage", authStorage);
-
-// API methods loaded after the storage global is installed.
-const { default: useApi } = await import("./index");
+// The error class from the same module load as useApi, so instanceof checks
+// match the errors it throws.
+let ApiError;
+// The API composable, loaded again for each test so it uses that test's
+// storage mock.
+let useApi;
 
 describe("useApi (fetch)", () => {
-	beforeEach(() => {
-		useApi().setAuthToken(null);
+	beforeEach(async () => {
+		vi.resetModules();
+
+		({ default: useApi } = await import("./index"));
+		({ default: ApiError } = await import("./api-error"));
+
 		vi.clearAllMocks();
 	});
 
@@ -86,7 +86,7 @@ describe("useApi (fetch)", () => {
 			setAuthToken("token-123");
 
 			expect(hasAuthToken()).toBe(true);
-			expect(authStorage.getItem(authTokenStorageKey)).toBe("token-123");
+			expect(localStorage.getItem(authTokenStorageKey)).toBe("token-123");
 		});
 
 		test("Clears the auth token when set to null", async () => {
@@ -95,16 +95,15 @@ describe("useApi (fetch)", () => {
 
 			setAuthToken("token-123");
 
-			// The happy-dom test environment fires the storage event for our
-			// own write in this window, which makes VueUse ignore changes until
-			// the next tick. Browsers only fire it in other tabs, so the app is
-			// unaffected.
+			// The storage mock is not a real Storage, so VueUse announces our
+			// own write with a same-page event and ignores further changes
+			// until the next tick.
 			await nextTick();
 
 			setAuthToken(null);
 
 			expect(hasAuthToken()).toBe(false);
-			expect(authStorage.getItem(authTokenStorageKey)).toBeNull();
+			expect(localStorage.getItem(authTokenStorageKey)).toBeNull();
 		});
 	});
 

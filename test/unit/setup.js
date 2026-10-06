@@ -14,8 +14,8 @@ config.global.plugins = [componentLibrary];
 
 beforeEach(() => {
 	setActivePinia(createPinia());
+	mockLocalStorage();
 });
 
-mockLocalStorage();
 setupConsole();
 setupVueTests();

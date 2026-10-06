@@ -42,7 +42,8 @@ let application;
  *     Reactive link states and the current group state.
  */
 async function mountMenu(links, destination) {
-	// Memory-history router using boilerplate's named route structure.
+	// A real router with the app's routes, because menu state depends on how
+	// named routes and their parameters resolve into paths.
 	const router = createRouter({
 		history: createMemoryHistory(),
 		routes,
