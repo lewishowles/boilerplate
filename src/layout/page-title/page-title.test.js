@@ -5,8 +5,6 @@ import PageTitle from "./page-title.vue";
 
 // Mocked breadcrumb state.
 const mockBreadcrumbs = vi.hoisted(() => ({ value: [] }));
-// Mocked router link resolver.
-const mockResolve = vi.hoisted(() => vi.fn((to) => ({ href: `/${to.name}` })));
 
 vi.mock("@/composables/router/use-breadcrumbs", () => ({
 	/**
@@ -20,13 +18,7 @@ vi.mock("@/composables/router/use-breadcrumbs", () => ({
 
 vi.mock("vue-router", async (importOriginal) => ({
 	...(await importOriginal()),
-	/**
-	 * Returns the mocked router.
-	 *
-	 * @returns  {object}
-	 *     The router with the mocked resolver.
-	 */
-	useRouter: () => ({ resolve: mockResolve }),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
 }));
 
 // Mount helper for the page title.
@@ -35,8 +27,6 @@ const mount = createMount(PageTitle);
 describe("page-title", () => {
 	beforeEach(() => {
 		mockBreadcrumbs.value = [];
-
-		vi.clearAllMocks();
 	});
 
 	describe("Render contracts", () => {

@@ -1,25 +1,18 @@
-import { createMount } from "@lewishowles/testing/vue";
+import { createMount, mockRouter } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import AppSearch from "./app-search.vue";
 
-// Stands in for the app router, listing the pages the search can find.
-const mockRouter = vi.hoisted(() => ({
-	getRoutes: vi.fn(),
-	push: vi.fn(),
-	resolve: vi.fn(),
-}));
-
 vi.mock("vue-router", async (importOriginal) => ({
 	...(await importOriginal()),
-	useRouter: vi.fn().mockReturnValue(mockRouter),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
 }));
 
-// Mounts the search component with the mocked router.
+// Mount helper for the search component.
 const mount = createMount(AppSearch);
 
 /**
- * Register one page for each title, in the given route order, and return the
+ * Registers one page for each title, in the given route order, and returns the
  * titles the search shows for the query.
  *
  * @param  {string[]}  pageTitles
