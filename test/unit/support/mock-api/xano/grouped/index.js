@@ -1,52 +1,12 @@
-import { beforeEach, vi } from "vite-plus/test";
+import { mockApiModule } from "@lewishowles/testing/vue";
+import { vi } from "vite-plus/test";
 
-// Mock application-group API methods for query and component tests.
-const mockDelete = vi.hoisted(() => vi.fn());
-// Mock API retrieval method.
-const mockGet = vi.hoisted(() => vi.fn());
-// Mock authentication-token lookup method.
-const mockHasAuthToken = vi.hoisted(() => vi.fn());
-// Mock loading-state reference.
-const mockIsLoading = vi.hoisted(() => ({ value: false }));
-// Mock readiness-state reference.
-const mockIsReady = vi.hoisted(() => ({ value: false }));
-// Mock API update method.
-const mockPatch = vi.hoisted(() => vi.fn());
-// Mock API creation method.
-const mockPost = vi.hoisted(() => vi.fn());
-// Mock authentication-token storage method.
-const mockSetAuthToken = vi.hoisted(() => vi.fn());
+// Replace the app's API composable with the testing library's shared spies.
+// The factory imports the library itself because Vitest moves this call above
+// the file's imports.
+vi.mock("@/composables/api", async () => (await import("@lewishowles/testing/vue")).mockApiModule);
 
-vi.mock("@/composables/api", () => ({
-	/**
-	 * Returns the mocked API methods.
-	 *
-	 * @returns  {object}
-	 *     The mocked API interface.
-	 */
-	default: () => ({
-		delete: mockDelete,
-		get: mockGet,
-		hasAuthToken: mockHasAuthToken,
-		isLoading: mockIsLoading,
-		isReady: mockIsReady,
-		patch: mockPatch,
-		post: mockPost,
-		setAuthToken: mockSetAuthToken,
-	}),
-}));
-
-beforeEach(() => {
-	vi.clearAllMocks();
-});
-
-export default {
-	delete: mockDelete,
-	get: mockGet,
-	hasAuthToken: mockHasAuthToken,
-	isLoading: mockIsLoading,
-	isReady: mockIsReady,
-	patch: mockPatch,
-	post: mockPost,
-	setAuthToken: mockSetAuthToken,
-};
+// The spies the mocked composable returns, so a test can queue responses with
+// `mockApi.get.mockResolvedValue()` and check the calls made. The testing
+// library resets them after each test.
+export default mockApiModule.default();

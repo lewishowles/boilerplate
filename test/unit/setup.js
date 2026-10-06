@@ -3,7 +3,7 @@
 document.title = "App";
 
 import { mockLocalStorage, setupConsole } from "@lewishowles/testing/vitest";
-import { setupVueMounting } from "@lewishowles/testing/vue";
+import { setupVueTests } from "@lewishowles/testing/vue";
 import { config } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach } from "vite-plus/test";
@@ -18,4 +18,4 @@ beforeEach(() => {
 
 mockLocalStorage();
 setupConsole();
-setupVueMounting();
+setupVueTests();
