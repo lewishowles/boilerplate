@@ -7,7 +7,7 @@
 		<template #actions>
 			<router-link-tag
 				v-bind="{ to: { name: '{{ NAME | kebab }}-create' } }"
-				class="button--muted animate-fade-in-left delay"
+				class="button--muted animate-fade-in-left stagger"
 				icon-start="icon-plus"
 			>
 				Add {{ SINGULAR_NAME | lower }}

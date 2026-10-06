@@ -4,7 +4,7 @@
 			<div class="flex flex-col">
 				<div
 					v-if="$slots.breadcrumbs || breadcrumbItems.length > 1"
-					class="animate-fade-in-up delay text-content-muted mbe-1 text-sm"
+					class="animate-fade-in-up stagger text-content-muted mbe-1 text-sm"
 				>
 					<slot name="breadcrumbs" :items="breadcrumbItems">
 						<breadcrumb-list>
@@ -20,7 +20,7 @@
 				</div>
 
 				<h1
-					class="animate-fade-in-up delay text-content-strong text-3xl leading-tight font-bold tracking-tight wrap-break-word lg:text-4xl"
+					class="animate-fade-in-up stagger text-content-strong text-3xl leading-tight font-bold tracking-tight wrap-break-word lg:text-4xl"
 				>
 					<slot>
 						<div class="py-1">
@@ -32,7 +32,7 @@
 
 				<p
 					v-if="$slots.introduction"
-					class="animate-fade-in-up delay text-content-muted max-w-2xl text-base"
+					class="animate-fade-in-up stagger text-content-muted max-w-2xl text-base"
 				>
 					<slot name="introduction" />
 				</p>

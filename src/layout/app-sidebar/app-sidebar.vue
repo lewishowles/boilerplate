@@ -7,7 +7,7 @@
 			hidden: !props.alwaysVisible && !showSidebar,
 		}"
 	>
-		<div class="border-border animate-fade-in delay flex min-h-16 items-center border-b px-5">
+		<div class="border-border animate-fade-in stagger flex min-h-16 items-center border-b px-5">
 			<slot name="logo">
 				<div class="flex items-center gap-3 font-bold">
 					<span

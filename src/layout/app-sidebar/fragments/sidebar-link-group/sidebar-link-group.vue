@@ -1,6 +1,6 @@
 <template>
 	<section
-		class="sidebar-link-group animate-fade-in delay flex flex-col gap-2"
+		class="sidebar-link-group animate-fade-in stagger flex flex-col gap-2"
 		v-bind="{ 'aria-labelledby': id }"
 	>
 		<h2 class="text-content-muted px-3 text-sm" v-bind="{ id }">

@@ -31,7 +31,7 @@
 
 			<div class="col-start-4 flex shrink-0 items-center justify-end gap-3">
 				<ui-button
-					class="button--muted animate-fade-in-left delay"
+					class="button--muted animate-fade-in-left stagger"
 					v-bind="{
 						iconStart: colourModeIcon,
 						iconOnly: true,
@@ -42,7 +42,7 @@
 				</ui-button>
 
 				<ui-button
-					class="button--muted animate-fade-in-left delay"
+					class="button--muted animate-fade-in-left stagger"
 					v-bind="{ iconStart: 'icon-plus' }"
 				>
 					New something
