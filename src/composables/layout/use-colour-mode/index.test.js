@@ -18,6 +18,7 @@ describe("use-colour-mode", () => {
 
 	afterEach(() => {
 		window.matchMedia = originalMatchMedia;
+		document.documentElement.className = "";
 	});
 
 	describe("Initialisation", () => {
