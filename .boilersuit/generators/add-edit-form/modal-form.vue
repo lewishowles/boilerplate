@@ -17,7 +17,7 @@
 		<form-wrapper
 			v-else-if="isReady"
 			v-model="formData"
-			v-bind="{ compact: true, fieldTypes, initialData, recordId: itemId, rules }"
+			v-bind="{ compact: true, fields, initialData, recordId: itemId }"
 			@submit="submitForm"
 		>
 			<template #default>
@@ -72,11 +72,9 @@ const itemId = toRef(props, "itemId");
 // two in step (a falsy id such as null, "", or 0 stays in add mode).
 const isEditMode = computed(() => Boolean(itemId.value));
 
-// TODO: Add field coercions, keyed by field name, for the form wrapper.
-const fieldTypes = {};
-
-// TODO: Add validation rules, keyed by field name.
-const rules = {};
+// TODO: Add the form wrapper settings for each field, such as its valueType and
+// rules, under the field's name.
+const fields = {};
 
 // The details query is self-gated with `enabled: Boolean(unref(id))`, so add
 // mode (no usable id) never triggers a fetch. Its isInitialLoading is aliased

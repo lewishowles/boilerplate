@@ -1,4 +1,5 @@
-import { createMount, mockRouter, setRoute } from "@lewishowles/testing/vue";
+import { createDeepMount, createMount, mockRouter, setRoute } from "@lewishowles/testing/vue";
+import { flushPromises } from "@vue/test-utils";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { ref } from "vue";
 
@@ -42,6 +43,18 @@ describe("login", () => {
 		vi.clearAllMocks();
 
 		mockErrorMessage.value = null;
+	});
+
+	test("Shows both required-field errors when the empty form is submitted", async () => {
+		// Render the full form so its field validation runs on submission.
+		const wrapper = createDeepMount(Login)();
+
+		await wrapper.find("form").trigger("submit");
+		await flushPromises();
+
+		expect(wrapper.text()).toContain("Enter your email address");
+		expect(wrapper.text()).toContain("Enter your password");
+		expect(mockLogin).not.toHaveBeenCalled();
 	});
 
 	describe("performLogin", () => {

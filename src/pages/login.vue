@@ -2,7 +2,7 @@
 	<div class="flex min-h-screen flex-col items-center justify-center">
 		<form-wrapper
 			v-model="formData"
-			v-bind="{ rules, unsavedChangesGuard: false }"
+			v-bind="{ fields, unsavedChangesGuard: false }"
 			class="w-full max-w-sm"
 			@submit="performLogin"
 		>
@@ -38,10 +38,10 @@ const router = useRouter();
 // Our form data.
 const formData = ref({});
 
-// Validation rules for the sign-in fields.
-const rules = {
-	email: [{ rule: "required", message: "Enter your email address" }],
-	password: [{ rule: "required", message: "Enter your password" }],
+// Settings for the sign-in fields, both of which must be filled in.
+const fields = {
+	email: { rules: [{ rule: "required", message: "Enter your email address" }] },
+	password: { rules: [{ rule: "required", message: "Enter your password" }] },
 };
 
 /**
