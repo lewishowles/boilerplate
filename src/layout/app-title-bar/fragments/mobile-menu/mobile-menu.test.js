@@ -1,13 +1,8 @@
-import { createMount } from "@lewishowles/testing/vue";
-import { afterEach, describe, expect, test, vi } from "vite-plus/test";
-import { nextTick, reactive } from "vue";
+import { createMount, setRoute } from "@lewishowles/testing/vue";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
+import { nextTick } from "vue";
 
 import MobileMenu from "./mobile-menu.vue";
-
-// Mocked current route.
-const mockRoute = vi.hoisted(() => ({ fullPath: "/" }));
-// Reactive route used to trigger route watchers.
-const reactiveRoute = reactive(mockRoute);
 
 // Dialog stub exposing the controls used by the menu.
 const modalDialogStub = {
@@ -18,21 +13,10 @@ const modalDialogStub = {
 	},
 };
 
-vi.mock("vue-router", async (importOriginal) => {
-	// Router module with unmocked exports retained.
-	const actual = await importOriginal();
-
-	return {
-		...actual,
-		/**
-		 * Returns the reactive mocked route.
-		 *
-		 * @returns  {object}
-		 *     The current mocked route.
-		 */
-		useRoute: () => reactiveRoute,
-	};
-});
+vi.mock("vue-router", async (importOriginal) => ({
+	...(await importOriginal()),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
+}));
 
 // Mount helper with the dialog stub.
 const mount = createMount(MobileMenu, {
@@ -47,6 +31,10 @@ const mount = createMount(MobileMenu, {
 const { close, open } = modalDialogStub.methods;
 
 describe("mobile-menu", () => {
+	beforeEach(() => {
+		setRoute({ fullPath: "/" });
+	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -64,7 +52,7 @@ describe("mobile-menu", () => {
 		test("Closes the dialog when the route changes", async () => {
 			mount();
 
-			reactiveRoute.fullPath = "/account";
+			setRoute({ fullPath: "/account" });
 
 			await nextTick();
 

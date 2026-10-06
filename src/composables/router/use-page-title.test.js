@@ -1,6 +1,7 @@
 import { usePageTitle, usePageTitles } from "./use-page-title";
+import { setRoute } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
-import { effectScope, nextTick, reactive, ref } from "vue";
+import { effectScope, nextTick, ref } from "vue";
 
 // Reactive document title returned by the VueUse stub.
 const mockTitle = ref(null);
@@ -9,17 +10,14 @@ vi.mock("@vueuse/core", () => ({
 	useTitle: vi.fn(() => mockTitle),
 }));
 
-// Reactive route used by the Vue Router stub.
-const route = reactive({ meta: {} });
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(() => route),
+vi.mock("vue-router", async (importOriginal) => ({
+	...(await importOriginal()),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
 }));
 
 describe("usePageTitle", () => {
 	beforeEach(() => {
 		mockTitle.value = null;
-		route.meta = {};
 	});
 
 	describe("Static titles", () => {
@@ -73,7 +71,7 @@ describe("usePageTitle", () => {
 		});
 
 		test("Falls back to the route meta title when the title resolves to a falsy value", async () => {
-			route.meta = { page_title: "Sample page one" };
+			setRoute({ meta: { page_title: "Sample page one" } });
 
 			// Reactive title supplied to the composable.
 			const title = ref("Sample page two");
@@ -115,7 +113,7 @@ describe("usePageTitle", () => {
 
 	describe("Cleanup", () => {
 		test("Restores the route meta title when the scope is disposed", () => {
-			route.meta = { page_title: "Sample page one" };
+			setRoute({ meta: { page_title: "Sample page one" } });
 
 			// Scope used to dispose the title effect.
 			const scope = effectScope();
@@ -147,12 +145,11 @@ describe("usePageTitle", () => {
 describe("usePageTitles", () => {
 	beforeEach(() => {
 		mockTitle.value = null;
-		route.meta = {};
 	});
 
 	describe("Initialisation", () => {
 		test("Applies the route meta title on mount", () => {
-			route.meta = { page_title: "Sample page one" };
+			setRoute({ meta: { page_title: "Sample page one" } });
 
 			usePageTitles();
 
@@ -168,11 +165,11 @@ describe("usePageTitles", () => {
 
 	describe("Route changes", () => {
 		test("Updates the document title when the route meta title changes", async () => {
-			route.meta = { page_title: "Sample page one" };
+			setRoute({ meta: { page_title: "Sample page one" } });
 
 			usePageTitles();
 
-			route.meta = { page_title: "Sample page two" };
+			setRoute({ meta: { page_title: "Sample page two" } });
 
 			await nextTick();
 
@@ -180,11 +177,11 @@ describe("usePageTitles", () => {
 		});
 
 		test("Falls back to the base title when the route meta title is removed", async () => {
-			route.meta = { page_title: "Sample page one" };
+			setRoute({ meta: { page_title: "Sample page one" } });
 
 			usePageTitles();
 
-			route.meta = {};
+			setRoute({ meta: {} });
 
 			await nextTick();
 
