@@ -1,4 +1,4 @@
-import { createMount } from "@lewishowles/testing/vue";
+import { createMount, mockRouter, setRoute } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { ref } from "vue";
 
@@ -6,12 +6,8 @@ import Login from "./login.vue";
 
 // Mocked sign-in action.
 const mockLogin = vi.hoisted(() => vi.fn());
-// Mocked router navigation action.
-const mockRouterPush = vi.hoisted(() => vi.fn());
 // Mocked sign-in error state.
 const mockErrorMessage = ref(null);
-// Mocked current route and its query values.
-const mockRoute = vi.hoisted(() => ({ query: {} }));
 
 vi.mock("@/queries/auth", () => ({
 	/**
@@ -26,28 +22,10 @@ vi.mock("@/queries/auth", () => ({
 	}),
 }));
 
-vi.mock("vue-router", async (importOriginal) => {
-	// Router module with unmocked exports retained.
-	const actual = await importOriginal();
-
-	return {
-		...actual,
-		/**
-		 * Returns the mocked current route.
-		 *
-		 * @returns  {object}
-		 *     The current mocked route.
-		 */
-		useRoute: () => mockRoute,
-		/**
-		 * Returns the mocked router.
-		 *
-		 * @returns  {object}
-		 *     The router with mocked navigation.
-		 */
-		useRouter: () => ({ push: mockRouterPush }),
-	};
-});
+vi.mock("vue-router", async (importOriginal) => ({
+	...(await importOriginal()),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
+}));
 
 // Mount helper with form components stubbed.
 const mount = createMount(Login, {
@@ -64,7 +42,6 @@ describe("login", () => {
 		vi.clearAllMocks();
 
 		mockErrorMessage.value = null;
-		mockRoute.query = {};
 	});
 
 	describe("performLogin", () => {
@@ -87,11 +64,11 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "sample-pages" });
+			expect(mockRouter.push).toHaveBeenCalledWith({ name: "sample-pages" });
 		});
 
 		test("Redirects to the safe internal route on success", async () => {
-			mockRoute.query = { redirect: "/account?tab=security" };
+			setRoute({ query: { redirect: "/account?tab=security" } });
 
 			mockLogin.mockResolvedValue({});
 
@@ -100,7 +77,7 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith("/account?tab=security");
+			expect(mockRouter.push).toHaveBeenCalledWith("/account?tab=security");
 		});
 
 		test.each([
@@ -110,7 +87,7 @@ describe("login", () => {
 			["a non-string value", 42],
 			["a missing value", undefined],
 		])("Falls back to sample pages for %s redirect values", async (_description, redirect) => {
-			mockRoute.query = { redirect };
+			setRoute({ query: { redirect } });
 
 			mockLogin.mockResolvedValue({});
 
@@ -119,7 +96,7 @@ describe("login", () => {
 
 			await wrapper.vm.performLogin();
 
-			expect(mockRouterPush).toHaveBeenCalledWith({ name: "sample-pages" });
+			expect(mockRouter.push).toHaveBeenCalledWith({ name: "sample-pages" });
 		});
 
 		test("Does not throw or redirect when login fails", async () => {
@@ -130,7 +107,7 @@ describe("login", () => {
 
 			await expect(wrapper.vm.performLogin()).resolves.not.toThrow();
 
-			expect(mockRouterPush).not.toHaveBeenCalled();
+			expect(mockRouter.push).not.toHaveBeenCalled();
 		});
 	});
 });

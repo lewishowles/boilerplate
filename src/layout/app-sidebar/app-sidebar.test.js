@@ -1,6 +1,6 @@
-import { createMount } from "@lewishowles/testing/vue";
+import { createMount, mockRouter } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
 import AppSidebar from "./app-sidebar.vue";
 
@@ -31,36 +31,10 @@ vi.mock("@/queries/auth", () => ({
 	}),
 }));
 
-// The page the sidebar menu treats as currently open.
-const mockRoute = vi.hoisted(() => ({ path: "/" }));
-// The current page, made reactive so the menu responds like a real route.
-const reactiveRoute = reactive(mockRoute);
-// Turns a named menu link into a path, the way the router would.
-const mockResolve = vi.hoisted(() => vi.fn((to) => ({ path: `/${to.name}` })));
-
-vi.mock("vue-router", async (importOriginal) => {
-	// The real router module, kept for everything the sidebar does not need
-	// replaced.
-	const actual = await importOriginal();
-
-	return {
-		...actual,
-		/**
-		 * Returns the mocked current page.
-		 *
-		 * @returns  {object}
-		 *     The mocked route.
-		 */
-		useRoute: () => reactiveRoute,
-		/**
-		 * Returns a router that can only resolve menu links.
-		 *
-		 * @returns  {object}
-		 *     The mocked router.
-		 */
-		useRouter: () => ({ resolve: mockResolve }),
-	};
-});
+vi.mock("vue-router", async (importOriginal) => ({
+	...(await importOriginal()),
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
+}));
 
 // Mount the sidebar with the authentication query replaced by test state.
 const mount = createMount(AppSidebar);
@@ -71,6 +45,10 @@ describe("app-sidebar", () => {
 		mockUserDetails.value = null;
 
 		vi.clearAllMocks();
+
+		// The menu matches each named link to the current page by its path, so
+		// resolve each name to a path the way the router would.
+		mockRouter.resolve.mockImplementation((to) => ({ path: `/${to.name}` }));
 	});
 
 	describe("Computed", () => {
