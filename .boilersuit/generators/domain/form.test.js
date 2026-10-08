@@ -1,58 +1,47 @@
-import { createMount } from "@lewishowles/testing/vue";
+import { createDeepMount } from "@lewishowles/testing/vue";
+import { flushPromises } from "@vue/test-utils";
 import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ SINGULAR_NAME | pascal }}Form from "./{{ SINGULAR_NAME | kebab }}-form.vue";
 
-// Reproduce the form-flow submit contract without rendering the library
-// component.
-const formFlowStub = {
-	props: {
-		modelValue: {
-			/**
-			 * Provide empty initial form values to the stub.
-			 *
-			 * @returns  {object}
-			 *     The initial form values.
-			 */
-			default: () => ({}),
-			type: Object,
-		},
-	},
-	template:
-		'<form data-test="form-flow" @submit.prevent="$emit(\'submit\', modelValue)"><slot /></form>',
-};
-
-// Mount the form with form-field and form-flow stubbed.
-const mount = createMount({{ SINGULAR_NAME | pascal }}Form, {
-	global: {
-		stubs: {
-			FormField: true,
-			FormFlow: formFlowStub,
-		},
-	},
-});
+// Mount the form with its real form components, so submitting runs the field rules.
+const mount = createDeepMount({{ SINGULAR_NAME | pascal }}Form);
 
 describe("{{ SINGULAR_NAME | kebab }}-form", () => {
-	test("Starts with an empty name", () => {
-		// Form wrapper returned by the mount helper.
-		const wrapper = mount();
-
-		expect(wrapper.vm.record).toEqual({ name: "" });
-	});
-
-	test("Forwards submit to the parent", async () => {
-		// Parent submit handler.
+	test("Asks for a name before submitting", async () => {
 		const submit = vi.fn().mockResolvedValue();
 
-		// Form wrapper with the submit handler attached.
 		const wrapper = mount({
 			attrs: {
 				onSubmit: submit,
 			},
+			props: {
+				modelValue: {},
+			},
 		});
 
-		await wrapper.get("[data-test='form-flow']").trigger("submit");
+		await wrapper.get("form").trigger("submit");
+		await flushPromises();
 
-		expect(submit).toHaveBeenCalledWith({ name: "" });
+		expect(submit).not.toHaveBeenCalled();
+		expect(wrapper.text()).toContain("Enter a name");
+	});
+
+	test("Forwards the entered values to the parent", async () => {
+		const submit = vi.fn().mockResolvedValue();
+
+		const wrapper = mount({
+			attrs: {
+				onSubmit: submit,
+			},
+			props: {
+				modelValue: { name: "Example" },
+			},
+		});
+
+		await wrapper.get("form").trigger("submit");
+		await flushPromises();
+
+		expect(submit).toHaveBeenCalledWith({ name: "Example" });
 	});
 });

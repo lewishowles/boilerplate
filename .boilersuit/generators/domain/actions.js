@@ -74,5 +74,7 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
  *     The values to send unchanged until domain-specific mapping is added.
  */
 function normaliseParametersForApi(parameters) {
-	return toValue(parameters);
+	const localParameters = { ...toValue(parameters) };
+
+	return localParameters;
 }

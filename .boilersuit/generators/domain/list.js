@@ -1,34 +1,23 @@
 import { {{ NAME | constant }}_KEYS } from "./keys.js";
 import { computed } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
+import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
 import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
-import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
-import { mock{{ NAME | pascal }} } from "./mock.js";
+import { mock{{ NAME | pascal }} } from "@/queries/mock/data.js";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-// API method used to load {{ NAME | words }} records.
 const { get } = {{ API_COMPOSABLE }}();
 // Whether {{ NAME | words }} requests return fixture data in development.
 const isMockData = import.meta.env.VITE_MOCK_DATA === "true";
 
 /**
  * Provide access to the {{ NAME | words }} list.
- *
- * @returns  {object}
- *     The {{ NAME | words }} query state and actions.
  */
 export function use{{ NAME | pascal }}() {
-	// Current query state and actions for the {{ NAME | words }} list.
 	const current{{ NAME | pascal }} = useQueryWrapper({
-		/**
-		 * Build the query options for the {{ NAME | words }} list.
-		 *
-		 * @returns  {object}
-		 *     The query options for the list.
-		 */
 		queryOptions: {{ NAME | camel }}QueryOptions,
 	});
 
@@ -37,7 +26,6 @@ export function use{{ NAME | pascal }}() {
 
 	// The returned {{ NAME | words }} items.
 	const {{ NAME | camel }} = computed(() => {
-		// Items returned by the API response.
 		const items = getPropertyValue(data.value, "items");
 
 		if (!isNonEmptyArray(items)) {
@@ -61,17 +49,9 @@ export function use{{ NAME | pascal }}() {
 }
 
 /**
- * Load the {{ NAME | words }} list, returning fixture data in mock mode after the API
- * request is sent.
- *
- * @throws  {Error}
- *     The API error when mock data is disabled.
- *
- * @returns  {Promise<object>}
- *     The formatted {{ NAME | words }} list response.
+ * Load the {{ NAME | words }} list, returning fixture data in mock mode after the API request is sent.
  */
 async function load{{ NAME | pascal }}() {
-	// API response used to build the list data.
 	let response;
 
 	try {
@@ -82,13 +62,11 @@ async function load{{ NAME | pascal }}() {
 		}
 	}
 
-	// Response data normalised to the query shape.
-	const formattedResponse = format{{ SINGULAR_NAME | pascal }}(isMockData ? mock{{ NAME | pascal }} : response);
-	// Items to format in the list response.
+	const listResponse = isMockData ? mock{{ NAME | pascal }} : response;
 	const items = getPropertyValue(formattedResponse, "items");
 
 	return {
-		...formattedResponse,
+		...listResponse,
 		items: isNonEmptyArray(items) ? items.map((item) => format{{ SINGULAR_NAME | pascal }}(item)) : [],
 	};
 }
@@ -96,11 +74,5 @@ async function load{{ NAME | pascal }}() {
 // Describe how the list cache is keyed and loaded.
 const {{ NAME | camel }}QueryOptions = defineQueryOptions({
 	key: {{ NAME | constant }}_KEYS.list(),
-	/**
-	 * Load the {{ NAME | words }} list.
-	 *
-	 * @returns  {Promise<object>}
-	 *     The formatted list response.
-	 */
 	query: load{{ NAME | pascal }},
 });

@@ -1,25 +1,31 @@
 <template>
-	<form-flow v-model="record" class="bg-surface border-border rounded-lg border p-6">
-		<form-field type="text" name="name">Name</form-field>
+	<form-wrapper v-model="formData" v-bind="{ fields }" class="max-w-2xl">
+		<content-card>
+			<content-card-section class="p-8">
+				<form-fieldset>
+					<template #title>Title</template>
 
-		<template #submit-button-label>Save {{ SINGULAR_NAME | words }}</template>
-	</form-flow>
+					<template #introduction>Introduction</template>
+
+					<form-field type="text" name="name">Name</form-field>
+				</form-fieldset>
+			</content-card-section>
+		</content-card>
+
+		<template #submit-button-label>Create {{ SINGULAR_NAME | words }}</template>
+	</form-wrapper>
 </template>
 
 <script setup>
-/**
- * Edits a {{ SINGULAR_NAME | words }} record.
- */
-// The form values, shared with the page that saves them.
-const record = defineModel({
-	/**
-	 * Provide empty initial form values.
-	 *
-	 * @returns  {object}
-	 *     The initial form values.
-	 */
-	default: () => ({
-		name: "",
-	}),
-});
+// The form values, shared with the page that saves them. The form fills in the
+// starting values from `fields`.
+const formData = defineModel({ type: Object });
+
+// The starting values and validation rules for the form's fields.
+const fields = {
+	name: {
+		default: "",
+		rules: [{ rule: "required", message: "Enter a name" }],
+	},
+};
 </script>

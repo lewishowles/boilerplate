@@ -19,9 +19,7 @@
 					</slot>
 				</div>
 
-				<h1
-					class="animate-fade-in-up stagger text-content-strong text-3xl leading-tight font-bold tracking-tight wrap-break-word lg:text-4xl"
-				>
+				<h1 class="animate-fade-in-up stagger text-content-strong text-3xl font-bold lg:text-4xl">
 					<slot>
 						<div class="py-1">
 							<loading-spinner class="text-content-strong size-6" />
