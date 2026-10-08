@@ -43,7 +43,7 @@
 			<ui-button
 				class="button--muted"
 				icon-start="icon-reload"
-				v-bind="{ reactive: true }"
+				reactive
 				@click="refetch"
 			>
 				Refresh
@@ -54,7 +54,7 @@
 	<div v-else-if="error" class="space-y-4">
 		<p role="alert">Unable to load {{ NAME | lower }}.</p>
 
-		<ui-button class="button--muted" v-bind="{ reactive: true }" @click="refetch">
+		<ui-button class="button--muted" reactive @click="refetch">
 			Try again
 		</ui-button>
 	</div>

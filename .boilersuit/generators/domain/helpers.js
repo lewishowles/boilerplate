@@ -1,27 +1,22 @@
+import { isObject } from "@lewishowles/helpers/object";
+
 /**
  * Format API responses for {{ NAME | kebab }} queries.
  *
  * Add field mapping here when the API response differs from the query data.
  *
- * @param  {unknown}  response
- *     The raw API response.
- *
- * @returns  {unknown}
- *     Formatted response data.
+ * @param  {object}  response
+ *     The {{ SINGULAR_NAME }} returned by the API.
+ * @returns  {object}
+ *     Formatted {{ SINGULAR_NAME }}.
  */
-export function format{{ NAME | pascal }}Response(response) {
-	if (response === null || typeof response !== "object") {
-		return response;
+export function format{{ SINGULAR_NAME | pascal }}({{ SINGULAR_NAME | camel }}) {
+	if (!isObject({{ SINGULAR_NAME | camel }})) {
+		return {{ SINGULAR_NAME | camel }};
 	}
 
-	// Response data without an optional data envelope.
-	const payload = response.data ?? response;
-	// Copy of the response data that can carry normalised metadata.
-	const formattedResponse = { ...payload };
+	// The values the app works out from the API fields.
+	const derived = {};
 
-	if (response.itemsTotal !== undefined || payload.itemsTotal !== undefined) {
-		formattedResponse.itemsTotal = response.itemsTotal ?? payload.itemsTotal;
-	}
-
-	return formattedResponse;
+	return { ...{{ SINGULAR_NAME | camel }}, derived };
 }

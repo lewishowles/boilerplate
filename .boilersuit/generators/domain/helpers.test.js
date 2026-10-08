@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vite-plus/test";
-import { format{{ NAME | pascal }}Response } from ".";
+import { format{{ SINGULAR_NAME | pascal }} } from ".";
 
 describe("{{ NAME | kebab }} response formatter", () => {
 	test("Unwraps a response data envelope", () => {
@@ -11,7 +11,7 @@ describe("{{ NAME | kebab }} response formatter", () => {
 		};
 
 		// Response after the data envelope is removed.
-		const formattedResponse = format{{ NAME | pascal }}Response(response);
+		const formattedResponse = format{{ SINGULAR_NAME | pascal }}(response);
 
 		expect(formattedResponse).toEqual(response.data);
 	});
@@ -26,7 +26,7 @@ describe("{{ NAME | kebab }} response formatter", () => {
 		};
 
 		// Response after the data is normalised.
-		const formattedResponse = format{{ NAME | pascal }}Response(response);
+		const formattedResponse = format{{ SINGULAR_NAME | pascal }}(response);
 
 		expect(formattedResponse).toEqual({
 			items: response.data.items,
@@ -39,9 +39,9 @@ describe("{{ NAME | kebab }} response formatter", () => {
 		const nullResponse = null;
 		const textResponse = "response";
 		// Formatted null response.
-		const formattedNullResponse = format{{ NAME | pascal }}Response(nullResponse);
+		const formattedNullResponse = format{{ SINGULAR_NAME | pascal }}(nullResponse);
 		// Formatted text response.
-		const formattedTextResponse = format{{ NAME | pascal }}Response(textResponse);
+		const formattedTextResponse = format{{ SINGULAR_NAME | pascal }}(textResponse);
 
 		expect(formattedNullResponse).toBe(null);
 		expect(formattedTextResponse).toBe(textResponse);

@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { defineQueryOptions } from "@pinia/colada";
 import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
-import { format{{ NAME | pascal }}Response } from "./helpers.js";
+import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
 import { mock{{ NAME | pascal }} } from "./mock.js";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
@@ -83,13 +83,13 @@ async function load{{ NAME | pascal }}() {
 	}
 
 	// Response data normalised to the query shape.
-	const formattedResponse = format{{ NAME | pascal }}Response(isMockData ? mock{{ NAME | pascal }} : response);
+	const formattedResponse = format{{ SINGULAR_NAME | pascal }}(isMockData ? mock{{ NAME | pascal }} : response);
 	// Items to format in the list response.
 	const items = getPropertyValue(formattedResponse, "items");
 
 	return {
 		...formattedResponse,
-		items: isNonEmptyArray(items) ? items.map((item) => format{{ NAME | pascal }}Response(item)) : [],
+		items: isNonEmptyArray(items) ? items.map((item) => format{{ SINGULAR_NAME | pascal }}(item)) : [],
 	};
 }
 
