@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick, ref } from "vue";
 import { withAppContext } from "@lewishowles/testing/vue";
 
-// Mocked {{ NAME | kebab }} list query.
+// Mocked {{ NAME | words }} list query.
 const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());
 
 vi.mock("@/queries/{{ NAME | kebab }}", () => ({
@@ -15,20 +15,20 @@ import { use{{ NAME | pascal }}Table } from ".";
 const queryParameters = [];
 
 /**
- * Create the {{ NAME | kebab }} table composable in a Vue app context.
+ * Create the {{ NAME | words }} table composable in a Vue app context.
  *
  * @returns  {object}
- *     The {{ NAME | kebab }} table state and actions.
+ *     The {{ NAME | words }} table state and actions.
  */
 function create{{ NAME | pascal }}Table() {
 	return withAppContext(() => use{{ NAME | pascal }}Table());
 }
 
 /**
- * Create the mocked {{ NAME | kebab }} list query state.
+ * Create the mocked {{ NAME | words }} list query state.
  *
  * @returns  {object}
- *     The mocked {{ NAME | kebab }} query state.
+ *     The mocked {{ NAME | words }} query state.
  */
 function createQueryState() {
 	return {
@@ -48,7 +48,7 @@ function createQueryState() {
 	};
 }
 
-describe("{{ NAME | kebab }} table", () => {
+describe("{{ NAME | words }} table", () => {
 	beforeEach(() => {
 		queryParameters.length = 0;
 
@@ -61,7 +61,7 @@ describe("{{ NAME | kebab }} table", () => {
 	});
 
 	describe("use{{ NAME | pascal }}Table", () => {
-		test("Exposes table state and query {{ NAME | kebab }}", () => {
+		test("Exposes table state and query {{ NAME | words }}", () => {
 			// Table state returned by the composable.
 			const {
 				error,

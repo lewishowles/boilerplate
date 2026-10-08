@@ -1,8 +1,8 @@
 <template>
 	<page-title>
-		Add {{ SINGULAR_NAME | lower }}
+		Add {{ SINGULAR_NAME | words }}
 
-		<template #introduction>Add a new {{ SINGULAR_NAME | lower }} record</template>
+		<template #introduction>Add a new {{ SINGULAR_NAME | words }} record</template>
 	</page-title>
 
 	<{{ SINGULAR_NAME | kebab }}-form v-model="record" @submit="handleSubmit" />
@@ -10,7 +10,7 @@
 
 <script setup>
 /**
- * Creates a {{ SINGULAR_NAME | kebab }} record and opens its details page.
+ * Creates a {{ SINGULAR_NAME | words }} record and opens its details page.
  */
 import { ref } from "vue";
 import { definePage } from "vue-router/experimental";
@@ -38,7 +38,7 @@ async function handleSubmit(parameters) {
 	const response = await create{{ SINGULAR_NAME | pascal }}(parameters);
 
 	sendMessage({
-		message: "{{ SINGULAR_NAME | pascal }} added successfully",
+		message: "{{ SINGULAR_NAME | sentence }} added successfully",
 		type: "success",
 	});
 
@@ -50,6 +50,6 @@ async function handleSubmit(parameters) {
 
 definePage({
 	name: "{{ NAME | kebab }}-create",
-	meta: { page_title: "Add {{ SINGULAR_NAME | pascal }}" },
+	meta: { page_title: "Add {{ SINGULAR_NAME | words }}" },
 });
 </script>

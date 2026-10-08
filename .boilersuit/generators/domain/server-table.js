@@ -7,10 +7,10 @@ import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
 const searchDebounceDelay = 300;
 
 /**
- * Provide independent state for the {{ NAME | kebab }} server table.
+ * Provide independent state for the {{ NAME | words }} server table.
  *
  * @returns  {object}
- *     The table state and {{ NAME | kebab }} query actions.
+ *     The table state and {{ NAME | words }} query actions.
  */
 export function use{{ NAME | pascal }}Table() {
 	// Create controls inside the composable so table instances do not share
@@ -31,7 +31,7 @@ export function use{{ NAME | pascal }}Table() {
 		sort: sort.value,
 	}));
 
-	// Query state and actions for the {{ NAME | kebab }} list.
+	// Query state and actions for the {{ NAME | words }} list.
 	const {
 		error,
 		isInitialLoading,

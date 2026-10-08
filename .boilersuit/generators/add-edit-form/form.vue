@@ -118,7 +118,7 @@ async function submitForm(values) {
 
 	// Create a success message
 	sendMessage({
-		message: "{{ SINGULAR_NAME }} created successfully",
+		message: "{{ SINGULAR_NAME | sentence }} created successfully",
 		type: "success",
 	});
 

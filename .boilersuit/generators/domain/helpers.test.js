@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vite-plus/test";
 import { format{{ SINGULAR_NAME | pascal }} } from ".";
 
-describe("{{ NAME | kebab }} response formatter", () => {
+describe("{{ NAME | words }} response formatter", () => {
 	test("Unwraps a response data envelope", () => {
 		// Response containing a data envelope.
 		const response = {

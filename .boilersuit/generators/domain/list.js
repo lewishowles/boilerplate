@@ -9,22 +9,22 @@ import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-// API method used to load {{ NAME | kebab }} records.
+// API method used to load {{ NAME | words }} records.
 const { get } = {{ API_COMPOSABLE }}();
-// Whether {{ NAME | kebab }} requests return fixture data in development.
+// Whether {{ NAME | words }} requests return fixture data in development.
 const isMockData = import.meta.env.VITE_MOCK_DATA === "true";
 
 /**
- * Provide access to the {{ NAME | kebab }} list.
+ * Provide access to the {{ NAME | words }} list.
  *
  * @returns  {object}
- *     The {{ NAME | kebab }} query state and actions.
+ *     The {{ NAME | words }} query state and actions.
  */
 export function use{{ NAME | pascal }}() {
-	// Current query state and actions for the {{ NAME | kebab }} list.
+	// Current query state and actions for the {{ NAME | words }} list.
 	const current{{ NAME | pascal }} = useQueryWrapper({
 		/**
-		 * Build the query options for the {{ NAME | kebab }} list.
+		 * Build the query options for the {{ NAME | words }} list.
 		 *
 		 * @returns  {object}
 		 *     The query options for the list.
@@ -35,7 +35,7 @@ export function use{{ NAME | pascal }}() {
 	// The raw response, which also carries the total row count.
 	const data = current{{ NAME | pascal }}.data;
 
-	// The returned {{ NAME | kebab }} items.
+	// The returned {{ NAME | words }} items.
 	const {{ NAME | camel }} = computed(() => {
 		// Items returned by the API response.
 		const items = getPropertyValue(data.value, "items");
@@ -49,7 +49,7 @@ export function use{{ NAME | pascal }}() {
 
 	// The total rows returned by the server for the current request.
 	const totalRows = computed(() => getPropertyValue(data.value, "itemsTotal") ?? 0);
-	// Whether any {{ NAME | kebab }} items have been returned.
+	// Whether any {{ NAME | words }} items have been returned.
 	const have{{ NAME | pascal }} = computed(() => isNonEmptyArray({{ NAME | camel }}.value));
 
 	return {
@@ -61,14 +61,14 @@ export function use{{ NAME | pascal }}() {
 }
 
 /**
- * Load the {{ NAME | kebab }} list, returning fixture data in mock mode after the API
+ * Load the {{ NAME | words }} list, returning fixture data in mock mode after the API
  * request is sent.
  *
  * @throws  {Error}
  *     The API error when mock data is disabled.
  *
  * @returns  {Promise<object>}
- *     The formatted {{ NAME | kebab }} list response.
+ *     The formatted {{ NAME | words }} list response.
  */
 async function load{{ NAME | pascal }}() {
 	// API response used to build the list data.
@@ -97,7 +97,7 @@ async function load{{ NAME | pascal }}() {
 const {{ NAME | camel }}QueryOptions = defineQueryOptions({
 	key: {{ NAME | constant }}_KEYS.list(),
 	/**
-	 * Load the {{ NAME | kebab }} list.
+	 * Load the {{ NAME | words }} list.
 	 *
 	 * @returns  {Promise<object>}
 	 *     The formatted list response.

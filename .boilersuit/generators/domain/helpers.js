@@ -1,14 +1,14 @@
 import { isObject } from "@lewishowles/helpers/object";
 
 /**
- * Format API responses for {{ NAME | kebab }} queries.
+ * Format API responses for {{ NAME | words }} queries.
  *
  * Add field mapping here when the API response differs from the query data.
  *
  * @param  {object}  response
- *     The {{ SINGULAR_NAME }} returned by the API.
+ *     The {{ SINGULAR_NAME | words }} returned by the API.
  * @returns  {object}
- *     Formatted {{ SINGULAR_NAME }}.
+ *     Formatted {{ SINGULAR_NAME | words }}.
  */
 export function format{{ SINGULAR_NAME | pascal }}({{ SINGULAR_NAME | camel }}) {
 	if (!isObject({{ SINGULAR_NAME | camel }})) {

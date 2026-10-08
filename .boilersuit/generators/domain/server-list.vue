@@ -2,7 +2,7 @@
 	<page-title>
 		{{ NAME | pascal }}
 
-		<template #introduction>Browse {{ NAME | lower }}</template>
+		<template #introduction>Browse {{ NAME | words }}</template>
 
 		<template #actions>
 			<router-link-tag
@@ -10,13 +10,13 @@
 				class="button--muted animate-fade-in-left stagger"
 				icon-start="icon-plus"
 			>
-				Add {{ SINGULAR_NAME | lower }}
+				Add {{ SINGULAR_NAME | words }}
 			</router-link-tag>
 		</template>
 	</page-title>
 
 	<loading-indicator v-if="isInitialLoading" v-bind="{ large: true }">
-		Loading {{ NAME | lower }}…
+		Loading {{ NAME | words }}…
 	</loading-indicator>
 
 	<content-card v-else-if="isReady">
@@ -27,8 +27,8 @@
 				name="{{ NAME | kebab }}"
 				v-bind="{ columns, data: {{ NAME | camel }}, error, loading: isRefreshing, totalRows }"
 			>
-				<template #search-label>Search {{ NAME | lower }}</template>
-				<template #no-data-message>No {{ NAME | lower }} to display</template>
+				<template #search-label>Search {{ NAME | words }}</template>
+				<template #no-data-message>No {{ NAME | words }} to display</template>
 
 				<template #actions="{ row }">
 					<router-link-tag v-bind="{ to: { name: '{{ NAME | kebab }}-edit', params: { {{ ID_NAME }}: row.id } } }">
@@ -57,7 +57,7 @@
 	</content-card>
 
 	<div v-else-if="error" class="space-y-4">
-		<p role="alert">Unable to load {{ NAME | lower }}.</p>
+		<p role="alert">Unable to load {{ NAME | words }}.</p>
 
 		<ui-button class="button--muted" reactive @click="refetch">
 			Try again
@@ -67,7 +67,7 @@
 
 <script setup>
 /**
- * Displays the {{ NAME | kebab }} list with server-side table controls.
+ * Displays the {{ NAME | words }} list with server-side table controls.
  */
 import { computed } from "vue";
 import { definePage } from "vue-router/experimental";
@@ -128,6 +128,6 @@ const columns = {
 
 definePage({
 	name: "{{ NAME | kebab }}",
-	meta: { page_title: "{{ NAME | pascal }}" },
+	meta: { page_title: "{{ NAME | sentence }}" },
 });
 </script>

@@ -7,19 +7,19 @@ import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 
 /**
- * Create the {{ NAME | kebab }} list query wrapper in a Vue app context.
+ * Create the {{ NAME | words }} list query wrapper in a Vue app context.
  *
  * @param  {object}  parameters
- *     Query parameters for the {{ NAME | kebab }} list.
+ *     Query parameters for the {{ NAME | words }} list.
  *
  * @returns  {object}
- *     The {{ NAME | kebab }} query state and actions.
+ *     The {{ NAME | words }} query state and actions.
  */
 function create{{ NAME | pascal }}(parameters) {
 	return withAppContext(() => use{{ NAME | pascal }}(parameters));
 }
 
-describe("{{ NAME | kebab }} list", () => {
+describe("{{ NAME | words }} list", () => {
 	setupConsole();
 
 	// Parameters passed to the list query.
@@ -50,7 +50,7 @@ describe("{{ NAME | kebab }} list", () => {
 	});
 
 	describe("use{{ NAME | pascal }}", () => {
-		test("Initialises with no {{ NAME | kebab }}", () => {
+		test("Initialises with no {{ NAME | words }}", () => {
 			// Query state returned before a response is loaded.
 			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
 				create{{ NAME | pascal }}(parameters);
@@ -64,7 +64,7 @@ describe("{{ NAME | kebab }} list", () => {
 			expect(refetch).toBeTypeOf("function");
 		});
 
-		test("Loads and stores {{ NAME | kebab }}", async () => {
+		test("Loads and stores {{ NAME | words }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
 			// Query state returned after the response loads.
@@ -84,7 +84,7 @@ describe("{{ NAME | kebab }} list", () => {
 			expect(isRefreshing.value).toBe(false);
 		});
 
-		test("Does not update {{ NAME | kebab }} when the request fails", async () => {
+		test("Does not update {{ NAME | words }} when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
 			// Query state returned after the request fails.
@@ -98,14 +98,14 @@ describe("{{ NAME | kebab }} list", () => {
 		});
 
 		describe("have{{ NAME | pascal }}", () => {
-			test("Is false when no {{ NAME | kebab }} are loaded", () => {
+			test("Is false when no {{ NAME | words }} are loaded", () => {
 				// Presence state returned before any items are loaded.
 				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}(parameters);
 
 				expect(have{{ NAME | pascal }}.value).toBe(false);
 			});
 
-			test("Is true when {{ NAME | kebab }} have been loaded", async () => {
+			test("Is true when {{ NAME | words }} have been loaded", async () => {
 				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
 				// Presence state and refetch action for the loaded list.

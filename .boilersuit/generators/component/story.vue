@@ -1,6 +1,6 @@
 <script setup>
 /**
- * The {{NAME | kebab}} component as the gallery shows it.
+ * The {{ NAME | words }} component as the gallery shows it.
  */
 import {{NAME | pascal}} from "./{{NAME | kebab}}.vue";
 </script>

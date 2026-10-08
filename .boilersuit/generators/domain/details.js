@@ -7,20 +7,20 @@ import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-// API method used to load a {{ SINGULAR_NAME | kebab }} record.
+// API method used to load a {{ SINGULAR_NAME | words }} record.
 const { get } = {{ API_COMPOSABLE }}();
 
 /**
- * Provide access to a {{ SINGULAR_NAME | kebab }} record.
+ * Provide access to a {{ SINGULAR_NAME | words }} record.
  *
  * @param  {string|Ref<string>}  {{ ID_NAME }}
- *     The {{ SINGULAR_NAME | kebab }} ID.
+ *     The {{ SINGULAR_NAME | words }} ID.
  *
  * @returns  {object}
- *     The {{ SINGULAR_NAME | kebab }} query state and actions.
+ *     The {{ SINGULAR_NAME | words }} query state and actions.
  */
 export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
-	// Current query state and actions for the {{ SINGULAR_NAME | kebab }} record.
+	// Current query state and actions for the {{ SINGULAR_NAME | words }} record.
 	const current{{ SINGULAR_NAME | pascal }} = useQueryWrapper({
 		/**
 		 * Build query options for the current record ID.
@@ -44,9 +44,9 @@ export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 		isReady: (data) => isNonEmptyObject(data),
 	});
 
-	// The returned {{ SINGULAR_NAME | kebab }} record.
+	// The returned {{ SINGULAR_NAME | words }} record.
 	const {{ SINGULAR_NAME | camel }} = current{{ SINGULAR_NAME | pascal }}.data;
-	// Whether a {{ SINGULAR_NAME | kebab }} record is present.
+	// Whether a {{ SINGULAR_NAME | words }} record is present.
 	const have{{ SINGULAR_NAME | pascal }} = computed(() => isNonEmptyObject({{ SINGULAR_NAME | camel }}.value));
 
 	return {
@@ -57,13 +57,13 @@ export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 }
 
 /**
- * Load a {{ SINGULAR_NAME | kebab }} record.
+ * Load a {{ SINGULAR_NAME | words }} record.
  *
  * @param  {string}  {{ ID_NAME }}
- *     The ID of the {{ SINGULAR_NAME | kebab }} to load.
+ *     The ID of the {{ SINGULAR_NAME | words }} to load.
  *
  * @returns  {Promise<object>}
- *     The formatted {{ SINGULAR_NAME | kebab }} record.
+ *     The formatted {{ SINGULAR_NAME | words }} record.
  */
 async function get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 	// API response for the requested record.
@@ -72,14 +72,14 @@ async function get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 	return format{{ SINGULAR_NAME | pascal }}(response);
 }
 
-// Query options for a {{ SINGULAR_NAME | kebab }} record.
+// Query options for a {{ SINGULAR_NAME | words }} record.
 const {{ SINGULAR_NAME | camel }}QueryOptions = defineQueryOptions(({{ ID_NAME }}) => ({
 	key: {{ NAME | constant }}_KEYS.byId({{ ID_NAME }}),
 	/**
-	 * Load the requested {{ SINGULAR_NAME | kebab }} record.
+	 * Load the requested {{ SINGULAR_NAME | words }} record.
 	 *
 	 * @returns  {Promise<object>}
-	 *     The formatted {{ SINGULAR_NAME | kebab }} record.
+	 *     The formatted {{ SINGULAR_NAME | words }} record.
 	 */
 	query: () => get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}),
 }));

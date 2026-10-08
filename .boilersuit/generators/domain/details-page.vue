@@ -1,14 +1,14 @@
 <template>
-	<page-title v-if="have{{ SINGULAR_NAME | pascal }} || isInitialLoading">{{ SINGULAR_NAME | pascal }}</page-title>
+	<page-title v-if="have{{ SINGULAR_NAME | pascal }} || isInitialLoading">{{ SINGULAR_NAME | sentence }}</page-title>
 
 	<loading-indicator v-if="isInitialLoading" v-bind="{ large: true }">
-		Loading {{ SINGULAR_NAME | lower }}…
+		Loading {{ SINGULAR_NAME | words }}…
 	</loading-indicator>
 
 	<none-found v-else-if="!have{{ SINGULAR_NAME | pascal }}">
-		<template #title>{{ SINGULAR_NAME | pascal }} not found</template>
+		<template #title>{{ SINGULAR_NAME | sentence }} not found</template>
 
-		This {{ SINGULAR_NAME | lower }} couldn't be found. Please try again.
+		This {{ SINGULAR_NAME | words }} couldn't be found. Please try again.
 	</none-found>
 
 	<{{ SINGULAR_NAME | kebab }}-form v-else v-model="record" @submit="handleSubmit" />
@@ -16,7 +16,7 @@
 
 <script setup>
 /**
- * Displays and updates a {{ SINGULAR_NAME | kebab }} record.
+ * Displays and updates a {{ SINGULAR_NAME | words }} record.
  */
 import { computed, ref, watch } from "vue";
 import { definePage } from "vue-router/experimental";
@@ -41,7 +41,7 @@ const record = ref({});
 // Show a success message once the record is saved.
 const { sendMessage } = useFlashMessages();
 
-useBreadcrumb(() => "{{ SINGULAR_NAME | pascal }}");
+useBreadcrumb(() => "{{ SINGULAR_NAME | sentence }}");
 
 // Copy newly loaded data into the form after the asynchronous query updates.
 watch(
@@ -69,13 +69,13 @@ async function handleSubmit(parameters) {
 	});
 
 	sendMessage({
-		message: "{{ SINGULAR_NAME | pascal }} saved",
+		message: "{{ SINGULAR_NAME | sentence }} saved",
 		type: "success",
 	});
 }
 
 definePage({
 	name: "{{ NAME | kebab }}-edit",
-	meta: { page_title: "{{ SINGULAR_NAME | pascal }}" },
+	meta: { page_title: "{{ SINGULAR_NAME | sentence }}" },
 });
 </script>

@@ -4,32 +4,32 @@ import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-// API methods used to create and update {{ SINGULAR_NAME | kebab }} records.
+// API methods used to create and update {{ SINGULAR_NAME | words }} records.
 const { patch, post } = {{ API_COMPOSABLE }}();
 
 /**
- * Create and update {{ SINGULAR_NAME | kebab }} records.
+ * Create and update {{ SINGULAR_NAME | words }} records.
  *
  * @returns  {object}
  *     The create and update actions.
  */
 export function use{{ SINGULAR_NAME | pascal }}Actions() {
-	// Action that creates a {{ SINGULAR_NAME | kebab }} record.
+	// Action that creates a {{ SINGULAR_NAME | words }} record.
 	const { mutateAsync: create{{ SINGULAR_NAME | pascal }} } = useMutationWrapper({
 		invalidates: [{{ NAME | constant }}_KEYS.root],
 		/**
-		 * Create a {{ SINGULAR_NAME | kebab }} record through the API.
+		 * Create a {{ SINGULAR_NAME | words }} record through the API.
 		 *
 		 * @param  {object}  parameters
 		 *     The values to send to the API.
 		 *
 		 * @returns  {Promise<object>}
-		 *     The created {{ SINGULAR_NAME | kebab }} record.
+		 *     The created {{ SINGULAR_NAME | words }} record.
 		 */
 		mutation: (parameters) => post("{{ ENDPOINT }}", normaliseParametersForApi(parameters)),
 	});
 
-	// Action that updates a {{ SINGULAR_NAME | kebab }} record.
+	// Action that updates a {{ SINGULAR_NAME | words }} record.
 	const { mutateAsync: update{{ SINGULAR_NAME | pascal }} } = useMutationWrapper({
 		/**
 		 * Return cache keys affected by an updated record.
@@ -42,15 +42,15 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
 		 */
 		invalidates: (variables) => [{{ NAME | constant }}_KEYS.root, {{ NAME | constant }}_KEYS.byId(variables.{{ ID_NAME }})],
 		/**
-		 * Update a {{ SINGULAR_NAME | kebab }} record through the API.
+		 * Update a {{ SINGULAR_NAME | words }} record through the API.
 		 *
 		 * @param  {object}  options
 		 *     The record ID and values to send to the API.
 		 * @param  {string}  options.{{ ID_NAME }}
-		 *     The ID of the {{ SINGULAR_NAME | kebab }} to update.
+		 *     The ID of the {{ SINGULAR_NAME | words }} to update.
 		 *
 		 * @returns  {Promise<object>}
-		 *     The updated {{ SINGULAR_NAME | kebab }} record.
+		 *     The updated {{ SINGULAR_NAME | words }} record.
 		 */
 		mutation: ({ {{ ID_NAME }}, ...parameters }) =>
 			patch(`{{ ENDPOINT }}/${{{ ID_NAME }}}`, normaliseParametersForApi(parameters)),

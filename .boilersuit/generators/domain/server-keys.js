@@ -2,7 +2,7 @@
 export const {{ NAME | constant }}_KEYS = {
 	root: ["{{ NAME | kebab }}"],
 	/**
-	 * Build the cache key for a parameterised {{ NAME | kebab }} list.
+	 * Build the cache key for a parameterised {{ NAME | words }} list.
 	 *
 	 * @param  {object}  [parameters]
 	 *     The list parameters to include in the key.
@@ -12,7 +12,7 @@ export const {{ NAME | constant }}_KEYS = {
 	 */
 	list: (parameters = {}) => ["{{ NAME | kebab }}", "list", parameters],
 	/**
-	 * Build the cache key for a {{ SINGULAR_NAME | kebab }} record.
+	 * Build the cache key for a {{ SINGULAR_NAME | words }} record.
 	 *
 	 * @param  {string}  {{ ID_NAME }}
 	 *     The record ID to include in the key.

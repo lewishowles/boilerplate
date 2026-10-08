@@ -7,19 +7,19 @@ import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
 
 /**
- * Create the {{ SINGULAR_NAME | kebab }} query wrapper in a Vue app context.
+ * Create the {{ SINGULAR_NAME | words }} query wrapper in a Vue app context.
  *
  * @param  {string|null}  {{ ID_NAME }}
- *     The {{ SINGULAR_NAME | kebab }} ID to pass to the query wrapper.
+ *     The {{ SINGULAR_NAME | words }} ID to pass to the query wrapper.
  *
  * @returns  {object}
- *     The {{ SINGULAR_NAME | kebab }} query state and actions.
+ *     The {{ SINGULAR_NAME | words }} query state and actions.
  */
 function create{{ SINGULAR_NAME | pascal }}({{ ID_NAME }} = "item-123") {
 	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}));
 }
 
-describe("{{ SINGULAR_NAME | kebab }} details", () => {
+describe("{{ SINGULAR_NAME | words }} details", () => {
 	setupConsole();
 
 	// Response returned by the details request.
@@ -34,7 +34,7 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 	});
 
 	describe("use{{ SINGULAR_NAME | pascal }}", () => {
-		test("Initialises with no {{ SINGULAR_NAME | kebab }} details", () => {
+		test("Initialises with no {{ SINGULAR_NAME | words }} details", () => {
 			// Query state returned before a record is loaded.
 			const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } =
 				create{{ SINGULAR_NAME | pascal }}(null);
@@ -48,7 +48,7 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 			expect(refetch).toBeTypeOf("function");
 		});
 
-		test("Loads and stores {{ SINGULAR_NAME | kebab }} details", async () => {
+		test("Loads and stores {{ SINGULAR_NAME | words }} details", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(sampleResponse);
 
 			// Query state returned after the record loads.
@@ -68,7 +68,7 @@ describe("{{ SINGULAR_NAME | kebab }} details", () => {
 			expect(isRefreshing.value).toBe(false);
 		});
 
-		test("Does not update {{ SINGULAR_NAME | kebab }} details when the request fails", async () => {
+		test("Does not update {{ SINGULAR_NAME | words }} details when the request fails", async () => {
 			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
 
 			// Query state returned after the request fails.

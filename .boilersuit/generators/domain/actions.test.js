@@ -7,19 +7,19 @@ import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 import { use{{ SINGULAR_NAME | pascal }}Actions } from ".";
 
 /**
- * Create {{ SINGULAR_NAME | kebab }} actions in a Vue app context.
+ * Create {{ SINGULAR_NAME | words }} actions in a Vue app context.
  *
  * @returns  {object}
- *     The {{ SINGULAR_NAME | kebab }} actions.
+ *     The {{ SINGULAR_NAME | words }} actions.
  */
 function create{{ SINGULAR_NAME | pascal }}Actions() {
 	return withAppContext(() => use{{ SINGULAR_NAME | pascal }}Actions());
 }
 
-describe("{{ SINGULAR_NAME | kebab }} actions", () => {
+describe("{{ SINGULAR_NAME | words }} actions", () => {
 	setupConsole();
 
-	test("Creates {{ SINGULAR_NAME | kebab }}", async () => {
+	test("Creates {{ SINGULAR_NAME | words }}", async () => {
 		// Values submitted to the create action.
 		const parameters = { name: "Example" };
 		// Response returned by the create request.
@@ -34,7 +34,7 @@ describe("{{ SINGULAR_NAME | kebab }} actions", () => {
 		expect({{ MOCK_API_NAME }}.post).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
 	});
 
-	test("Updates {{ SINGULAR_NAME | kebab }}", async () => {
+	test("Updates {{ SINGULAR_NAME | words }}", async () => {
 		// Values submitted to the update action.
 		const parameters = { {{ ID_NAME }}: "item-123", name: "Updated example" };
 		// Response returned by the update request.

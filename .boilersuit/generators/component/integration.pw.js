@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// Story rendered by the {{NAME | kebab}} component tests.
+// Story rendered by the {{ NAME | words }} component tests.
 const storyId = "components/{{NAME | kebab}}/{{NAME | kebab}}";
 
 test.describe("{{NAME | kebab}}", () => {

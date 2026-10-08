@@ -61,7 +61,7 @@ function mountForm(options = {}) {
 
 setupConsole();
 
-describe("{{ SINGULAR_NAME | kebab }} form", () => {
+describe("{{ SINGULAR_NAME | words }} form", () => {
 	beforeEach(() => {
 		queryState = createQueryState();
 		mockCreate{{ SINGULAR_NAME | pascal }}.mockReset();
