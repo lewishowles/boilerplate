@@ -5,6 +5,9 @@
 		Loading {{ SINGULAR_NAME | words }}…
 	</loading-indicator>
 
+	<template v-else-if="have{{ SINGULAR_NAME | pascal }}">
+	</template>
+
 	<none-found v-else-if="!have{{ SINGULAR_NAME | pascal }}">
 		<template #title>{{ SINGULAR_NAME | sentence }} not found</template>
 
@@ -22,8 +25,9 @@ import { computed, ref, watch } from "vue";
 import { definePage } from "vue-router/experimental";
 import { useFlashMessages } from "@lewishowles/components/composables";
 import { isNonEmptyObject } from "@lewishowles/helpers/object";
-import { use{{ SINGULAR_NAME | pascal }}, use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
+import { use{{ SINGULAR_NAME | pascal }}, use{ { SINGULAR_NAME | pascal } } Actions } from "@/queries/{{ NAME | kebab }}";
 import { useBreadcrumb } from "@/composables/router/use-breadcrumbs";
+import { usePageTitle } from "@/composables/router/use-page-title";
 import { useRoute } from "vue-router";
 
 // Read the record ID from the URL.
@@ -78,4 +82,6 @@ definePage({
 	name: "{{ NAME | kebab }}-edit",
 	meta: { page_title: "{{ SINGULAR_NAME | sentence }}" },
 });
+
+usePageTitle(computed(() => {{ SINGULAR_NAME | camel }}.value?.name));
 </script>
