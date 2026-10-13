@@ -1,9 +1,10 @@
 <template>
-	<div class="flex min-h-screen flex-col items-center justify-center">
+	<div class="flex min-h-screen flex-col items-center justify-center p-8">
 		<form-wrapper
 			v-model="formData"
 			v-bind="{ fields, unsavedChangesGuard: false }"
-			class="w-full max-w-sm"
+			compact
+			class="w-full max-lg:[&_.button--primary]:w-full"
 			@submit="performLogin"
 		>
 			<form-field type="email" name="email">Email</form-field>
