@@ -168,12 +168,12 @@
 					"required": true
 				},
 				{
-					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.vue",
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form/{{ SINGULAR_NAME | kebab }}-form.vue",
 					"template": "form.vue",
 					"required": true
 				},
 				{
-					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form/{{ SINGULAR_NAME | kebab }}-form.test.js",
 					"template": "form.test.js",
 					"required": true
 				},
@@ -255,12 +255,12 @@
 					"required": true
 				},
 				{
-					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.vue",
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form/{{ SINGULAR_NAME | kebab }}-form.vue",
 					"template": "form.vue",
 					"required": true
 				},
 				{
-					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form.test.js",
+					"output_path": "components/{{ NAME | kebab }}/{{ SINGULAR_NAME | kebab }}-form/{{ SINGULAR_NAME | kebab }}-form.test.js",
 					"template": "form.test.js",
 					"required": true
 				},
