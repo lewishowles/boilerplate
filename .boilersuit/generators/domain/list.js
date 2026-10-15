@@ -1,15 +1,13 @@
-import { {{ NAME | constant }}_KEYS } from "./keys.js";
-import { computed } from "vue";
-import { defineQueryOptions } from "@pinia/colada";
-import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
-import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
-import { isNonEmptyArray } from "@lewishowles/helpers/array";
-import { mock{{ NAME | pascal }} } from "./mock.js";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
+import { isNonEmptyArray } from "@lewishowles/helpers/array";
+import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
+import { defineQueryOptions } from "@pinia/colada";
+import { {{ NAME | camel }}Domain } from "./definition.js";
+import { mock{{ NAME | pascal }} } from "./mock.js";
+import { computed } from "vue";
 
-import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
-
-const { get } = {{ API_COMPOSABLE }}();
+// The API client, endpoint, formatter, and cache keys for {{ NAME | words }} requests.
+const { api, endpoint, format, keys } = {{ NAME | camel }}Domain;
 // Whether {{ NAME | words }} requests return fixture data in development.
 const isMockData = import.meta.env.VITE_MOCK_DATA === "true";
 
@@ -55,7 +53,7 @@ async function load{{ NAME | pascal }}() {
 	let response;
 
 	try {
-		response = await get("{{ ENDPOINT }}");
+		response = await api.get(endpoint);
 	} catch (error) {
 		if (!isMockData) {
 			throw error;
@@ -69,12 +67,12 @@ async function load{{ NAME | pascal }}() {
 
 	return {
 		...listResponse,
-		items: isNonEmptyArray(items) ? items.map((item) => format{{ SINGULAR_NAME | pascal }}(item)) : [],
+		items: isNonEmptyArray(items) ? items.map((item) => format(item)) : [],
 	};
 }
 
 // Describe how the list cache is keyed and loaded.
 const {{ NAME | camel }}QueryOptions = defineQueryOptions({
-	key: {{ NAME | constant }}_KEYS.list(),
+	key: keys.list(),
 	query: load{{ NAME | pascal }},
 });

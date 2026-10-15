@@ -1,14 +1,11 @@
-import { {{ NAME | constant }}_KEYS } from "./keys.js";
-import { computed, unref } from "vue";
-import { defineQueryOptions } from "@pinia/colada";
-import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
+import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { defineQueryOptions } from "@pinia/colada";
+import { {{ NAME | camel }}Domain } from "./definition.js";
+import { computed, unref } from "vue";
 
-import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
-
-// API method used to load a {{ SINGULAR_NAME | words }} record.
-const { get } = {{ API_COMPOSABLE }}();
+// The API client, endpoint, formatter, and cache keys for a {{ SINGULAR_NAME | words }} record.
+const { api, endpoint, format, keys } = {{ NAME | camel }}Domain;
 
 /**
  * Provide access to a {{ SINGULAR_NAME | words }} record.
@@ -67,14 +64,14 @@ export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
  */
 async function get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
 	// API response for the requested record.
-	const response = await get(`{{ ENDPOINT }}/${{{ ID_NAME }}}`);
+	const response = await api.get(`${endpoint}/${{{ ID_NAME }}}`);
 
-	return format{{ SINGULAR_NAME | pascal }}(response);
+	return format(response);
 }
 
 // Query options for a {{ SINGULAR_NAME | words }} record.
 const {{ SINGULAR_NAME | camel }}QueryOptions = defineQueryOptions(({{ ID_NAME }}) => ({
-	key: {{ NAME | constant }}_KEYS.byId({{ ID_NAME }}),
+	key: keys.byId({{ ID_NAME }}),
 	/**
 	 * Load the requested {{ SINGULAR_NAME | words }} record.
 	 *

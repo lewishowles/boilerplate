@@ -1,11 +1,9 @@
-import { {{ NAME | constant }}_KEYS } from "./keys.js";
-import { toValue } from "vue";
 import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
+import { {{ NAME | camel }}Domain } from "./definition.js";
+import { toValue } from "vue";
 
-import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
-
-// API methods used to create and update {{ SINGULAR_NAME | words }} records.
-const { patch, post } = {{ API_COMPOSABLE }}();
+// The API client, endpoint, and cache keys for creating and updating {{ SINGULAR_NAME | words }} records.
+const { api, endpoint, keys } = {{ NAME | camel }}Domain;
 
 /**
  * Create and update {{ SINGULAR_NAME | words }} records.
@@ -16,7 +14,7 @@ const { patch, post } = {{ API_COMPOSABLE }}();
 export function use{{ SINGULAR_NAME | pascal }}Actions() {
 	// Action that creates a {{ SINGULAR_NAME | words }} record.
 	const { mutateAsync: create{{ SINGULAR_NAME | pascal }} } = useMutationWrapper({
-		invalidates: [{{ NAME | constant }}_KEYS.root],
+		invalidates: [keys.root],
 		/**
 		 * Create a {{ SINGULAR_NAME | words }} record through the API.
 		 *
@@ -26,7 +24,7 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
 		 * @returns  {Promise<object>}
 		 *     The created {{ SINGULAR_NAME | words }} record.
 		 */
-		mutation: (parameters) => post("{{ ENDPOINT }}", normaliseParametersForApi(parameters)),
+		mutation: (parameters) => api.post(endpoint, normaliseParametersForApi(parameters)),
 	});
 
 	// Action that updates a {{ SINGULAR_NAME | words }} record.
@@ -40,7 +38,7 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
 		 * @returns  {object[][]}
 		 *     The query keys that need refreshing.
 		 */
-		invalidates: (variables) => [{{ NAME | constant }}_KEYS.root, {{ NAME | constant }}_KEYS.byId(variables.{{ ID_NAME }})],
+		invalidates: (variables) => [keys.root, keys.byId(variables.{{ ID_NAME }})],
 		/**
 		 * Update a {{ SINGULAR_NAME | words }} record through the API.
 		 *
@@ -53,7 +51,7 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
 		 *     The updated {{ SINGULAR_NAME | words }} record.
 		 */
 		mutation: ({ {{ ID_NAME }}, ...parameters }) =>
-			patch(`{{ ENDPOINT }}/${{{ ID_NAME }}}`, normaliseParametersForApi(parameters)),
+			api.patch(`${endpoint}/${{{ ID_NAME }}}`, normaliseParametersForApi(parameters)),
 	});
 
 	return {

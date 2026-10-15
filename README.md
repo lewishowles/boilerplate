@@ -117,6 +117,10 @@ Rerun generation with `--skip-existing` to protect files you have already edited
 
 Both variants generate the resource's query keys, list query and test, mock data, details query and test, create/update actions and test, response helpers and test, query barrel, list page, create page, details page, starter form, and form test. The server variant also generates the server-table composable and test and wires the list query to server-side table controls.
 
+Each domain also has a `definition.js` that declares its API client, endpoint, cache keys, and record formatter once. The list, details, and actions use that definition. Keep record-specific field mapping in `helpers.js`.
+
+For a request outside the domain's usual endpoint, import the definition from the query barrel and pass an explicit path to its API client. For example, a generated `users` domain can call `usersDomain.api.get("reports/users")` while its standard requests continue to use `usersDomain.endpoint`. Every request in the domain shares that one API client, so changing its settings, such as its base URL, changes them all.
+
 ## Add-edit form generator
 
 `boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the generated resource domain for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.

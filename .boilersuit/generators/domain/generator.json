@@ -98,6 +98,11 @@
 			"description": "Adds server-side search, sort, pagination, and table state.",
 			"files": [
 				{
+					"output_path": "queries/{{ NAME | kebab }}/definition.js",
+					"template": "definition.js",
+					"required": true
+				},
+				{
 					"output_path": "queries/{{ NAME | kebab }}/keys.js",
 					"template": "server-keys.js",
 					"required": true
@@ -194,6 +199,11 @@
 			"label": "Client domain",
 			"description": "Loads the collection for client-side table controls.",
 			"files": [
+				{
+					"output_path": "queries/{{ NAME | kebab }}/definition.js",
+					"template": "definition.js",
+					"required": true
+				},
 				{
 					"output_path": "queries/{{ NAME | kebab }}/keys.js",
 					"template": "keys.js",
