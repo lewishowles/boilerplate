@@ -4,7 +4,7 @@ import { defineQueryOptions } from "@pinia/colada";
 import { format{{ SINGULAR_NAME | pascal }} } from "./helpers.js";
 import { getPathValue as getPropertyValue } from "@lewishowles/helpers/object";
 import { isNonEmptyArray } from "@lewishowles/helpers/array";
-import { mock{{ NAME | pascal }} } from "@/queries/mock/data.js";
+import { mock{{ NAME | pascal }} } from "./mock.js";
 import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
@@ -62,8 +62,10 @@ async function load{{ NAME | pascal }}() {
 		}
 	}
 
+	// The fixture data in mock mode, otherwise the API response.
 	const listResponse = isMockData ? mock{{ NAME | pascal }} : response;
-	const items = getPropertyValue(formattedResponse, "items");
+	// The items from that response, before formatting.
+	const items = getPropertyValue(listResponse, "items");
 
 	return {
 		...listResponse,
