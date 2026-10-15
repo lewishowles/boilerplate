@@ -74,7 +74,7 @@ export function use{{ NAME | pascal }}(parameters = {}) {
  *     The API error when mock data is disabled.
  *
  * @returns  {Promise<object>}
- *     The formatted {{ NAME | words }} list response.
+ *     The {{ NAME | words }} list response with each {{ SINGULAR_NAME | words }} formatted.
  */
 async function load{{ NAME | pascal }}(parameters) {
 	// API response used to build the list data.
@@ -88,13 +88,13 @@ async function load{{ NAME | pascal }}(parameters) {
 		}
 	}
 
-	// Response data normalised to the query shape.
-	const formattedResponse = format{{ SINGULAR_NAME | pascal }}(isMockData ? mock{{ NAME | pascal }} : response);
-	// Items to format in the list response.
-	const items = getPropertyValue(formattedResponse, "items");
+	// The fixture data in mock mode, otherwise the API response.
+	const listResponse = isMockData ? mock{{ NAME | pascal }} : response;
+	// The items from that response, before formatting.
+	const items = getPropertyValue(listResponse, "items");
 
 	return {
-		...formattedResponse,
+		...listResponse,
 		items: isNonEmptyArray(items) ? items.map((item) => format{{ SINGULAR_NAME | pascal }}(item)) : [],
 	};
 }

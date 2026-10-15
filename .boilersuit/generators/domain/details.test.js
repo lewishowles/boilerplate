@@ -60,7 +60,7 @@ describe("{{ SINGULAR_NAME | words }} details", () => {
 			await refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}/item-123");
-			expect({{ SINGULAR_NAME | camel }}.value).toEqual(sampleResponse);
+			expect({{ SINGULAR_NAME | camel }}.value).toEqual({ ...sampleResponse, derived: {} });
 			expect(have{{ SINGULAR_NAME | pascal }}.value).toBe(true);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);

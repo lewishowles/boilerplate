@@ -1,49 +1,37 @@
 import { describe, expect, test } from "vite-plus/test";
 import { format{{ SINGULAR_NAME | pascal }} } from ".";
 
-describe("{{ NAME | words }} response formatter", () => {
-	test("Unwraps a response data envelope", () => {
-		// Response containing a data envelope.
-		const response = {
-			data: {
-				id: "item-123",
-			},
-		};
+describe("{{ SINGULAR_NAME | words }} formatter", () => {
+	test("Adds an empty derived object to a record", () => {
+		// The record returned by the API.
+		const record = { id: "item-123" };
+		// The record after formatting.
+		const formattedRecord = format{{ SINGULAR_NAME | pascal }}(record);
 
-		// Response after the data envelope is removed.
-		const formattedResponse = format{{ SINGULAR_NAME | pascal }}(response);
-
-		expect(formattedResponse).toEqual(response.data);
+		expect(formattedRecord).toEqual({ id: "item-123", derived: {} });
 	});
 
-	test("Preserves an envelope-level item total", () => {
-		// Response containing list data and an envelope-level total.
-		const response = {
-			data: {
-				items: [{ id: "item-123" }],
-			},
-			itemsTotal: 42,
-		};
+	test("Copies a record without changing the API data", () => {
+		// The record returned by the API.
+		const record = { id: "item-123", name: "Flight 123" };
+		// The record after formatting.
+		const formattedRecord = format{{ SINGULAR_NAME | pascal }}(record);
 
-		// Response after the data is normalised.
-		const formattedResponse = format{{ SINGULAR_NAME | pascal }}(response);
-
-		expect(formattedResponse).toEqual({
-			items: response.data.items,
-			itemsTotal: 42,
-		});
+		expect(formattedRecord).not.toBe(record);
+		expect(record).toEqual({ id: "item-123", name: "Flight 123" });
 	});
 
-	test("Returns null and non-object responses unchanged", () => {
-		// Non-object values that should remain unchanged.
-		const nullResponse = null;
-		const textResponse = "response";
-		// Formatted null response.
-		const formattedNullResponse = format{{ SINGULAR_NAME | pascal }}(nullResponse);
-		// Formatted text response.
-		const formattedTextResponse = format{{ SINGULAR_NAME | pascal }}(textResponse);
+	test("Returns null and other non-object values unchanged", () => {
+		// A null value, which the formatter returns unchanged.
+		const nullValue = null;
+		// A text value, which the formatter returns unchanged.
+		const textValue = "text";
+		// The formatted null value.
+		const formattedNullValue = format{{ SINGULAR_NAME | pascal }}(nullValue);
+		// The formatted text value.
+		const formattedTextValue = format{{ SINGULAR_NAME | pascal }}(textValue);
 
-		expect(formattedNullResponse).toBe(null);
-		expect(formattedTextResponse).toBe(textResponse);
+		expect(formattedNullValue).toBe(null);
+		expect(formattedTextValue).toBe(textValue);
 	});
 });

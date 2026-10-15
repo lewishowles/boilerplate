@@ -1,14 +1,15 @@
 import { isObject } from "@lewishowles/helpers/object";
 
 /**
- * Format API responses for {{ NAME | words }} queries.
+ * Format one {{ SINGULAR_NAME | words }} from the API for the app to use.
  *
- * Add field mapping here when the API response differs from the query data.
+ * Add field mapping here when the API fields differ from what the app needs.
  *
- * @param  {object}  response
+ * @param  {object}  {{ SINGULAR_NAME | camel }}
  *     The {{ SINGULAR_NAME | words }} returned by the API.
  * @returns  {object}
- *     Formatted {{ SINGULAR_NAME | words }}.
+ *     A copy of the {{ SINGULAR_NAME | words }} with a `derived` object added,
+ *     or the value unchanged when it is not an object.
  */
 export function format{{ SINGULAR_NAME | pascal }}({{ SINGULAR_NAME | camel }}) {
 	if (!isObject({{ SINGULAR_NAME | camel }})) {

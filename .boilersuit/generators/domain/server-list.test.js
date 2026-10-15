@@ -76,7 +76,7 @@ describe("{{ NAME | words }} list", () => {
 			await refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
-			expect({{ NAME | camel }}.value).toEqual(validResponse.items);
+			expect({{ NAME | camel }}.value).toEqual([{ ...validResponse.items[0], derived: {} }]);
 			expect(totalRows.value).toBe(validResponse.itemsTotal);
 			expect(lastFetched.value).toBeInstanceOf(Date);
 			expect(isInitialLoading.value).toBe(false);
