@@ -41,8 +41,14 @@ const formData = ref({});
 
 // Settings for the sign-in fields, both of which must be filled in.
 const fields = {
-	email: { rules: [{ rule: "required", message: "Enter your email address" }] },
-	password: { rules: [{ rule: "required", message: "Enter your password" }] },
+	email: {
+		inputAttributes: { autocomplete: "username" },
+		rules: [{ rule: "required", message: "Enter your email address" }],
+	},
+	password: {
+		inputAttributes: { autocomplete: "current-password" },
+		rules: [{ rule: "required", message: "Enter your password" }],
+	},
 };
 
 /**
