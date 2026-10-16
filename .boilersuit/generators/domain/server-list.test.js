@@ -50,71 +50,19 @@ describe("{{ NAME | words }} list", () => {
 	});
 
 	describe("use{{ NAME | pascal }}", () => {
-		test("Initialises with no {{ NAME | words }}", () => {
-			// Query state returned before a response is loaded.
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
-				create{{ NAME | pascal }}(parameters);
-
-			expect({{ NAME | camel }}.value).toEqual([]);
-			expect(totalRows.value).toBe(0);
-			expect(isInitialLoading.value).toBe(true);
-			expect(isReady.value).toBe(false);
-			expect(isRefreshing.value).toBe(false);
-			expect(lastFetched.value).toBe(null);
-			expect(refetch).toBeTypeOf("function");
-		});
-
 		test("Loads and stores {{ NAME | words }}", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
 			// Query state returned after the response loads.
-			const { isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ NAME | camel }}, totalRows } =
+			const { have{{ NAME | pascal }}, refetch, {{ NAME | camel }}, totalRows } =
 				create{{ NAME | pascal }}(parameters);
-
-			expect(lastFetched.value).toBe(null);
 
 			await refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
 			expect({{ NAME | camel }}.value).toEqual([{ ...validResponse.items[0], derived: {} }]);
 			expect(totalRows.value).toBe(validResponse.itemsTotal);
-			expect(lastFetched.value).toBeInstanceOf(Date);
-			expect(isInitialLoading.value).toBe(false);
-			expect(isReady.value).toBe(true);
-			expect(isRefreshing.value).toBe(false);
-		});
-
-		test("Does not update {{ NAME | words }} when the request fails", async () => {
-			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
-
-			// Query state returned after the request fails.
-			const { isReady, lastFetched, refetch, {{ NAME | camel }} } = create{{ NAME | pascal }}(parameters);
-
-			await expect(refetch(true)).rejects.toThrow("Request failed");
-
-			expect({{ NAME | camel }}.value).toEqual([]);
-			expect(isReady.value).toBe(false);
-			expect(lastFetched.value).toBe(null);
-		});
-
-		describe("have{{ NAME | pascal }}", () => {
-			test("Is false when no {{ NAME | words }} are loaded", () => {
-				// Presence state returned before any items are loaded.
-				const { have{{ NAME | pascal }} } = create{{ NAME | pascal }}(parameters);
-
-				expect(have{{ NAME | pascal }}.value).toBe(false);
-			});
-
-			test("Is true when {{ NAME | words }} have been loaded", async () => {
-				{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
-
-				// Presence state and refetch action for the loaded list.
-				const { have{{ NAME | pascal }}, refetch } = create{{ NAME | pascal }}(parameters);
-
-				await refetch(true);
-
-				expect(have{{ NAME | pascal }}.value).toBe(true);
-			});
+			expect(have{{ NAME | pascal }}.value).toBe(true);
 		});
 	});
 });

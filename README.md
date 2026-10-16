@@ -28,7 +28,7 @@ Copy the generated `.env.example` to `.env` and fill in the values for the selec
 
 In development builds only, set `VITE_MOCK_AUTH=true` to sign in as the sample user in `src/queries/auth/current-user/index.js` without calling the API.
 
-Set `VITE_MOCK_DATA=true` to show sample data in list pages made by the domain generator. Each list query still calls the API first. If that request fails, the query returns the sample data in `src/queries/<name>/mock.js` instead of an error. With any other value, a failed request shows an error as normal.
+Set `VITE_MOCK_DATA=true` to show sample data in list pages made by the domain generator. Each list query still calls the API first, then shows the sample data in `src/queries/<name>/mock.js` whether the request succeeds or fails. A failed request does not show an error in mock mode. With any other value, a failed request shows an error as normal.
 
 Add another grouped API by defining one environment value and a named adapter:
 
@@ -120,6 +120,8 @@ Both variants generate the resource's query keys, list query and test, mock data
 Each domain also has a `definition.js` that declares its API client, endpoint, cache keys, and record formatter once. The list, details, and actions use that definition. Keep record-specific field mapping in `helpers.js`.
 
 For a request outside the domain's usual endpoint, import the definition from the query barrel and pass an explicit path to its API client. For example, a generated `users` domain can call `usersDomain.api.get("reports/users")` while its standard requests continue to use `usersDomain.endpoint`. Every request in the domain shares that one API client, so changing its settings, such as its base URL, changes them all.
+
+The generated list query uses `useListQuery` for its request, mock data, record formatting, and result state. If a collection needs different list behaviour, edit its generated `list.js` to use `useQueryWrapper` directly. Keep the domain definition for the API client, endpoint, cache keys, and formatter, and keep the generated function's public return names for its pages and components.
 
 ## Add-edit form generator
 
