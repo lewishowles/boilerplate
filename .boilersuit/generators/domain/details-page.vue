@@ -25,7 +25,7 @@ import { computed, ref, watch } from "vue";
 import { definePage } from "vue-router/experimental";
 import { useFlashMessages } from "@lewishowles/components/composables";
 import { isNonEmptyObject } from "@lewishowles/helpers/object";
-import { use{{ SINGULAR_NAME | pascal }}, use{ { SINGULAR_NAME | pascal } } Actions } from "@/queries/{{ NAME | kebab }}";
+import { use{{ SINGULAR_NAME | pascal }}, use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
 import { useBreadcrumb } from "@/composables/router/use-breadcrumbs";
 import { usePageTitle } from "@/composables/router/use-page-title";
 import { useRoute } from "vue-router";
