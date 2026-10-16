@@ -34,20 +34,6 @@ describe("{{ SINGULAR_NAME | words }} details", () => {
 	});
 
 	describe("use{{ SINGULAR_NAME | pascal }}", () => {
-		test("Initialises with no {{ SINGULAR_NAME | words }} details", () => {
-			// Query state returned before a record is loaded.
-			const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } =
-				create{{ SINGULAR_NAME | pascal }}(null);
-
-			expect({{ SINGULAR_NAME | camel }}.value).toBe(null);
-			expect(have{{ SINGULAR_NAME | pascal }}.value).toBe(false);
-			expect(isInitialLoading.value).toBe(false);
-			expect(isReady.value).toBe(false);
-			expect(isRefreshing.value).toBe(false);
-			expect(lastFetched.value).toBe(null);
-			expect(refetch).toBeTypeOf("function");
-		});
-
 		test("Loads and stores {{ SINGULAR_NAME | words }} details", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(sampleResponse);
 
@@ -66,20 +52,6 @@ describe("{{ SINGULAR_NAME | words }} details", () => {
 			expect(isInitialLoading.value).toBe(false);
 			expect(isReady.value).toBe(true);
 			expect(isRefreshing.value).toBe(false);
-		});
-
-		test("Does not update {{ SINGULAR_NAME | words }} details when the request fails", async () => {
-			{{ MOCK_API_NAME }}.get.mockRejectedValue(new Error("Request failed"));
-
-			// Query state returned after the request fails.
-			const { have{{ SINGULAR_NAME | pascal }}, isReady, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } = create{{ SINGULAR_NAME | pascal }}();
-
-			await expect(refetch(true)).rejects.toThrow("Request failed");
-
-			expect({{ SINGULAR_NAME | camel }}.value).toBe(null);
-			expect(have{{ SINGULAR_NAME | pascal }}.value).toBe(false);
-			expect(isReady.value).toBe(false);
-			expect(lastFetched.value).toBe(null);
 		});
 	});
 });

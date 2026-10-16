@@ -123,6 +123,8 @@ For a request outside the domain's usual endpoint, import the definition from th
 
 The generated list query uses `useListQuery` for its request, mock data, record formatting, and result state. If a collection needs different list behaviour, edit its generated `list.js` to use `useQueryWrapper` directly. Keep the domain definition for the API client, endpoint, cache keys, and formatter, and keep the generated function's public return names for its pages and components.
 
+The generated details query uses `useDetailQuery` for its request, record formatting, and result state. If a record needs a different detail request, edit its generated `details.js` to use `useQueryWrapper` directly. Keep the domain definition and the generated function's public return names for its pages and components.
+
 ## Add-edit form generator
 
 `boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the generated resource domain for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.

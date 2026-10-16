@@ -1,82 +1,26 @@
-import { useQueryWrapper } from "@/queries/use-query-wrapper/use-query-wrapper";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
-import { defineQueryOptions } from "@pinia/colada";
+import { useDetailQuery } from "@/queries/use-detail-query/use-detail-query";
 import { {{ NAME | camel }}Domain } from "./definition.js";
-import { computed, unref } from "vue";
-
-// The API client, endpoint, formatter, and cache keys for a {{ SINGULAR_NAME | words }} record.
-const { api, endpoint, format, keys } = {{ NAME | camel }}Domain;
 
 /**
  * Provide access to a {{ SINGULAR_NAME | words }} record.
  *
  * @param  {string|Ref<string>}  {{ ID_NAME }}
- *     The {{ SINGULAR_NAME | words }} ID.
+ *     The {{ SINGULAR_NAME | words }} ID. No request is sent while it is empty.
  *
  * @returns  {object}
- *     The {{ SINGULAR_NAME | words }} query state and actions.
+ *     The query state, the {{ SINGULAR_NAME | words }} record, and whether it has loaded.
  */
 export function use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
-	// Current query state and actions for the {{ SINGULAR_NAME | words }} record.
-	const current{{ SINGULAR_NAME | pascal }} = useQueryWrapper({
-		/**
-		 * Build query options for the current record ID.
-		 *
-		 * @returns  {object}
-		 *     The query options for the current record.
-		 */
-		queryOptions: () => ({
-			...{{ SINGULAR_NAME | camel }}QueryOptions(unref({{ ID_NAME }})),
-			enabled: Boolean(unref({{ ID_NAME }})),
-		}),
-		/**
-		 * Check whether the record response contains a record.
-		 *
-		 * @param  {object}  data
-		 *     The current record response.
-		 *
-		 * @returns  {boolean}
-		 *     Whether the response contains a record.
-		 */
-		isReady: (data) => isNonEmptyObject(data),
+	// The shared detail state. The record and whether it has loaded are
+	// returned below under this domain's names.
+	const { haveRecord, record, ...current{{ SINGULAR_NAME | pascal }} } = useDetailQuery({
+		domain: {{ NAME | camel }}Domain,
+		id: {{ ID_NAME }},
 	});
-
-	// The returned {{ SINGULAR_NAME | words }} record.
-	const {{ SINGULAR_NAME | camel }} = current{{ SINGULAR_NAME | pascal }}.data;
-	// Whether a {{ SINGULAR_NAME | words }} record is present.
-	const have{{ SINGULAR_NAME | pascal }} = computed(() => isNonEmptyObject({{ SINGULAR_NAME | camel }}.value));
 
 	return {
 		...current{{ SINGULAR_NAME | pascal }},
-		have{{ SINGULAR_NAME | pascal }},
-		{{ SINGULAR_NAME | camel }},
+		have{{ SINGULAR_NAME | pascal }}: haveRecord,
+		{{ SINGULAR_NAME | camel }}: record,
 	};
 }
-
-/**
- * Load a {{ SINGULAR_NAME | words }} record.
- *
- * @param  {string}  {{ ID_NAME }}
- *     The ID of the {{ SINGULAR_NAME | words }} to load.
- *
- * @returns  {Promise<object>}
- *     The formatted {{ SINGULAR_NAME | words }} record.
- */
-async function get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}) {
-	// API response for the requested record.
-	const response = await api.get(`${endpoint}/${{{ ID_NAME }}}`);
-
-	return format(response);
-}
-
-// Query options for a {{ SINGULAR_NAME | words }} record.
-const {{ SINGULAR_NAME | camel }}QueryOptions = defineQueryOptions(({{ ID_NAME }}) => ({
-	key: keys.byId({{ ID_NAME }}),
-	/**
-	 * Load the requested {{ SINGULAR_NAME | words }} record.
-	 *
-	 * @returns  {Promise<object>}
-	 *     The formatted {{ SINGULAR_NAME | words }} record.
-	 */
-	query: () => get{{ SINGULAR_NAME | pascal }}({{ ID_NAME }}),
-}));
