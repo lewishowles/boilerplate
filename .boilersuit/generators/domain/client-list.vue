@@ -40,12 +40,7 @@
 				<relative-date v-bind="{ date: lastFetched }" />
 			</p>
 
-			<ui-button
-				class="button--muted"
-				icon-start="icon-reload"
-				reactive
-				@click="refetch"
-			>
+			<ui-button class="button--muted" icon-start="icon-reload" reactive @click="refetch">
 				Refresh
 			</ui-button>
 		</content-card-footer>
@@ -54,9 +49,7 @@
 	<div v-else-if="error" class="space-y-4">
 		<p role="alert">Unable to load {{ NAME | words }}.</p>
 
-		<ui-button class="button--muted" reactive @click="refetch">
-			Try again
-		</ui-button>
+		<ui-button class="button--muted" reactive @click="refetch">Try again</ui-button>
 	</div>
 </template>
 
@@ -64,8 +57,8 @@
 /**
  * Displays the {{ NAME | words }} list with client-side table controls.
  */
-import { definePage } from "vue-router/experimental";
 import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
+import { definePage } from "vue-router/experimental";
 
 // Load the list and the state the page shows.
 const { error, isInitialLoading, isReady, lastFetched, refetch, {{ NAME | camel }} } = use{{ NAME | pascal }}();

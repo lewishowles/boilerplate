@@ -12,11 +12,11 @@
 /**
  * Creates a {{ SINGULAR_NAME | words }} record and opens its details page.
  */
-import { ref } from "vue";
-import { definePage } from "vue-router/experimental";
-import { useFlashMessages } from "@lewishowles/components/composables";
 import { use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
+import { useFlashMessages } from "@lewishowles/components/composables";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { definePage } from "vue-router/experimental";
 
 // Show a success message once the record is saved.
 const { sendMessage } = useFlashMessages();

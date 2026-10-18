@@ -5,8 +5,7 @@
 		Loading {{ SINGULAR_NAME | words }}…
 	</loading-indicator>
 
-	<template v-else-if="have{{ SINGULAR_NAME | pascal }}">
-	</template>
+	<template v-else-if="have{{ SINGULAR_NAME | pascal }}"></template>
 
 	<none-found v-else-if="!have{{ SINGULAR_NAME | pascal }}">
 		<template #title>{{ SINGULAR_NAME | sentence }} not found</template>
@@ -21,23 +20,21 @@
 /**
  * Displays and updates a {{ SINGULAR_NAME | words }} record.
  */
-import { computed, ref, watch } from "vue";
-import { definePage } from "vue-router/experimental";
-import { useFlashMessages } from "@lewishowles/components/composables";
-import { isNonEmptyObject } from "@lewishowles/helpers/object";
-import { use{{ SINGULAR_NAME | pascal }}, use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
 import { useBreadcrumb } from "@/composables/router/use-breadcrumbs";
 import { usePageTitle } from "@/composables/router/use-page-title";
+import { use{{ SINGULAR_NAME | pascal }}, use{{ SINGULAR_NAME | pascal }}Actions } from "@/queries/{{ NAME | kebab }}";
+import { useFlashMessages } from "@lewishowles/components/composables";
+import { isNonEmptyObject } from "@lewishowles/helpers/object";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { definePage } from "vue-router/experimental";
 
 // Read the record ID from the URL.
 const route = useRoute();
 // The ID of the record being edited.
 const {{ ID_NAME }} = computed(() => route.params.{{ ID_NAME }});
-
 // Load the current record.
 const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, {{ SINGULAR_NAME | camel }} } = use{{ SINGULAR_NAME | pascal }}({{ ID_NAME }});
-
 // Save changes to the record.
 const { update{{ SINGULAR_NAME | pascal }} } = use{{ SINGULAR_NAME | pascal }}Actions();
 // Hold an editable copy so form changes do not mutate cached query data.
