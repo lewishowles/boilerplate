@@ -113,6 +113,8 @@ boilersuit generate domain --variant server \
 
 Rerun generation with `--skip-existing` to protect files you have already edited. Without it, generation overwrites the destination.
 
+A very long domain name can push some generated lines past the formatter's width, and lint then reports formatting failures in those files. Run `bun run lint:fix` once after generating to fix them.
+
 ### What it generates
 
 Both variants generate the resource's query keys, list query and test, mock data, details query and test, create/update actions and test, response helpers and test, query barrel, list page, create page, details page, starter form, and form test. The server variant also generates the server-table composable and test and wires the list query to server-side table controls.
