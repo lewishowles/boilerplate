@@ -3,7 +3,7 @@ import { {{ NAME | constant }}_KEYS } from "./keys.js";
 
 import {{ API_COMPOSABLE }} from "{{ API_IMPORT }}";
 
-// The API settings that every {{ NAME | words }} query and action reads, so each one is declared once.
+// Shared API settings for {{ NAME | words }} queries and actions.
 export const {{ NAME | camel }}Domain = {
 	// The API client for {{ NAME | words }} requests.
 	api: {{ API_COMPOSABLE }}(),

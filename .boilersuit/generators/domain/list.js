@@ -4,6 +4,9 @@ import { useListQuery } from "@/queries/use-list-query/use-list-query";
 
 /**
  * Provide access to the {{ NAME | words }} list.
+ *
+ * @returns  {object}
+ *     The list query state, with `items` and `haveItems` renamed.
  */
 export function use{{ NAME | pascal }}() {
 	// The shared list state, with its items renamed for this domain below.

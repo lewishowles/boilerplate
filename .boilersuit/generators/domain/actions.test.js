@@ -5,9 +5,8 @@ import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-// Mock the API composable in this file so Vitest sets the mock up before any import.
-// The mock API helper also mocks it, but only in time when it is imported before the
-// code under test, and the formatter sorts that import later.
+// Mock the API in this file. The mock API helper's own mock only works when it
+// is imported first, and the formatter moves that import further down.
 vi.mock("{{ API_IMPORT }}", async () => (await import("@lewishowles/testing/vue")).mockApiModule);
 
 /**
@@ -35,6 +34,7 @@ describe("{{ SINGULAR_NAME | words }} actions", () => {
 		const { create{{ SINGULAR_NAME | pascal }} } = create{{ SINGULAR_NAME | pascal }}Actions();
 
 		await expect(create{{ SINGULAR_NAME | pascal }}(parameters)).resolves.toEqual(response);
+
 		expect({{ MOCK_API_NAME }}.post).toHaveBeenCalledWith("{{ ENDPOINT }}", parameters);
 	});
 
@@ -50,6 +50,7 @@ describe("{{ SINGULAR_NAME | words }} actions", () => {
 		const { update{{ SINGULAR_NAME | pascal }} } = create{{ SINGULAR_NAME | pascal }}Actions();
 
 		await expect(update{{ SINGULAR_NAME | pascal }}(parameters)).resolves.toEqual(response);
+
 		expect({{ MOCK_API_NAME }}.patch).toHaveBeenCalledWith("{{ ENDPOINT }}/item-123", {
 			name: "Updated example",
 		});

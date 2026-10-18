@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ SINGULAR_NAME | pascal }}Form from "./{{ SINGULAR_NAME | kebab }}-form.vue";
 
-// Mount the form with its real form components, so submitting runs the field rules.
+// Mount with real child components, so submitting runs the field rules.
 const mount = createDeepMount({{ SINGULAR_NAME | pascal }}Form);
 
 describe("{{ SINGULAR_NAME | kebab }}-form", () => {

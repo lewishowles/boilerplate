@@ -7,9 +7,10 @@ import { isObject } from "@lewishowles/helpers/object";
  *
  * @param  {object}  {{ SINGULAR_NAME | camel }}
  *     The {{ SINGULAR_NAME | words }} returned by the API.
+ *
  * @returns  {object}
- *     A copy of the {{ SINGULAR_NAME | words }} with a `derived` object added,
- *     or the value unchanged when it is not an object.
+ *     A copy with a `derived` object added, or the value unchanged when it is
+ *     not an object.
  */
 export function format{{ SINGULAR_NAME | pascal }}({{ SINGULAR_NAME | camel }}) {
 	if (!isObject({{ SINGULAR_NAME | camel }})) {

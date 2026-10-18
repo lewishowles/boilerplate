@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+/**
+ * Collects the values for creating or updating a {{ SINGULAR_NAME | words }} record.
+ */
 // The form values, shared with the page that saves them. The form fills in the
 // starting values from `fields`.
 const formData = defineModel({ type: Object });

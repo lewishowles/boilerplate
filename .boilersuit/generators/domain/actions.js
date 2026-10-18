@@ -2,7 +2,7 @@ import { {{ NAME | camel }}Domain } from "./definition.js";
 import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 import { toValue } from "vue";
 
-// The API client, endpoint, and cache keys for creating and updating {{ SINGULAR_NAME | words }} records.
+// The API client, endpoint, and cache keys for {{ SINGULAR_NAME | words }} actions.
 const { api, endpoint, keys } = {{ NAME | camel }}Domain;
 
 /**
@@ -72,6 +72,7 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
  *     The values to send unchanged until domain-specific mapping is added.
  */
 function normaliseParametersForApi(parameters) {
+	// A copy, so field mapping never changes the form's own values.
 	const localParameters = { ...toValue(parameters) };
 
 	return localParameters;

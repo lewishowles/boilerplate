@@ -53,6 +53,7 @@ describe("{{ NAME | words }} table", () => {
 		queryParameters.length = 0;
 
 		mockUse{{ NAME | pascal }}.mockReset();
+
 		mockUse{{ NAME | pascal }}.mockImplementation((parameters) => {
 			queryParameters.push(parameters);
 
@@ -122,6 +123,7 @@ describe("{{ NAME | words }} table", () => {
 				expect(parameters.value.search).toBe("");
 
 				vi.advanceTimersByTime(300);
+
 				await nextTick();
 
 				expect(parameters.value.search).toBe("example");
