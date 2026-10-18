@@ -1,6 +1,6 @@
-import { useListQuery } from "@/queries/use-list-query/use-list-query";
 import { {{ NAME | camel }}Domain } from "./definition.js";
 import { mock{{ NAME | pascal }} } from "./mock.js";
+import { useListQuery } from "@/queries/use-list-query/use-list-query";
 
 /**
  * Provide access to the {{ NAME | words }} list.

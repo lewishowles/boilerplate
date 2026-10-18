@@ -1,5 +1,5 @@
-import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 import { {{ NAME | camel }}Domain } from "./definition.js";
+import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 import { toValue } from "vue";
 
 // The API client, endpoint, and cache keys for creating and updating {{ SINGULAR_NAME | words }} records.

@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vite-plus/test";
 import { format{{ SINGULAR_NAME | pascal }} } from ".";
+import { describe, expect, test } from "vite-plus/test";
 
 describe("{{ SINGULAR_NAME | words }} formatter", () => {
 	test("Adds an empty derived object to a record", () => {

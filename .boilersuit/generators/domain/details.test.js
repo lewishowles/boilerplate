@@ -1,10 +1,14 @@
-import { describe, expect, test } from "vite-plus/test";
-import { withAppContext } from "@lewishowles/testing/vue";
+import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
 import { setupConsole } from "@lewishowles/testing/vitest";
+import { withAppContext } from "@lewishowles/testing/vue";
+import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ NAME | constant }}_KEYS, use{{ SINGULAR_NAME | pascal }} } from ".";
+// Mock the API composable in this file so Vitest sets the mock up before any import.
+// The mock API helper also mocks it, but only in time when it is imported before the
+// code under test, and the formatter sorts that import later.
+vi.mock("{{ API_IMPORT }}", async () => (await import("@lewishowles/testing/vue")).mockApiModule);
 
 /**
  * Create the {{ SINGULAR_NAME | words }} query wrapper in a Vue app context.

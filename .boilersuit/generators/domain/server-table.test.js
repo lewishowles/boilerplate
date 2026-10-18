@@ -1,6 +1,6 @@
+import { withAppContext } from "@lewishowles/testing/vue";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick, ref } from "vue";
-import { withAppContext } from "@lewishowles/testing/vue";
 
 // Mocked {{ NAME | words }} list query.
 const mockUse{{ NAME | pascal }} = vi.hoisted(() => vi.fn());

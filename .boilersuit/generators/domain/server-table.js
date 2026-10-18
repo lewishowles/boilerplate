@@ -1,7 +1,6 @@
-import { computed, ref } from "vue";
-import { refDebounced } from "@vueuse/core";
-
 import { use{{ NAME | pascal }} } from "@/queries/{{ NAME | kebab }}";
+import { refDebounced } from "@vueuse/core";
+import { computed, ref } from "vue";
 
 // Delay search requests until typing pauses.
 const searchDebounceDelay = 300;

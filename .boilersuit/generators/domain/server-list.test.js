@@ -1,10 +1,14 @@
-import { describe, expect, test } from "vite-plus/test";
+import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
 import { setupConsole } from "@lewishowles/testing/vitest";
 import { withAppContext } from "@lewishowles/testing/vue";
+import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-import { {{ NAME | constant }}_KEYS, use{{ NAME | pascal }} } from ".";
+// Mock the API composable in this file so Vitest sets the mock up before any import.
+// The mock API helper also mocks it, but only in time when it is imported before the
+// code under test, and the formatter sorts that import later.
+vi.mock("{{ API_IMPORT }}", async () => (await import("@lewishowles/testing/vue")).mockApiModule);
 
 /**
  * Create the {{ NAME | words }} list query wrapper in a Vue app context.
@@ -54,8 +58,7 @@ describe("{{ NAME | words }} list", () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(validResponse);
 
 			// Query state returned after the response loads.
-			const { have{{ NAME | pascal }}, refetch, {{ NAME | camel }}, totalRows } =
-				create{{ NAME | pascal }}(parameters);
+			const { have{{ NAME | pascal }}, refetch, {{ NAME | camel }}, totalRows } = create{{ NAME | pascal }}(parameters);
 
 			await refetch(true);
 

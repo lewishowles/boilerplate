@@ -1,5 +1,5 @@
-import { useDetailQuery } from "@/queries/use-detail-query/use-detail-query";
 import { {{ NAME | camel }}Domain } from "./definition.js";
+import { useDetailQuery } from "@/queries/use-detail-query/use-detail-query";
 
 /**
  * Provide access to a {{ SINGULAR_NAME | words }} record.
