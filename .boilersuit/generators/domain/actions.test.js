@@ -22,6 +22,7 @@ function create{{ SINGULAR_NAME | pascal }}Actions() {
 
 describe("{{ SINGULAR_NAME | words }} actions", () => {
 	setupConsole();
+
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});
@@ -33,6 +34,7 @@ describe("{{ SINGULAR_NAME | words }} actions", () => {
 		const response = { id: "item-123" };
 
 		{{ MOCK_API_NAME }}.post.mockResolvedValue(response);
+
 		vi.spyOn({{ NAME | camel }}Domain, "prepare").mockReturnValue({
 			name: "Prepared example",
 		});
