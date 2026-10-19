@@ -13,4 +13,6 @@ export const {{ NAME | camel }}Domain = {
 	keys: {{ NAME | constant }}_KEYS,
 	// Shapes one API record for the app; edit it in helpers.js.
 	format: format{{ SINGULAR_NAME | pascal }},
+	// Turns form values into the fields the API expects. Add mapping here when the two differ.
+	prepare: (parameters) => parameters,
 };

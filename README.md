@@ -119,13 +119,17 @@ A very long domain name can push some generated lines past the formatter's width
 
 Both variants generate the resource's query keys, list query and test, mock data, details query and test, create/update actions and test, response helpers and test, query barrel, list page, create page, details page, starter form, and form test. The server variant also generates the server-table composable and test and wires the list query to server-side table controls.
 
-Each domain also has a `definition.js` that declares its API client, endpoint, cache keys, and record formatter once. The list, details, and actions use that definition. Keep record-specific field mapping in `helpers.js`.
+Each domain also has a `definition.js` that declares its API client, endpoint, cache keys, record formatter, and form value mapper once. The list, details, and actions use that definition. Keep API-to-app record mapping in `helpers.js` and add form-to-API field mapping to `prepare` in `definition.js`. The default `prepare` returns the submitted values unchanged.
 
 For a request outside the domain's usual endpoint, import the definition from the query barrel and pass an explicit path to its API client. For example, a generated `users` domain can call `usersDomain.api.get("reports/users")` while its standard requests continue to use `usersDomain.endpoint`. Every request in the domain shares that one API client, so changing its settings, such as its base URL, changes them all.
 
 The generated list query uses `useListQuery` for its request, mock data, record formatting, and result state. If a collection needs different list behaviour, edit its generated `list.js` to use `useQueryWrapper` directly. Keep the domain definition for the API client, endpoint, cache keys, and formatter, and keep the generated function's public return names for its pages and components.
 
 The generated details query uses `useDetailQuery` for its request, record formatting, and result state. If a record needs a different detail request, edit its generated `details.js` to use `useQueryWrapper` directly. Keep the domain definition and the generated function's public return names for its pages and components.
+
+The generated create action uses `useCreateMutation` to send prepared form values to the domain endpoint and refresh its cached queries after the request settles. The generated `use<Item>Actions()` function exposes `create<Item>` to forms. `prepare` receives a shallow copy of the submitted values, so it can add, rename, or remove top-level fields without changing the form's values. Replace nested objects and arrays rather than editing them, because the form still shares those.
+
+When one create action needs something different, such as refreshing another domain's cache as well, write that action directly with `useMutationWrapper` in the generated actions file. Reuse the domain definition's `api`, `endpoint`, and `keys` for the request and cache refresh, and call `prepare` on a copy of the submitted values when the action uses the same field mapping. The domain's other actions can keep using the shared versions.
 
 ## Add-edit form generator
 

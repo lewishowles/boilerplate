@@ -1,4 +1,5 @@
 import { {{ NAME | camel }}Domain } from "./definition.js";
+import { useCreateMutation } from "@/queries/use-create-mutation/use-create-mutation";
 import { useMutationWrapper } from "@/queries/use-mutation-wrapper/use-mutation-wrapper";
 import { toValue } from "vue";
 
@@ -13,18 +14,8 @@ const { api, endpoint, keys } = {{ NAME | camel }}Domain;
  */
 export function use{{ SINGULAR_NAME | pascal }}Actions() {
 	// Action that creates a {{ SINGULAR_NAME | words }} record.
-	const { mutateAsync: create{{ SINGULAR_NAME | pascal }} } = useMutationWrapper({
-		invalidates: [keys.root],
-		/**
-		 * Create a {{ SINGULAR_NAME | words }} record through the API.
-		 *
-		 * @param  {object}  parameters
-		 *     The values to send to the API.
-		 *
-		 * @returns  {Promise<object>}
-		 *     The created {{ SINGULAR_NAME | words }} record.
-		 */
-		mutation: (parameters) => api.post(endpoint, normaliseParametersForApi(parameters)),
+	const { mutateAsync: create{{ SINGULAR_NAME | pascal }} } = useCreateMutation({
+		domain: {{ NAME | camel }}Domain,
 	});
 
 	// Action that updates a {{ SINGULAR_NAME | words }} record.
@@ -61,9 +52,10 @@ export function use{{ SINGULAR_NAME | pascal }}Actions() {
 }
 
 /**
- * Prepare form values for the API.
+ * Prepare form values for the update request.
  *
- * Add field mapping here when the API shape differs from the form shape.
+ * Add update field mapping here when the API shape differs from the form
+ * shape. Create requests use the domain definition's `prepare` instead.
  *
  * @param  {object}  parameters
  *     The values to send to the API.
