@@ -1,4 +1,4 @@
-import { format{{ SINGULAR_NAME | pascal }} } from ".";
+import { format{{ SINGULAR_NAME | pascal }}, format{{ SINGULAR_NAME | pascal }}ForApi } from "./helpers.js";
 import { describe, expect, test } from "vite-plus/test";
 
 describe("{{ SINGULAR_NAME | words }} formatter", () => {
@@ -33,5 +33,16 @@ describe("{{ SINGULAR_NAME | words }} formatter", () => {
 
 		expect(formattedNullValue).toBe(null);
 		expect(formattedTextValue).toBe(textValue);
+	});
+});
+
+describe("{{ SINGULAR_NAME | words }} API formatter", () => {
+	test("Passes form values through unchanged", () => {
+		// The values submitted by the form.
+		const formValues = { name: "Flight 123" };
+		// The values sent to the API.
+		const apiValues = format{{ SINGULAR_NAME | pascal }}ForApi(formValues);
+
+		expect(apiValues).toBe(formValues);
 	});
 });
