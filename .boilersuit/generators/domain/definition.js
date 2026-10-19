@@ -9,6 +9,8 @@ export const {{ NAME | camel }}Domain = {
 	api: {{ API_COMPOSABLE }}(),
 	// The path that standard {{ NAME | words }} requests start from.
 	endpoint: "{{ ENDPOINT }}",
+	// The field that holds a {{ SINGULAR_NAME | words }} record's ID.
+	idName: "{{ ID_NAME }}",
 	// The cache keys for {{ NAME | words }} queries.
 	keys: {{ NAME | constant }}_KEYS,
 	// Shapes one API record for the app; edit it in helpers.js.

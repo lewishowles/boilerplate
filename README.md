@@ -79,7 +79,7 @@ The router's auth guard (`src/router/middleware/auth.js`) only checks for a trut
 - `NAME`: collection name, plural lowercase kebab-case. Drives the query, component, composable, and page folders.
 - `SINGULAR_NAME`: item name, singular lowercase kebab-case. Drives detail queries, actions, routes, and the starter form.
 - `ENDPOINT`: API endpoint without a leading slash, such as `users` or `account/profile`.
-- `ID_NAME`: item ID parameter name, camelCase. Used by detail queries and generated routes.
+- `ID_NAME`: item ID parameter name, camelCase. Used by detail queries, generated routes, and the update action.
 - `API_TYPE`: API helper and import mapping. The default is `fetch`; choose `xano` or `xano-grouped` when the project uses one of those API clients.
 
 ### Variants
@@ -119,7 +119,7 @@ A very long domain name can push some generated lines past the formatter's width
 
 Both variants generate the resource's query keys, list query and test, mock data, details query and test, create/update actions and test, response helpers and test, query barrel, list page, create page, details page, starter form, and form test. The server variant also generates the server-table composable and test and wires the list query to server-side table controls.
 
-Each domain also has a `definition.js` that declares its API client, endpoint, cache keys, record formatter, and form value mapper once. The list, details, and actions use that definition. Keep API-to-app record mapping in `helpers.js` and add form-to-API field mapping to `prepare` in `definition.js`. The default `prepare` returns the submitted values unchanged.
+Each domain also has a `definition.js` that declares its API client, endpoint, record ID field (`idName`), cache keys, record formatter, and form value mapper once. The list, details, and actions use that definition. Keep API-to-app record mapping in `helpers.js` and add form-to-API field mapping to `prepare` in `definition.js`. The default `prepare` returns the submitted values unchanged.
 
 For a request outside the domain's usual endpoint, import the definition from the query barrel and pass an explicit path to its API client. For example, a generated `users` domain can call `usersDomain.api.get("reports/users")` while its standard requests continue to use `usersDomain.endpoint`. Every request in the domain shares that one API client, so changing its settings, such as its base URL, changes them all.
 
@@ -129,7 +129,9 @@ The generated details query uses `useDetailQuery` for its request, record format
 
 The generated create action uses `useCreateMutation` to send prepared form values to the domain endpoint and refresh its cached queries after the request settles. The generated `use<Item>Actions()` function exposes `create<Item>` to forms. `prepare` receives a shallow copy of the submitted values, so it can add, rename, or remove top-level fields without changing the form's values. Replace nested objects and arrays rather than editing them, because the form still shares those.
 
-When one create action needs something different, such as refreshing another domain's cache as well, write that action directly with `useMutationWrapper` in the generated actions file. Reuse the domain definition's `api`, `endpoint`, and `keys` for the request and cache refresh, and call `prepare` on a copy of the submitted values when the action uses the same field mapping. The domain's other actions can keep using the shared versions.
+The generated update action uses `useUpdateMutation` to send a PATCH request to `<endpoint>/<id>`. It reads the ID from the submitted field that `idName` names and leaves that field out of the request body. It passes a shallow copy of the remaining values to `prepare`, then refreshes the domain list and that record's cached query after the request settles. `use<Item>Actions()` exposes `update<Item>` to forms.
+
+When one create or update action needs something different, such as refreshing another domain's cache as well, write that action directly with `useMutationWrapper` in the generated actions file. Reuse the domain definition's `api`, `endpoint`, `keys`, `idName`, and `prepare` as needed for the request and cache refresh. Call `prepare` on a copy of the submitted values when the action uses the same field mapping. The domain's other actions can keep using the shared versions.
 
 ## Add-edit form generator
 

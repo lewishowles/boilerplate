@@ -47,7 +47,7 @@ describe("{{ SINGULAR_NAME | words }} actions", () => {
 		});
 	});
 
-	test("Updates {{ SINGULAR_NAME | words }}", async () => {
+	test("Updates {{ SINGULAR_NAME | words }} without sending the record ID", async () => {
 		// Values submitted to the update action.
 		const parameters = { {{ ID_NAME }}: "item-123", name: "Updated example" };
 		// Response returned by the update request.
