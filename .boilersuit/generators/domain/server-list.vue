@@ -31,7 +31,14 @@
 				<template #no-data-message>No {{ NAME | words }} to display</template>
 
 				<template #actions="{ row }">
-					<router-link-tag v-bind="{ to: { name: '{{ NAME | kebab }}-edit', params: { {{ ID_NAME }}: row.id } } }">
+					<router-link-tag
+						v-bind="{
+							to: {
+								name: '{{ NAME | kebab }}-edit',
+								params: { {{ ID_NAME }}: row.id },
+							},
+						}"
+					>
 						View
 						<span class="sr-only" v-text="row.name" />
 					</router-link-tag>

@@ -40,21 +40,20 @@ describe("{{ SINGULAR_NAME | words }} details", () => {
 		test("Loads and stores {{ SINGULAR_NAME | words }} details", async () => {
 			{{ MOCK_API_NAME }}.get.mockResolvedValue(sampleResponse);
 
-			// Query state returned after the record loads.
-			const { have{{ SINGULAR_NAME | pascal }}, isInitialLoading, isReady, isRefreshing, lastFetched, refetch, {{ SINGULAR_NAME | camel }} } =
-				create{{ SINGULAR_NAME | pascal }}();
+			// The record's details query, which has not fetched anything yet.
+			const query = create{{ SINGULAR_NAME | pascal }}();
 
-			expect(lastFetched.value).toBe(null);
+			expect(query.lastFetched.value).toBe(null);
 
-			await refetch(true);
+			await query.refetch(true);
 
 			expect({{ MOCK_API_NAME }}.get).toHaveBeenCalledWith("{{ ENDPOINT }}/item-123");
-			expect({{ SINGULAR_NAME | camel }}.value).toEqual({ ...sampleResponse, derived: {} });
-			expect(have{{ SINGULAR_NAME | pascal }}.value).toBe(true);
-			expect(lastFetched.value).toBeInstanceOf(Date);
-			expect(isInitialLoading.value).toBe(false);
-			expect(isReady.value).toBe(true);
-			expect(isRefreshing.value).toBe(false);
+			expect(query.{{ SINGULAR_NAME | camel }}.value).toEqual({ ...sampleResponse, derived: {} });
+			expect(query.have{{ SINGULAR_NAME | pascal }}.value).toBe(true);
+			expect(query.lastFetched.value).toBeInstanceOf(Date);
+			expect(query.isInitialLoading.value).toBe(false);
+			expect(query.isReady.value).toBe(true);
+			expect(query.isRefreshing.value).toBe(false);
 		});
 	});
 });
