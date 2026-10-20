@@ -78,13 +78,15 @@ check_fetch_exclusions() {
 		assert_dependency_absent "$project_path" '@xano/js-sdk'
 }
 
-# Single-group Xano mode: the Xano composable, API, client, auth composable, and
-# the Xano SDK dependency.
+# Single-group Xano mode: the Xano composable, API, sort translator, client,
+# auth composable, and the Xano SDK dependency.
 check_xano_structure() {
 	assert_file_present "$project_path" 'src/composables/api/xano/use-api/index.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/use-api/index.test.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/xano-api.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/xano-api.test.js' &&
+		assert_file_present "$project_path" 'src/composables/api/xano/translate-sort-parameters.js' &&
+		assert_file_present "$project_path" 'src/composables/api/xano/translate-sort-parameters.test.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/xano-client.js' &&
 		assert_file_present "$project_path" 'src/composables/api/use-auth-api/index.js' &&
 		assert_dependency_present "$project_path" '@xano/js-sdk'
@@ -98,13 +100,16 @@ check_xano_exclusions() {
 		assert_no_match "$project_path" 'src/composables/api/use-group-api/**'
 }
 
-# Grouped Xano mode: the grouped composable and client, the shared Xano API,
-# separate auth and group composables, and the Xano SDK dependency.
+# Grouped Xano mode: the grouped composable and client, the shared Xano API and
+# sort translator, separate auth and group composables, and the Xano SDK
+# dependency.
 check_grouped_xano_structure() {
 	assert_file_present "$project_path" 'src/composables/api/xano/grouped/use-api/index.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/grouped/xano-client.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/xano-api.js' &&
 		assert_file_present "$project_path" 'src/composables/api/xano/xano-api.test.js' &&
+		assert_file_present "$project_path" 'src/composables/api/xano/translate-sort-parameters.js' &&
+		assert_file_present "$project_path" 'src/composables/api/xano/translate-sort-parameters.test.js' &&
 		assert_file_present "$project_path" 'src/composables/api/use-auth-api/index.js' &&
 		assert_file_present "$project_path" 'src/composables/api/use-group-api/index.js' &&
 		assert_file_present "$project_path" 'src/composables/api/use-group-api/index.test.js' &&
