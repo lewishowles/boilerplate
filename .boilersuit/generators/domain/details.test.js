@@ -5,8 +5,8 @@ import { describe, expect, test, vi } from "vite-plus/test";
 
 import {{ MOCK_API_NAME }} from "{{ MOCK_API_IMPORT }}";
 
-// Mock the API in this file. The mock API helper's own mock only works when it
-// is imported first, and the formatter moves that import further down.
+// Declare the API mock in this file, where Vitest runs it before the imports,
+// so it applies whatever order the imports are in.
 vi.mock("{{ API_IMPORT }}", async () => (await import("@lewishowles/testing/vue")).mockApiModule);
 
 /**
