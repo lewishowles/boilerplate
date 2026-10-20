@@ -133,56 +133,6 @@ The generated update action uses `useUpdateMutation` to send a PATCH request to 
 
 When one create or update action needs something different, such as refreshing another domain's cache as well, write that action directly with `useMutationWrapper` in the generated actions file. Reuse the domain definition's `api`, `endpoint`, `keys`, `idName`, and `prepare` as needed for the request and cache refresh. Call `prepare` on a copy of the submitted values when the action uses the same field mapping. The domain's other actions can keep using the shared versions.
 
-## Add-edit form generator
-
-`boilersuit generate add-edit-form` creates an add/edit form for one resource: a form component plus a focused unit test. The form consumes the generated resource domain for that resource (`use<Item>` for details, `use<Item>Actions` for create and update) and the local `src/components/form/form-wrapper` extension.
-
-If the record id is missing, the form is in add mode and does not fetch. If it is set, the form is in edit mode, loads that record, and handles the initial load, a load error with retry, the ready state, and a missing record separately. A successful submit emits one `success` event carrying `{ result, formData }`.
-
-### Fields
-
-- `NAME` — collection name, lowercase kebab-case. Locates the query barrel (`@/queries/<NAME>`) and the output folder.
-- `SINGULAR_NAME` — item name, lowercase kebab-case. Drives the composable and generated test names.
-- `ID_NAME` — id parameter name, camelCase. Used by the details query and the update action.
-
-### Variants
-
-- `--variant page` (default) — a plain form component for a page to own. Navigation and global success messaging stay with the parent.
-- `--variant modal` — the same lifecycle wrapped in the Components `modal-dialog`. It re-emits `close` when the dialog emits `dialog:close` and after a successful submit, and makes no routing assumptions.
-
-Only the selected variant's files are generated.
-
-### Commands
-
-```bash
-# Preview first (page variant)
-boilersuit generate preview add-edit-form --variant page \
-	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
-
-# Generate
-boilersuit generate add-edit-form --variant page \
-	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
-
-# Modal variant
-boilersuit generate preview add-edit-form --variant modal \
-	--field NAME=users --field SINGULAR_NAME=user --field ID_NAME=userId
-```
-
-Rerun generation with `--skip-existing` to protect form files you have already edited. Without it, generation overwrites the destination.
-
-### Fields, validation, and mapping
-
-The generated form leaves fields, validation rules, value coercions, and record-to-form mapping as explicit TODO placeholders. It does not derive any of these from OpenAPI. Submit-time API errors, both field and general, flow through the local `form-wrapper` default adapter, `parseApiFieldErrors`.
-
-For the underlying form pattern, see the Components `form-wrapper` docs and snippet:
-
-```bash
-node node_modules/@lewishowles/components/bin/cli.js info form-wrapper
-node node_modules/@lewishowles/components/bin/cli.js snippet form-wrapper
-```
-
-The known-broken upstream `form-wrapper` example is deliberately not copied into boilerplate; fixing it is a separate follow-up in the Components repository.
-
 ## Linting
 
 `.oxlintrc.json` extends `@lewishowles/lint-config`'s shared `vue.json` and `comments.json` layers. `vp lint` and `vp check` ignore that list and take their layers from the `lint` block in `vite.config.js`, so when you add or remove a layer, change both. Add project-specific rule overrides, ignore patterns, or overrides blocks directly in `.oxlintrc.json`; see the `@lewishowles/lint-config` README for the merge rules.

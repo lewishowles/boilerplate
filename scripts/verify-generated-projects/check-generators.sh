@@ -56,7 +56,7 @@ if [[ ! -d "$project_path" ]]; then
 	exit 1
 fi
 
-if ! generators_json="$(boilersuit generators list --json)"; then
+if ! generators_json="$(boilersuit generators list "$project_path" --json)"; then
 	failure_reason='generator discovery command failed'
 else
 	if ! missing_generator_ids="$(node -e '
@@ -64,8 +64,8 @@ const generatorList = JSON.parse(process.argv[1]);
 const generators = Array.isArray(generatorList)
 	? generatorList
 	: generatorList.generators;
+// The generators every project made from this template must provide.
 const requiredIds = [
-	"add-edit-form",
 	"component",
 	"composable",
 	"domain",
