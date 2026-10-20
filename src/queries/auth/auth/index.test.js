@@ -1,5 +1,6 @@
+import { apiErrorCodes, apiErrorReasons } from "@/constants/api.js";
 import { withAppContext } from "@lewishowles/testing/vue";
-import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 // Mocked auth API GET method.
 const mockGet = vi.hoisted(() => vi.fn());
@@ -107,16 +108,157 @@ describe("useAuth", () => {
 			// Auth error state and login action from the composable.
 			const { errorMessage, login } = createAuth();
 
-			mockPost.mockRejectedValueOnce({ code: "ERROR_CODE_UNAUTHORIZED" });
+			mockPost.mockRejectedValueOnce({ code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED });
 
 			await expect(
 				login({ email: "test@example.com", password: "password" }),
 			).rejects.toMatchObject({
-				code: "ERROR_CODE_UNAUTHORIZED",
+				code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED,
 			});
 
 			expect(errorMessage.value).toBe("Incorrect email or password");
 			expect(mockSetAuthToken).not.toHaveBeenCalled();
+		});
+
+		test.each([apiErrorReasons.USER_NOT_FOUND, apiErrorReasons.INVALID_PASSWORD])(
+			"Shows an incorrect-credentials message for %s",
+			async (reason) => {
+				// Auth error state and login action from the composable.
+				const { errorMessage, login } = createAuth();
+
+				mockPost.mockRejectedValueOnce({
+					code: apiErrorCodes.ERROR_CODE_ACCESS_DENIED,
+					payload: { reason },
+				});
+
+				await expect(
+					login({ email: "test@example.com", password: "password" }),
+				).rejects.toMatchObject({ payload: { reason } });
+
+				expect(errorMessage.value).toBe("Incorrect email or password");
+			},
+		);
+
+		test("Shows the missing-profile message before the unauthorised message", async () => {
+			// Auth error state and login action from the composable.
+			const { errorMessage, login } = createAuth();
+
+			mockPost.mockRejectedValueOnce({
+				code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED,
+				payload: { reason: apiErrorReasons.PROFILE_NOT_FOUND },
+			});
+
+			await expect(
+				login({ email: "test@example.com", password: "password" }),
+			).rejects.toMatchObject({ payload: { reason: apiErrorReasons.PROFILE_NOT_FOUND } });
+
+			expect(errorMessage.value).toBe(
+				"Your account isn't fully set up yet. Please contact your administrator.",
+			);
+		});
+
+		test.each([
+			apiErrorReasons.MISSING_PERMISSION,
+			apiErrorReasons.INSUFFICIENT_ACCESS,
+			apiErrorReasons.NOT_PERMITTED,
+		])("Shows the account-access message for %s", async (reason) => {
+			// Auth error state and login action from the composable.
+			const { errorMessage, login } = createAuth();
+
+			mockPost.mockRejectedValueOnce({
+				code: apiErrorCodes.ERROR_CODE_ACCESS_DENIED,
+				payload: { reason },
+			});
+
+			await expect(
+				login({ email: "test@example.com", password: "password" }),
+			).rejects.toMatchObject({ payload: { reason } });
+
+			expect(errorMessage.value).toBe(
+				"Your account doesn't have access to this system. Please contact your administrator.",
+			);
+		});
+
+		test("Shows the too-many-attempts message", async () => {
+			// Auth error state and login action from the composable.
+			const { errorMessage, login } = createAuth();
+
+			mockPost.mockRejectedValueOnce({ code: apiErrorCodes.ERROR_CODE_TOO_MANY_REQUESTS });
+
+			await expect(
+				login({ email: "test@example.com", password: "password" }),
+			).rejects.toMatchObject({ code: apiErrorCodes.ERROR_CODE_TOO_MANY_REQUESTS });
+
+			expect(errorMessage.value).toBe(
+				"Too many login attempts. Please wait a moment and try again.",
+			);
+		});
+
+		describe("Account lockout", () => {
+			beforeEach(() => {
+				vi.stubEnv("TZ", "Europe/London");
+				vi.useFakeTimers();
+				vi.setSystemTime(new Date("2026-10-20T23:30:00.000Z"));
+			});
+
+			afterEach(() => {
+				vi.useRealTimers();
+				vi.unstubAllEnvs();
+			});
+
+			test.each([
+				["today", "2026-10-21T11:13:00.000Z", "This account is locked out until 12:13"],
+				[
+					"on another day",
+					"2026-10-22T11:13:00.000Z",
+					"This account is locked out until 22 Oct 2026, 12:13",
+				],
+			])("Shows the lockout end time when it ends %s", async (_day, endTime, expectedMessage) => {
+				// Auth error state and login action from the composable.
+				const { errorMessage, login } = createAuth();
+
+				mockPost.mockRejectedValueOnce({
+					code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED,
+					payload: {
+						lockout_until: new Date(endTime).getTime(),
+						reason: apiErrorReasons.ACCOUNT_LOCKOUT,
+					},
+				});
+
+				await expect(
+					login({ email: "test@example.com", password: "password" }),
+				).rejects.toMatchObject({ payload: { reason: apiErrorReasons.ACCOUNT_LOCKOUT } });
+
+				expect(errorMessage.value).toBe(expectedMessage);
+			});
+
+			test.each([
+				["in the past", new Date("2026-10-20T23:29:59.999Z").getTime()],
+				["exactly now", new Date("2026-10-20T23:30:00.000Z").getTime()],
+				["missing", undefined],
+				["a date string", "2026-10-21T11:13:00.000Z"],
+				["not a number", Number.NaN],
+				["out of range", 8.64e15 + 1],
+			])("Shows a temporary-lock message when the end time is %s", async (_case, lockoutUntil) => {
+				// Auth error state and login action from the composable.
+				const { errorMessage, login } = createAuth();
+
+				mockPost.mockRejectedValueOnce({
+					code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED,
+					payload: {
+						lockout_until: lockoutUntil,
+						reason: apiErrorReasons.ACCOUNT_LOCKOUT,
+					},
+				});
+
+				await expect(
+					login({ email: "test@example.com", password: "password" }),
+				).rejects.toMatchObject({ payload: { reason: apiErrorReasons.ACCOUNT_LOCKOUT } });
+
+				expect(errorMessage.value).toBe(
+					"This account is temporarily locked. Please try again later.",
+				);
+			});
 		});
 	});
 
