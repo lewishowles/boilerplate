@@ -5,15 +5,13 @@
 		Loading {{ SINGULAR_NAME | words }}…
 	</loading-indicator>
 
-	<template v-else-if="have{{ SINGULAR_NAME | pascal }}"></template>
+	<{{ SINGULAR_NAME | kebab }}-form v-else-if="have{{ SINGULAR_NAME | pascal }}" v-model="record" editing @submit="handleSubmit" />
 
-	<none-found v-else-if="!have{{ SINGULAR_NAME | pascal }}">
+	<none-found v-else>
 		<template #title>{{ SINGULAR_NAME | sentence }} not found</template>
 
 		This {{ SINGULAR_NAME | words }} couldn't be found. Please try again.
 	</none-found>
-
-	<{{ SINGULAR_NAME | kebab }}-form v-else v-model="record" @submit="handleSubmit" />
 </template>
 
 <script setup>

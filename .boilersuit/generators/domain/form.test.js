@@ -8,6 +8,27 @@ import {{ SINGULAR_NAME | pascal }}Form from "./{{ SINGULAR_NAME | kebab }}-form
 const mount = createDeepMount({{ SINGULAR_NAME | pascal }}Form);
 
 describe("{{ SINGULAR_NAME | kebab }}-form", () => {
+	test("Labels the submit button for a new record", () => {
+		const wrapper = mount({
+			props: {
+				modelValue: {},
+			},
+		});
+
+		expect(wrapper.get('button[type="submit"]').text()).toBe("Create {{ SINGULAR_NAME | words }}");
+	});
+
+	test("Labels the submit button for an existing record", () => {
+		const wrapper = mount({
+			props: {
+				editing: true,
+				modelValue: {},
+			},
+		});
+
+		expect(wrapper.get('button[type="submit"]').text()).toBe("Save changes");
+	});
+
 	test("Asks for a name before submitting", async () => {
 		const submit = vi.fn().mockResolvedValue();
 

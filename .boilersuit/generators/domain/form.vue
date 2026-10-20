@@ -12,7 +12,10 @@
 			</content-card-section>
 		</content-card>
 
-		<template #submit-button-label>Create {{ SINGULAR_NAME | words }}</template>
+		<template #submit-button-label>
+			<template v-if="editing">Save changes</template>
+			<template v-else>Create {{ SINGULAR_NAME | words }}</template>
+		</template>
 	</form-wrapper>
 </template>
 
@@ -20,6 +23,17 @@
 /**
  * Collects the values for creating or updating a {{ SINGULAR_NAME | words }} record.
  */
+defineProps({
+	/**
+	 * Whether the form edits an existing record. The submit button then says
+	 * "Save changes" instead of "Create {{ SINGULAR_NAME | words }}".
+	 */
+	editing: {
+		type: Boolean,
+		default: false,
+	},
+});
+
 // The form values, shared with the page that saves them. The form fills in the
 // starting values from `fields`.
 const formData = defineModel({ type: Object });
