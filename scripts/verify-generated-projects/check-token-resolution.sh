@@ -131,7 +131,7 @@ assert_rendered_value() {
 check_unresolved_tokens() {
 	local token_match  # First leftover token marker found, if any.
 
-	if token_match="$(first_project_match '\{\{[[:space:]]*[A-Z][A-Z0-9_]*(?:[[:space:]]*\\|[^}]*)?[[:space:]]*\}\}')"; then
+	if token_match="$(first_project_match '\{\{[[:space:]]*[A-Z][A-Z0-9_]*(?:[[:space:]]*\|[^}]*)?[[:space:]]*\}\}')"; then
 		fail_stage 'unresolved-tokens' "$token_match"
 		return 1
 	else
