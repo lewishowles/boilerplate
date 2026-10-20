@@ -110,7 +110,9 @@
 		{
 			"paths": [
 				"src/composables/api/xano/xano-api.js",
-				"src/composables/api/xano/xano-api.test.js"
+				"src/composables/api/xano/xano-api.test.js",
+				"src/composables/api/xano/translate-sort-parameters.js",
+				"src/composables/api/xano/translate-sort-parameters.test.js"
 			],
 			"include_when": { "HAS_XANO": "true" }
 		},
