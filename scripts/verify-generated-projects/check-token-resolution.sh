@@ -186,6 +186,27 @@ is_safe_host() {
 	esac
 }
 
+# Reports whether a URL is exactly one of four standard XML namespace
+# identifiers (SVG, XLink, XHTML and XML), such as the SVG namespace in an
+# icon's xmlns attribute.
+# Browsers never fetch these URLs, so they are not live endpoints. Any other
+# path or an https scheme does not match, and www.w3.org stays an unsafe host.
+#
+# @param  {string}  url
+#     Absolute URL to check against the namespace list.
+is_safe_namespace_url() {
+	local url="$1"  # URL being checked against the namespace list.
+
+	case "$url" in
+		http://www.w3.org/2000/svg|http://www.w3.org/1999/xlink|http://www.w3.org/1999/xhtml|http://www.w3.org/XML/1998/namespace)
+			return 0
+			;;
+		*)
+			return 1
+			;;
+	esac
+}
+
 # Strips scheme, credentials, port, and path from an absolute HTTP(S) URL,
 # leaving only the host.
 #
@@ -224,6 +245,11 @@ check_content_safety() {
 		while IFS= read -r url_match; do
 			match_remainder="${url_match#*:}"
 			url="${match_remainder#*:}"
+
+			if is_safe_namespace_url "$url"; then
+				continue
+			fi
+
 			host="$(url_host "$url")"
 
 			if ! is_safe_host "$host"; then
