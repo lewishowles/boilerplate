@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
@@ -13,8 +14,6 @@ const authTokenStorageKey = "authToken";
 // The saved auth token, shared by every useApi() call and kept in sync across
 // browser tabs.
 const authToken = useStorage(authTokenStorageKey, null, undefined, { flush: "sync" });
-// API error code returned when the current request is not authorised.
-const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
 
 /**
  * Composable for making API calls with fetch.
@@ -202,7 +201,7 @@ export default function useApi() {
 	function isUnauthorisedError(error) {
 		return (
 			(error instanceof ApiError && error.status === 401) ||
-			getPropertyValue(error, "code") === unauthorisedErrorCode
+			getPropertyValue(error, "code") === apiErrorCodes.ERROR_CODE_UNAUTHORIZED
 		);
 	}
 

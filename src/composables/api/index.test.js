@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { nextTick } from "vue";
 
@@ -267,7 +268,7 @@ describe("useApi (fetch)", () => {
 
 		test("Resets the auth session for an unauthorised non-login error", async () => {
 			// Unauthorised response body returned by the fetch mock.
-			const responseBody = { code: "ERROR_CODE_UNAUTHORIZED" };
+			const responseBody = { code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED };
 			// GET method used to trigger the session reset.
 			const { get } = useApi();
 
@@ -314,7 +315,7 @@ describe("useApi (fetch)", () => {
 
 		test("Keeps the auth session for an unauthorised login error", async () => {
 			// Unauthorised response body returned by the fetch mock.
-			const responseBody = { code: "ERROR_CODE_UNAUTHORIZED" };
+			const responseBody = { code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED };
 			// Login details that keep the auth session intact.
 			const credentials = { email: "ada@example.com", password: "secret" };
 			// POST method used for the login request.

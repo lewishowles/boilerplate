@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
 import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
 import { isNonEmptyString, ltrim } from "@lewishowles/helpers/string";
@@ -5,9 +6,6 @@ import { ref } from "vue";
 
 import translateSortParameters from "./translate-sort-parameters";
 import ApiError from "@/composables/api/api-error";
-
-// API error code returned when the current request is not authorised.
-const unauthorisedErrorCode = "ERROR_CODE_UNAUTHORIZED";
 
 /**
  * Create an API helper around a shared Xano client.
@@ -231,7 +229,7 @@ export default function createXanoApi({ client, groupId, requireGroupId = false 
 	function isUnauthorisedError(error) {
 		return (
 			(error instanceof ApiError && error.status === 401) ||
-			getPropertyValue(error, "code") === unauthorisedErrorCode
+			getPropertyValue(error, "code") === apiErrorCodes.ERROR_CODE_UNAUTHORIZED
 		);
 	}
 

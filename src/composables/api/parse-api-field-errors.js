@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 
 // Shown when the API refuses a request without telling us anything the user
@@ -33,7 +34,8 @@ export function parseApiFieldErrors(error) {
 	}
 
 	// Field name returned for a recognised input error.
-	const fieldName = error?.code === "ERROR_CODE_INPUT_ERROR" ? error?.body?.payload?.param : null;
+	const fieldName =
+		error?.code === apiErrorCodes.ERROR_CODE_INPUT_ERROR ? error?.body?.payload?.param : null;
 
 	if (isNonEmptyString(fieldName)) {
 		return { [fieldName]: message };

@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import useApi from "./index";
@@ -59,14 +60,14 @@ describe("useApi (Xano)", () => {
 			// Auth-error checker under test.
 			const { isUnauthorisedError } = useApi();
 
-			expect(isUnauthorisedError({ code: "ERROR_CODE_UNAUTHORIZED" })).toBe(true);
+			expect(isUnauthorisedError({ code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED })).toBe(true);
 		});
 
 		test("Returns false when the error body's code does not match", () => {
 			// Auth-error checker under test.
 			const { isUnauthorisedError } = useApi();
 
-			expect(isUnauthorisedError({ code: "ERROR_CODE_NOT_FOUND" })).toBe(false);
+			expect(isUnauthorisedError({ code: apiErrorCodes.ERROR_CODE_NOT_FOUND })).toBe(false);
 		});
 
 		test("Returns false when the error body has no code", () => {

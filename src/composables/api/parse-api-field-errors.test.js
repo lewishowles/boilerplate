@@ -1,4 +1,5 @@
 import { parseApiFieldErrors } from "./parse-api-field-errors";
+import { apiErrorCodes } from "@/constants/api.js";
 import { describe, expect, test } from "vite-plus/test";
 
 import ApiError from "./api-error";
@@ -23,7 +24,7 @@ describe("parseApiFieldErrors", () => {
 	test("Falls back to a general apology for an error with a code but no message", () => {
 		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors(
-			new ApiError(403, { code: "ERROR_CODE_ACCESS_DENIED", message: "" }),
+			new ApiError(403, { code: apiErrorCodes.ERROR_CODE_ACCESS_DENIED, message: "" }),
 		);
 
 		expect(response).toEqual({
@@ -43,7 +44,7 @@ describe("parseApiFieldErrors", () => {
 		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors(
 			new ApiError(422, {
-				code: "ERROR_CODE_INPUT_ERROR",
+				code: apiErrorCodes.ERROR_CODE_INPUT_ERROR,
 				message: "Enter a valid email address",
 				payload: { param: "email" },
 			}),
@@ -56,7 +57,7 @@ describe("parseApiFieldErrors", () => {
 		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors(
 			new ApiError(422, {
-				code: "ERROR_CODE_INPUT_ERROR",
+				code: apiErrorCodes.ERROR_CODE_INPUT_ERROR,
 				message: "Something went wrong",
 				payload: { param: "" },
 			}),
@@ -69,7 +70,7 @@ describe("parseApiFieldErrors", () => {
 		// Parsed error returned by the helper.
 		const response = parseApiFieldErrors(
 			new ApiError(401, {
-				code: "ERROR_CODE_UNAUTHORIZED",
+				code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED,
 				message: "Something went wrong",
 				payload: { param: "email" },
 			}),

@@ -1,3 +1,4 @@
+import { apiErrorCodes } from "@/constants/api.js";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 
 import createXanoApi from "./xano-api";
@@ -154,7 +155,7 @@ describe("createXanoApi", () => {
 
 	test("Resets the auth session for an unauthorised non-login error", async () => {
 		// Unauthorised Xano response body.
-		const body = { code: "ERROR_CODE_UNAUTHORIZED" };
+		const body = { code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED };
 
 		mockGet.mockRejectedValue(createXanoRequestError(body, 401));
 
@@ -185,7 +186,7 @@ describe("createXanoApi", () => {
 
 	test("Keeps the auth session for an unauthorised login error", async () => {
 		// Unauthorised Xano response body.
-		const body = { code: "ERROR_CODE_UNAUTHORIZED" };
+		const body = { code: apiErrorCodes.ERROR_CODE_UNAUTHORIZED };
 
 		mockGet.mockRejectedValue(createXanoRequestError(body, 401));
 
