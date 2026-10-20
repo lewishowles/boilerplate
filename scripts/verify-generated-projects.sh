@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Generates a boilerplate project for every supported API mode in a throwaway
-# directory and runs each check module against it, so the template's final file
-# selection, dependencies, and auth routing are checked as a complete output.
+# Copies the working tree, including uncommitted changes, into a throwaway
+# directory, generates a boilerplate project from it for every supported API
+# mode, and runs each check module against the result. This checks the template's
+# final file selection, dependencies, and auth routing as a complete output.
 #
 # Run order:
 #   1. Guard required tools and locate the check-module directory.
-#   2. Resolve the boilerplate source (local checkout, or its origin remote).
+#   2. Copy the current working tree into a throwaway Git repository.
 #   3. For each mode (fetch, xano, xano-grouped): generate the project, then run
 #      every scripts/verify-generated-projects/check-*.sh against it. With --build,
 #      also run install-and-build.sh (install, lint, unit tests, build) after the
@@ -50,21 +51,55 @@ first_error_line() {
 	printf 'No output captured\n'
 }
 
-# Resolves the value to pass to `boilersuit new --boilerplate`. Prefers the
-# local checkout when Git accepts it as a source; otherwise uses the origin
-# remote URL.
+# Copies tracked and untracked, non-ignored files as they are on disk into a
+# throwaway Git repository for Boilersuit to clone.
 #
-# @param  {string}  local_source
-#     Path to the local boilerplate checkout (the repository root).
-resolve_boilerplate_source() {
-	local local_source="$1"  # Local boilerplate checkout to test as a Git source.
+# @param  {string}  source_root
+#     Path to the boilerplate working tree.
+# @param  {string}  snapshot_root
+#     Path for the throwaway Git repository.
+snapshot_working_tree() {
+	local source_root="$1"  # Boilerplate working tree to copy.
+	local snapshot_root="$2"  # Throwaway repository to create.
+	local file_list="$run_directory/source-files"  # NUL-separated paths to copy.
+	local file_path  # Relative path of a tracked or eligible untracked file.
+	local source_path  # Full path of that file in the working tree.
 
-	if git -C "$local_source" ls-remote "$local_source" HEAD >/dev/null 2>&1; then
-		printf '%s\n' "$local_source"
-		return 0
-	fi
+	# Listing uses the user's Git configuration so their global ignore rules apply.
+	git -C "$source_root" ls-files -z --cached --others --exclude-standard > "$file_list"
+	mkdir -p "$snapshot_root"
 
-	git -C "$local_source" remote get-url origin
+	while IFS= read -r -d '' file_path; do
+		source_path="$source_root/$file_path"
+
+		# Leave deleted files out, but keep symlinks with missing targets.
+		if [[ ! -e "$source_path" && ! -L "$source_path" ]]; then
+			continue
+		fi
+
+		# Git lists an untracked nested repository as a directory entry.
+		if [[ -d "$source_path" && ! -L "$source_path" ]]; then
+			continue
+		fi
+
+		mkdir -p "$snapshot_root/$(dirname "$file_path")"
+		cp -Pp "$source_path" "$snapshot_root/$file_path"
+	done < "$file_list"
+
+	local -x GIT_CONFIG_GLOBAL=/dev/null  # Keep the user's Git configuration out of the throwaway repository.
+	local -x GIT_CONFIG_NOSYSTEM=1  # Keep system Git configuration out of the throwaway repository.
+
+	git init -q -b main "$snapshot_root"
+
+	# Give the throwaway repository its own identity so the commit does not
+	# depend on the user's or system's Git configuration.
+	git -C "$snapshot_root" config user.name 'Generated project verification'
+	git -C "$snapshot_root" config user.email 'verify-generated-projects@example.invalid'
+
+	# Force-add so files the working tree tracks despite an ignore pattern stay
+	# in the snapshot.
+	git -C "$snapshot_root" add -f --all
+	git -C "$snapshot_root" commit -qm 'Snapshot the current working tree'
 }
 
 # Runs the generator once for a single API mode with fixed, safe setup values.
@@ -73,14 +108,14 @@ resolve_boilerplate_source() {
 # @param  {string}  mode
 #     API mode to generate (fetch, xano, or xano-grouped).
 # @param  {string}  boilerplate_source
-#     Value for --boilerplate: a local path or a Git URL.
+#     Path to the throwaway Git repository.
 # @param  {string}  mode_parent
 #     Directory the project is created inside.
 # @param  {string}  project_name
 #     Name for the generated project directory.
 generate_project() {
 	local mode="$1"  # API mode to generate.
-	local boilerplate_source="$2"  # --boilerplate value: local path or Git URL.
+	local boilerplate_source="$2"  # Throwaway repository passed to --boilerplate.
 	local mode_parent="$3"  # Directory to create the project inside.
 	local project_name="$4"  # Generated project directory name.
 
@@ -237,12 +272,14 @@ fi
 
 modes=(fetch xano xano-grouped)  # API modes to generate and check, in run order.
 repo_root="$(git rev-parse --show-toplevel)"  # Boilerplate checkout root.
-boilerplate_source="$(resolve_boilerplate_source "$repo_root")"  # --boilerplate value for the generator.
 run_directory="$(mktemp -d "${TMPDIR:-/tmp}/boilerplate-generated-projects.XXXXXX")"  # Throwaway parent for all generated projects and logs.
+boilerplate_source="$run_directory/boilerplate-source"  # Throwaway Git repository for the generator.
 failed_modes=0  # Count of modes that failed; non-zero sets the exit status.
 
 printf 'Source: %s\n' "$boilerplate_source"
 printf 'Run directory: %s\n' "$run_directory"
+
+snapshot_working_tree "$repo_root" "$boilerplate_source"
 
 # mode: API mode being verified this iteration.
 for mode in "${modes[@]}"; do
