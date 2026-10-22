@@ -21,6 +21,21 @@ describe("usePageTitle", () => {
 	});
 
 	describe("Static titles", () => {
+		test("Uses the route base title with an explicit title", () => {
+			setRoute({ meta: { base_title: "Website" } });
+
+			// Scope used to dispose the title effect.
+			const scope = effectScope();
+
+			scope.run(() => {
+				usePageTitle("Sample page one");
+			});
+
+			expect(mockTitle.value).toBe("Sample page one | Website");
+
+			scope.stop();
+		});
+
 		test("Sets the document title from a plain string", () => {
 			// Scope used to dispose the title effect.
 			const scope = effectScope();
@@ -112,6 +127,21 @@ describe("usePageTitle", () => {
 	});
 
 	describe("Cleanup", () => {
+		test("Restores the route title and its base title when the scope is disposed", () => {
+			setRoute({ meta: { base_title: "Website", page_title: "Sample page one" } });
+
+			// Scope used to dispose the title effect.
+			const scope = effectScope();
+
+			scope.run(() => {
+				usePageTitle("Sample page two");
+			});
+
+			scope.stop();
+
+			expect(mockTitle.value).toBe("Sample page one | Website");
+		});
+
 		test("Restores the route meta title when the scope is disposed", () => {
 			setRoute({ meta: { page_title: "Sample page one" } });
 
@@ -148,6 +178,30 @@ describe("usePageTitles", () => {
 	});
 
 	describe("Initialisation", () => {
+		test("Uses the route base title with a page title", () => {
+			setRoute({ meta: { base_title: "Website", page_title: "Sample page one" } });
+
+			usePageTitles();
+
+			expect(mockTitle.value).toBe("Sample page one | Website");
+		});
+
+		test("Uses the route base title without a page title", () => {
+			setRoute({ meta: { base_title: "Website" } });
+
+			usePageTitles();
+
+			expect(mockTitle.value).toBe("Website");
+		});
+
+		test("Uses the default base title when the route base title is empty", () => {
+			setRoute({ meta: { base_title: "", page_title: "Sample page one" } });
+
+			usePageTitles();
+
+			expect(mockTitle.value).toBe("Sample page one | App");
+		});
+
 		test("Applies the route meta title on mount", () => {
 			setRoute({ meta: { page_title: "Sample page one" } });
 
@@ -164,6 +218,18 @@ describe("usePageTitles", () => {
 	});
 
 	describe("Route changes", () => {
+		test("Restores the default base title after leaving a public route", async () => {
+			setRoute({ meta: { base_title: "Website", page_title: "Sample page one" } });
+
+			usePageTitles();
+
+			setRoute({ meta: { page_title: "Sample page two" } });
+
+			await nextTick();
+
+			expect(mockTitle.value).toBe("Sample page two | App");
+		});
+
 		test("Updates the document title when the route meta title changes", async () => {
 			setRoute({ meta: { page_title: "Sample page one" } });
 

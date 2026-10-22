@@ -20,13 +20,16 @@ export function usePageTitle(title) {
 	const documentTitle = useTitle();
 
 	// Keep the document title synced to an explicit title or route
-	// `page_title`.
+	// `page_title`, followed by the route's base title.
 	watchEffect(() => {
-		documentTitle.value = getPageTitle(toValue(title) || route.meta?.page_title);
+		documentTitle.value = getPageTitle(
+			toValue(title) || route.meta?.page_title,
+			route.meta?.base_title,
+		);
 	});
 
 	onScopeDispose(() => {
-		documentTitle.value = getPageTitle(route.meta?.page_title);
+		documentTitle.value = getPageTitle(route.meta?.page_title, route.meta?.base_title);
 	});
 }
 
@@ -40,9 +43,9 @@ export function usePageTitles() {
 	// Reactive browser document title.
 	const documentTitle = useTitle();
 
-	// Keep the document title synced to the route `page_title`.
+	// Keep the document title synced to the route `page_title` and base title.
 	watchEffect(() => {
-		documentTitle.value = getPageTitle(route.meta?.page_title);
+		documentTitle.value = getPageTitle(route.meta?.page_title, route.meta?.base_title);
 	});
 }
 
@@ -52,14 +55,21 @@ export function usePageTitles() {
  *
  * @param  {string}  title
  *     The title to set.
+ * @param  {string}  baseTitle
+ *     The route's `base_title`, used in place of the title from index.html when
+ *     it is a non-empty string.
  *
  * @returns  {string}
- *     Title combined with the base application title.
+ *     The title combined with the base title, or the base title alone when
+ *     there is no title.
  */
-function getPageTitle(title) {
+function getPageTitle(title, baseTitle) {
+	// Routes without their own base title use the title from index.html.
+	const resolvedBaseTitle = isNonEmptyString(baseTitle) ? baseTitle : BASE_TITLE;
+
 	if (!isNonEmptyString(title)) {
-		return BASE_TITLE;
+		return resolvedBaseTitle;
 	}
 
-	return `${title} | ${BASE_TITLE}`;
+	return `${title} | ${resolvedBaseTitle}`;
 }

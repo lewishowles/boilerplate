@@ -3,7 +3,7 @@ import { flushPromises } from "@vue/test-utils";
 import { beforeEach, describe, expect, test, vi } from "vite-plus/test";
 import { ref } from "vue";
 
-import Login from "./login.vue";
+import Login from "./(login).vue";
 
 // Mocked sign-in action.
 const mockLogin = vi.hoisted(() => vi.fn());
