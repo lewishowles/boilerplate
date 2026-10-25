@@ -1,7 +1,11 @@
 import { apiErrorCodes } from "@/constants/api.js";
 import { getFriendlyDisplay } from "@lewishowles/helpers/general";
-import { getPathValue as getPropertyValue, isNonEmptyObject } from "@lewishowles/helpers/object";
-import { isNonEmptyString, ltrim, rtrim } from "@lewishowles/helpers/string";
+import {
+	getPathValue as getPropertyValue,
+	isNonEmptyObject,
+	objectLength,
+} from "@lewishowles/helpers/object";
+import { isNonEmptyString, ltrim, rtrim, toUpperCase } from "@lewishowles/helpers/string";
 import { useStorage } from "@vueuse/core";
 import { ref } from "vue";
 
@@ -60,7 +64,7 @@ export default function useApi() {
 
 			// Fetch response for the requested API endpoint.
 			const response = await fetch(finalEndpoint, {
-				method: method.toUpperCase(),
+				method: toUpperCase(method),
 				headers: getHeaders(parameters, method),
 				body: getBody(parameters, method),
 			});
@@ -244,7 +248,7 @@ export default function useApi() {
 			headers["Content-Type"] = "application/json";
 		}
 
-		return Object.keys(headers).length > 0 ? headers : undefined;
+		return objectLength(headers) > 0 ? headers : undefined;
 	}
 
 	/**

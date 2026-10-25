@@ -67,7 +67,7 @@
 /**
  * Provides search across the authenticated application pages.
  */
-import { isNonEmptyString } from "@lewishowles/helpers/string";
+import { isNonEmptyString, toLowerCase } from "@lewishowles/helpers/string";
 import {
 	breakpointsTailwind,
 	createReusableTemplate,
@@ -96,7 +96,7 @@ const platform =
 	globalThis.navigator?.userAgentData?.platform || globalThis.navigator?.platform || "";
 
 // Whether the search shortcut uses Command instead of Ctrl.
-const isMac = platform.toLowerCase().includes("mac");
+const isMac = toLowerCase(platform).includes("mac");
 // The Tailwind screen sizes, matching the lg classes that swap the search
 // layouts.
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -110,11 +110,11 @@ const matchingSearchItems = computed(() => {
 		return [];
 	}
 
-	// Lowercase query used for case-insensitive matching.
-	const normalisedQuery = searchQuery.value.toLowerCase();
+	// The query in lowercase, so pages match regardless of case.
+	const normalisedQuery = toLowerCase(searchQuery.value);
 
 	return searchItems
-		.filter((searchItem) => searchItem.label.toLowerCase().includes(normalisedQuery))
+		.filter((searchItem) => toLowerCase(searchItem.label).includes(normalisedQuery))
 		.sort((firstSearchItem, secondSearchItem) =>
 			compareSearchItems(firstSearchItem, secondSearchItem, normalisedQuery),
 		);
@@ -134,7 +134,7 @@ onKeyStroke(
 		// Whether the platform shortcut modifier key is held.
 		const modifierPressed = isMac ? event.metaKey : event.ctrlKey;
 
-		return modifierPressed && !event.altKey && !event.shiftKey && event.key?.toLowerCase() === "k";
+		return modifierPressed && !event.altKey && !event.shiftKey && toLowerCase(event.key) === "k";
 	},
 	(event) => {
 		event.preventDefault();
@@ -201,10 +201,10 @@ async function selectSearchItem(searchItem) {
 function compareSearchItems(firstSearchItem, secondSearchItem, normalisedQuery) {
 	// The first page's title in lowercase, so the query is found regardless of
 	// case.
-	const firstLabel = firstSearchItem.label.toLowerCase();
+	const firstLabel = toLowerCase(firstSearchItem.label);
 	// The second page's title in lowercase, so the query is found regardless of
 	// case.
-	const secondLabel = secondSearchItem.label.toLowerCase();
+	const secondLabel = toLowerCase(secondSearchItem.label);
 
 	if (firstLabel.length !== secondLabel.length) {
 		return firstLabel.length - secondLabel.length;
