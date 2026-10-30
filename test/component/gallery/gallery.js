@@ -72,6 +72,10 @@ const emptyPage = {
  *     The story id to show.
  * @param  {object}  [options.props={}]
  *     Serialisable props for the story, plus an optional routes array.
+ * @param  {object[]}  [options.props.routes=[]]
+ *     Routes for the gallery router. Only the first call uses them.
+ * @param  {object}  options.props.storyProps
+ *     Every other prop, which goes to the story.
  *
  * @returns  {Promise<void>}
  *     Resolves once the story is rendered.
